@@ -1,26 +1,12 @@
-import Link from 'next/link';
+import { Hero } from '@/app/ui/layout/Hero';
 
 export default function Home() {
   return (
     <main className='w-full max-w-[1600px] mx-auto px-6 md:px-8 lg:px-14'>
-      <div className='w-full text-center'>
-        <h1 className='text-[38px] leading-[38px] font-medium'>
-          Find your next expert
-        </h1>
-
-        <p className='max-w-[400px] mx-auto mt-[1.5rem] text-gray-800'>
-          Find top-tier talent for your teams.
-        </p>
-
-        <div className='mt-6 w-full flex flex-row items-center justify-center gap-4 text-[15px]'>
-          <Link
-            href='/explore'
-            className='rounded-full bg-gray-100 px-4 py-[9.5px] text-sm'
-          >
-            Search
-          </Link>
-        </div>
-      </div>
+      <Hero
+        title='Find your next expert'
+        description='Find top-tier talent for your teams.'
+      />
     </main>
   );
 }
