@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Hero } from '../ui/layout/Hero';
+import { Hero } from '../../components/layout/Hero';
 
 const CATEGORIES: Record<
   string,
