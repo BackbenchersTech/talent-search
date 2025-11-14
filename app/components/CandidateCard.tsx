@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ArrowUpRight } from '@/components/ui/icons/ArrowUpRight';
+import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -32,7 +32,7 @@ export const CandidateCard = ({ href }: CandidateCardProps) => {
         {/* absolute positioned view CTA */}
         <p className='flex items-center gap-1 rounded-md bg-gray-50/50 absolute top-0 right-2 px-2 py-4 text-sm text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm group-focus:opacity-100'>
           View
-          <ArrowUpRight />
+          <ArrowUpRightIcon className='size-3' />
         </p>
 
         {/* Rate */}
