@@ -1,11 +1,11 @@
 'use client';
 
+import { MagnifyingGlass } from '@/components/ui/icons/MagnifyingGlass';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
-import { SearchIcon } from 'lucide-react';
 import { ChangeEvent } from 'react';
 
 export const Search = () => {
@@ -18,7 +18,7 @@ export const Search = () => {
       <InputGroupInput placeholder='Type to search' onChange={handleChange} />
 
       <InputGroupAddon>
-        <SearchIcon />
+        <MagnifyingGlass className='size-4' />
       </InputGroupAddon>
     </InputGroup>
   );
