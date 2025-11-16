@@ -1,7 +1,7 @@
+import { CandidateCard } from '@/app/components/CandidateCard';
+import { CandidateGrid } from '@/app/components/CandidateGrid';
 import { Search } from '@/app/components/Search';
 import { getCandidates } from '@/lib/data/candidates/candidateData';
-import { CandidateCard } from '../components/CandidateCard';
-import { CandidateGrid } from '../components/CandidateGrid';
 
 const ExplorePage = async () => {
   const candidates = await getCandidates();

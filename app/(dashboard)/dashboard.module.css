@@ -1,0 +1,22 @@
+.dashboard-page-container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.75rem 1rem 5rem;
+}
+
+@media (min-width: 640px) {
+  .dashboard-page-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    padding-bottom: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-page-container {
+    max-width: 80vw;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 4rem;
+  }
+}
