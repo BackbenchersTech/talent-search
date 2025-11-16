@@ -1,3 +1,4 @@
+import { MarketingFooter } from '@/app/components/MarketingFooter';
 import '@/app/globals.css';
 import type { Metadata } from 'next';
 
@@ -14,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' className='h-full'>
-      <body className='antialiased h-full'>{children}</body>
+      <body className='antialiased h-full'>
+        {children}
+
+        <MarketingFooter />
+      </body>
     </html>
   );
 }
