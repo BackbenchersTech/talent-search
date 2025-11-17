@@ -4,7 +4,7 @@ import { mapCandidateRowToCandidate } from './candidateTransforms';
 
 export async function getCandidates(limit = 20) {
   return (await db.select().from(Candidates).limit(limit)).map(
-    mapCandidateRowToCandidate
+    mapCandidateRowToCandidate,
   );
 }
 
@@ -21,7 +21,7 @@ export async function searchCandidates(term: string) {
       ops.or(
         ops.ilike(fields.firstName, `%${term}%`),
         ops.ilike(fields.lastName, `%${term}%`),
-        ops.ilike(fields.title, `%${term}%`)
+        ops.ilike(fields.title, `%${term}%`),
       ),
   });
 }

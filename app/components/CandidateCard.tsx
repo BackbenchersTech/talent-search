@@ -1,10 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Candidate,
-  CandidateAvailability,
-} from '@/lib/data/candidates/candidateTypes';
+import { Candidate, CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -29,22 +26,22 @@ export const CandidateCard = ({ candidate }: CandidateCardProps) => {
   return (
     <Link
       href={`candidates/${id}`}
-      className='block group rounded-md bg-white p-3 shadow ring-1 ring-gray-200 transition-all hover:bg-gray-100/70 hover:shadow-md hover:ring-2 hover:ring-gray-600 active:shadow-none'
+      className='group block rounded-md bg-white p-3 shadow ring-1 ring-gray-200 transition-all hover:bg-gray-100/70 hover:shadow-md hover:ring-2 hover:ring-gray-600 active:shadow-none'
     >
       <article className='relative p-1'>
-        <section className='flex items-center mb-2 gap-2'>
+        <section className='mb-2 flex items-center gap-2'>
           <Avatar className='size-10'>
             <AvatarImage src={profileImageUrl} alt='' />
             <AvatarFallback className='bg-black text-white'>AP</AvatarFallback>
           </Avatar>
 
-          <h2 className='font-medium line-clamp-1 pe-2 group-hover:max-w-[75%]'>
+          <h2 className='line-clamp-1 pe-2 font-medium group-hover:max-w-[75%]'>
             {title}
           </h2>
         </section>
 
         {/* absolute positioned view CTA */}
-        <p className='flex items-center gap-1 rounded-md bg-gray-50/50 absolute top-0 right-2 px-2 py-4 text-sm text-black opacity-0 group-hover:opacity-100 backdrop-blur-sm group-focus:opacity-100'>
+        <p className='absolute top-0 right-2 flex items-center gap-1 rounded-md bg-gray-50/50 px-2 py-4 text-sm text-black opacity-0 backdrop-blur-sm group-hover:opacity-100 group-focus:opacity-100'>
           View
           <ArrowUpRightIcon className='size-3' />
         </p>
@@ -72,30 +69,19 @@ export const CandidateCard = ({ candidate }: CandidateCardProps) => {
         <section className='mt-6 flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <div className='flex -space-x-1'>
-              <Avatar className='border-2 border-white size-6'>
-                <AvatarImage
-                  src='https://www.github.com/apiedy.png'
-                  alt='@apiedy'
-                />
+              <Avatar className='size-6 border-2 border-white'>
+                <AvatarImage src='https://www.github.com/apiedy.png' alt='@apiedy' />
               </Avatar>
 
-              <Avatar className='border-2 border-white size-6'>
-                <AvatarImage
-                  src='https://www.github.com/shadcn.png'
-                  alt='@shadcn'
-                />
+              <Avatar className='size-6 border-2 border-white'>
+                <AvatarImage src='https://www.github.com/shadcn.png' alt='@shadcn' />
               </Avatar>
 
-              <Avatar className='border-2 border-white size-6'>
+              <Avatar className='size-6 border-2 border-white'>
                 {/* intentionally failing url */}
                 <AvatarImage src='/default-avatar' alt='@default' />
                 <AvatarFallback>
-                  <Image
-                    src='/default-avatar.svg'
-                    width={24}
-                    height={24}
-                    alt=''
-                  />
+                  <Image src='/default-avatar.svg' width={24} height={24} alt='' />
                 </AvatarFallback>
               </Avatar>
             </div>

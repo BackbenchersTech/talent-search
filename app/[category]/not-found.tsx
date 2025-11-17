@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <main className='mx-auto w-full max-w-7xl px-6 py-10 lg:px-8'>
       <div className='mx-auto mt-16 max-w-2xl text-center sm:mt-16'>
-        <p className='text-base font-semibold leading-8'>404</p>
+        <p className='text-base leading-8 font-semibold'>404</p>
 
         <h1 className='mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
           This page does not exist
@@ -15,10 +15,7 @@ export default function NotFound() {
         </p>
 
         <div className='mt-10 flex justify-center'>
-          <Link
-            href='/'
-            className='text-sm font-semibold leading-6 text-indigo-600'
-          >
+          <Link href='/' className='text-sm leading-6 font-semibold text-indigo-600'>
             <span aria-hidden='true'>←</span> Back to home
           </Link>
         </div>

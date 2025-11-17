@@ -11,7 +11,7 @@ const ApplicationLayout = ({ children }: { children: React.ReactNode }) => (
 
       <div className='h-full w-full flex-1'>
         {/* main content */}
-        <main className='h-full w-full overflow-auto no-scrollbar py-0 pt-16 sm:pt-0'>
+        <main className='no-scrollbar h-full w-full overflow-auto py-0 pt-16 sm:pt-0'>
           <div className={styles['dashboard-page-container']}>{children}</div>
         </main>
       </div>

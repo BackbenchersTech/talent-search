@@ -18,7 +18,7 @@ export const mapCandidateRowToCandidate = ({
       Object.entries(rest).map(([key, value]) => [
         key,
         value === null ? undefined : value,
-      ])
+      ]),
     ) as Omit<Candidate, 'id'>),
   };
 };

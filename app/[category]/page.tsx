@@ -34,7 +34,7 @@ export default async function CategoryPage(props: {
   const { heroTitle, heroDescription } = categoryData;
 
   return (
-    <main className='w-full max-w-[1600px] mx-auto px-6 md:px-8 lg:px-14'>
+    <main className='mx-auto w-full max-w-[1600px] px-6 md:px-8 lg:px-14'>
       <Hero title={heroTitle} description={heroDescription} />
     </main>
   );
