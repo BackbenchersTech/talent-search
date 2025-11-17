@@ -1,3 +1,4 @@
+import '@/app/globals.css';
 import Link from 'next/link';
 
 export default function NotFound() {
@@ -15,8 +16,11 @@ export default function NotFound() {
         </p>
 
         <div className='mt-10 flex justify-center'>
-          <Link href='/' className='text-sm leading-6 font-semibold text-indigo-600'>
-            <span aria-hidden='true'>←</span> Back to home
+          <Link
+            href='/'
+            className='flex gap-1 text-sm leading-6 font-semibold text-black'
+          >
+            <span aria-hidden='true'>←</span>Back to home
           </Link>
         </div>
       </div>
