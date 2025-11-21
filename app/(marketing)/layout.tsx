@@ -1,6 +1,6 @@
-import { AppTopNavigation } from '@/app/components/AppTopNavigation';
+import { Footer } from '@/app/(marketing)/components/Footer';
+import { NavBar } from '@/app/(marketing)/components/NavBar';
 import { HtmlShell } from '@/app/components/HtmlShell';
-import { MarketingFooter } from '@/app/components/MarketingFooter';
 import '@/app/globals.css';
 import type { Metadata } from 'next';
 
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 const MarketingLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <HtmlShell>
-      <AppTopNavigation />
+      <NavBar />
 
       <div className='flex flex-row pt-16'>
         <div className='mx-auto w-full max-w-[1600px] px-6 duration-300 md:px-8 lg:px-14 2xl:mt-16'>
           {children}
 
-          <MarketingFooter />
+          <Footer />
         </div>
       </div>
     </HtmlShell>

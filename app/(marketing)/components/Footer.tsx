@@ -107,7 +107,7 @@ const FooterSection = ({
   </>
 );
 
-export const MarketingFooter = () => {
+export const Footer = () => {
   return (
     <div className='w-full'>
       <div className='w-full py-8 sm:py-12 md:py-20'>

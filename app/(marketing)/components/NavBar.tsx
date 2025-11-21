@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-export const AppTopNavigation = () => {
+export const NavBar = () => {
   const [isSlidingMenuOpen, setIsSlidingMenuOpen] = useState(false);
 
   useEffect(() => {
