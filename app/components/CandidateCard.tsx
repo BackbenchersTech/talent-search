@@ -25,7 +25,7 @@ export const CandidateCard = ({ candidate }: CandidateCardProps) => {
 
   return (
     <Link
-      href={`candidates/${id}`}
+      href={`/explore?profileId=${id}`}
       className='group block rounded-md bg-white p-3 shadow ring-1 ring-gray-200 transition-all hover:bg-gray-100/70 hover:shadow-md hover:ring-2 hover:ring-gray-600 active:shadow-none'
     >
       <article className='relative p-1'>
