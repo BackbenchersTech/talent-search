@@ -1,4 +1,4 @@
-export const HomePage = async ({
+const HomePage = async ({
   params,
   searchParams,
 }: {
@@ -6,11 +6,14 @@ export const HomePage = async ({
   searchParams: Promise<{ query?: string }>;
 }) => {
   const { domain } = await params;
-  const searchParamsResolved = await searchParams;
+  const queryParams = await searchParams;
 
   return (
     <div>
-      Welcome to the {domain} Page. {JSON.stringify(searchParamsResolved)}
+      Home page <br />
+      Domain: {domain}
+      <br />
+      Query: {JSON.stringify(queryParams) || 'N/A'}
     </div>
   );
 };
