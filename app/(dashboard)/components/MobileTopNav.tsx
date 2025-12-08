@@ -9,6 +9,7 @@ export const MobileTopNav = () => {
   return (
     <div className='fixed top-0 z-40 inline-block w-full sm:hidden'>
       <div className='flex h-16 items-center justify-between bg-white pr-4 shadow-sm max-sm:pr-0 sm:px-0 sm:pr-6 sm:pl-3 sm:shadow-none md:border-b md:border-gray-200'>
+        {/* TODO: replace with logo SVG */}
         <div className='flex h-16 w-16 items-center justify-center text-[30px]'>ff</div>
 
         <section aria-label='User actions'>

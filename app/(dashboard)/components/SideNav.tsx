@@ -23,7 +23,7 @@ export const SideNav = () => {
       <div className='flex w-20 grow flex-col overflow-x-visible border-r border-gray-200 bg-white/5'>
         <section className='flex flex-1 flex-col'>
           <div className='flex justify-center p-3'>
-            {/* replace with logo SVG */}
+            {/* TODO: replace with logo SVG */}
             <div className='flex h-[56px] w-[55px] items-center justify-center text-[30px]'>
               ff
             </div>
@@ -32,9 +32,7 @@ export const SideNav = () => {
           <nav className='flex-1'>
             <ul role='list' className='flex flex-col items-center justify-center'>
               <li className='flex w-full flex-col items-center justify-center'>
-                {/* active colors
-                 text-indigo-600
-                */}
+                {/* TODO: fix routes to work for both domain paths and subdomains */}
                 <Link
                   className={cn(
                     'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
