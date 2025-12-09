@@ -1,18 +1,16 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
-import { Candidate } from '@/lib/data/candidates/candidateTypes';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
+import { Candidate } from '@/lib/data/candidates/candidateTypes';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 
 export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
@@ -67,13 +65,9 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
               <Link href={`candidates/${id}`}>View details</Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
