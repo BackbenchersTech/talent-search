@@ -11,17 +11,8 @@ interface CandidateCardProps {
 }
 
 export const CandidateCard = ({ candidate }: CandidateCardProps) => {
-  const {
-    id,
-    profileImageUrl,
-    title,
-    payRateMin,
-    payRateMax,
-    city,
-    state,
-    country,
-    availability,
-  } = candidate;
+  const { id, title, payRateMin, payRateMax, city, state, country, availability } =
+    candidate;
 
   return (
     <Link
@@ -30,11 +21,6 @@ export const CandidateCard = ({ candidate }: CandidateCardProps) => {
     >
       <article className='relative p-1'>
         <section className='mb-2 flex items-center gap-2'>
-          <Avatar className='size-10'>
-            <AvatarImage src={profileImageUrl} alt='' />
-            <AvatarFallback className='bg-black text-white'>AP</AvatarFallback>
-          </Avatar>
-
           <h2 className='line-clamp-1 pe-2 font-medium group-hover:max-w-[75%]'>
             {title}
           </h2>
