@@ -37,7 +37,7 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
               {firstName} {lastName}
             </span>
 
-            <span className='text-sm text-gray-500'>
+            <span className='text-sm text-gray-600'>
               {city ? `${city}` : ''}
               {state ? `, ${state}` : ''}
               {country && country !== 'USA' ? `, ${country}` : ''}

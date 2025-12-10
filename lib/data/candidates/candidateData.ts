@@ -8,13 +8,13 @@ export async function getCandidates(limit = 20) {
   );
 }
 
-// WIP functions below
 export async function getCandidateById(id: string) {
   return db.query.Candidates.findFirst({
     where: (fields, { eq }) => eq(fields.id, id),
   });
 }
 
+// WIP functions below
 export async function searchCandidates(term: string) {
   return db.query.Candidates.findMany({
     where: (fields, ops) =>

@@ -3,7 +3,7 @@ import { InferSelectModel } from 'drizzle-orm';
 import { Candidates } from './candidateSchema';
 import { Candidate } from './candidateTypes';
 
-const CANDIDATE_ID_PREFIX = 'cand_';
+export const CANDIDATE_ID_PREFIX = 'cand_';
 const createCandidateId = (id: string) => {
   return `${CANDIDATE_ID_PREFIX}${encodeUUID(id)}`;
 };
