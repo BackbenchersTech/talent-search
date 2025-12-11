@@ -34,6 +34,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
         <span className='font-medium'>View all candidates</span>
       </Link>
 
+      {/* TODO: add tags in header */}
       <div className='flex items-center gap-4'>
         <>
           <Avatar className='size-13'>
@@ -62,9 +63,8 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
         </div>
       </div>
 
-      {/* TODO: maybe add a profile completeness checklist */}
-
       <section>
+        {/* all of this is internal view only */}
         {/* TODO: split the cards into individual client components that have the edit buttons functionality built into them */}
         <Card className='mt-6 shadow-none'>
           <CardHeader>
@@ -73,7 +73,10 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
           </CardHeader>
 
           <CardContent>
-            <p>name, title, location, availability</p>
+            <p>
+              name, title, location, availability, salary expectations, total years of
+              experience
+            </p>
           </CardContent>
         </Card>
 
@@ -101,7 +104,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
 
         <Card className='mt-6 shadow-none'>
           <CardHeader>
-            <CardTitle>Resume</CardTitle>
+            <CardTitle>Resumes</CardTitle>
             <CardAction>edit button on hover</CardAction>
           </CardHeader>
 
@@ -110,10 +113,11 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
           </CardContent>
         </Card>
 
-        <span>hoverable notes section that internal team adds</span>
+        <span>public profiles section</span>
         <br />
 
-        <span>public profiles section</span>
+        <span>hoverable notes section that internal team adds</span>
+        <br />
       </section>
     </main>
   );

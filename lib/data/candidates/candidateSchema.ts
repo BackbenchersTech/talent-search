@@ -21,7 +21,6 @@ export const Candidates = pgTable('candidates', {
   payRateMax: integer('pay_rate_max'),
   payCurrency: text('pay_currency'),
   education: text('education'),
-  bio: text('bio'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
