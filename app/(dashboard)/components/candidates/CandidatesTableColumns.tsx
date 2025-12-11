@@ -22,7 +22,7 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
 
       return (
         <div className='flex items-center gap-1'>
-          <div>
+          <>
             <Avatar className='size-10'>
               <AvatarImage src={profileImageUrl} alt='' />
               <AvatarFallback className='bg-black text-white'>
@@ -30,7 +30,7 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
                 {lastName.at(0)}
               </AvatarFallback>
             </Avatar>
-          </div>
+          </>
 
           <div className='flex flex-col'>
             <span className='font-medium'>

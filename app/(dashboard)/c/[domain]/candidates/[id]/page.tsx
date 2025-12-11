@@ -1,3 +1,11 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { getCandidateById } from '@/lib/data/candidates/candidateData';
 import { CANDIDATE_ID_PREFIX } from '@/lib/data/candidates/candidateTransforms';
 import { decodeUUID } from '@/lib/utils/base62';
@@ -14,7 +22,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
     notFound();
   }
 
-  const { firstName, lastName, city, state, country } = candidate;
+  const { firstName, lastName, city, state, country, profileImageUrl } = candidate;
 
   return (
     <main>
@@ -26,29 +34,86 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
         <span className='font-medium'>View all candidates</span>
       </Link>
 
-      {/* Name and location */}
-      <div className='flex flex-col'>
-        <h1 className='text-2xl font-medium'>
-          {firstName} {lastName}
-        </h1>
+      <div className='flex items-center gap-4'>
+        <>
+          <Avatar className='size-13'>
+            <AvatarImage src={profileImageUrl || undefined} alt='' />
+            <AvatarFallback className='bg-black text-white'>
+              {firstName.at(0)}
+              {lastName.at(0)}
+            </AvatarFallback>
+          </Avatar>
+        </>
 
-        <span className='flex items-center gap-1 text-gray-600'>
-          <MapPinIcon className='size-4' />
+        <div className='flex flex-col'>
+          <h1 className='text-2xl font-medium'>
+            {firstName} {lastName}
+          </h1>
 
-          <span className='text-sm'>
-            {city ? `${city}` : ''}
-            {state ? `, ${state}` : ''}
-            {country && country !== 'USA' ? `, ${country}` : ''}
+          <span className='flex items-center gap-1 text-gray-600'>
+            <MapPinIcon className='size-4' />
+
+            <span className='text-sm'>
+              {city ? `${city}` : ''}
+              {state ? `, ${state}` : ''}
+              {country && country !== 'USA' ? `, ${country}` : ''}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
 
-      {/*  */}
+      {/* TODO: maybe add a profile completeness checklist */}
+
       <section>
-        <div className='mt-6'>
-          <h2 className='mt-6 mb-3 text-lg font-medium'>Basic information</h2>
-          <p className='mt-2 mb-2 text-base'>TK</p>
-        </div>
+        {/* TODO: split the cards into individual client components that have the edit buttons functionality built into them */}
+        <Card className='mt-6 shadow-none'>
+          <CardHeader>
+            <CardTitle>Basic information</CardTitle>
+            <CardAction>edit button on hover</CardAction>
+          </CardHeader>
+
+          <CardContent>
+            <p>name, title, location, availability</p>
+          </CardContent>
+        </Card>
+
+        <Card className='mt-6 shadow-none'>
+          <CardHeader>
+            <CardTitle>Contact</CardTitle>
+            <CardAction>edit button on hover</CardAction>
+          </CardHeader>
+
+          <CardContent>
+            <p>email, phone, linkedin</p>
+          </CardContent>
+        </Card>
+
+        <Card className='mt-6 shadow-none'>
+          <CardHeader>
+            <CardTitle>Skills & Tags</CardTitle>
+            <CardAction>edit button on hover</CardAction>
+          </CardHeader>
+
+          <CardContent>
+            <p>Skill chips. should this be in profiles?</p>
+          </CardContent>
+        </Card>
+
+        <Card className='mt-6 shadow-none'>
+          <CardHeader>
+            <CardTitle>Resume</CardTitle>
+            <CardAction>edit button on hover</CardAction>
+          </CardHeader>
+
+          <CardContent>
+            <p>PDF preview, parsed summary</p>
+          </CardContent>
+        </Card>
+
+        <span>hoverable notes section that internal team adds</span>
+        <br />
+
+        <span>public profiles section</span>
       </section>
     </main>
   );
