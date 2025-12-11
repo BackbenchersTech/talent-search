@@ -1,24 +1,18 @@
 import { db } from '@/lib/db/client';
 import { Candidates, Profiles } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { sql } from 'drizzle-orm';
-import { getTableColumns } from 'drizzle-orm';
-import { mapProfileRowToProfileWithCandidate } from './profileTransforms';
+import { eq, getTableColumns } from 'drizzle-orm';
+import {
+  mapProfileRowToProfile,
+  mapProfileRowToProfileWithCandidate,
+} from './profileTransforms';
 
 export async function getProfiles(limit = 20) {
-  const result = (
+  return (
     await db
       .select({
         ...getTableColumns(Profiles),
         candidate: {
           id: Profiles.candidateId,
-          // Convert first + last name → initials (e.g. "JD")
-          initials: sql<string>`
-          CONCAT(
-            SUBSTRING(${Candidates.firstName} FROM 1 FOR 1),
-            SUBSTRING(${Candidates.lastName} FROM 1 FOR 1)
-          )
-        `,
           city: Candidates.city,
           state: Candidates.state,
           country: Candidates.country,
@@ -29,6 +23,12 @@ export async function getProfiles(limit = 20) {
       .leftJoin(Candidates, eq(Profiles.candidateId, Candidates.id))
       .limit(limit)
   ).map(mapProfileRowToProfileWithCandidate);
+}
 
-  return result;
+export async function getCandidateProfiles(candidateId: string) {
+  return (
+    await db.query.Profiles.findMany({
+      where: (fields, { eq }) => eq(fields.candidateId, candidateId),
+    })
+  ).map(mapProfileRowToProfile);
 }

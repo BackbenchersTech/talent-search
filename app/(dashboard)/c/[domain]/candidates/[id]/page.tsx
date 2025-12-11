@@ -1,3 +1,5 @@
+import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
+import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Card,
@@ -8,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { getCandidateById } from '@/lib/data/candidates/candidateData';
 import { CANDIDATE_ID_PREFIX } from '@/lib/data/candidates/candidateTransforms';
+import { getCandidateProfiles } from '@/lib/data/profiles/profileData';
 import { decodeUUID } from '@/lib/utils/base62';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -16,7 +19,19 @@ import { notFound } from 'next/navigation';
 const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props.params;
   const encodedCandidateId = id.replace(CANDIDATE_ID_PREFIX, '');
-  const candidate = await getCandidateById(decodeUUID(encodedCandidateId));
+  const decodedCandidateId = decodeUUID(encodedCandidateId);
+  const candidate = await getCandidateById(decodedCandidateId);
+  const jobProfiles = await getCandidateProfiles(decodedCandidateId);
+  const profilesWithCandidate = jobProfiles.map((jp) => ({
+    ...jp,
+    candidate: {
+      id: candidate!.id,
+      city: candidate!.city,
+      state: candidate!.state,
+      country: candidate!.country,
+      availability: candidate!.availability,
+    },
+  }));
 
   if (!candidate) {
     notFound();
@@ -65,6 +80,14 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
 
       <section>
         {/* all of this is internal view only */}
+        <h2 className='mt-6 mb-3 text-lg font-medium'>Job profiles</h2>
+        <ProfileGrid>
+          {/* fetch profiles for candidate */}
+          {profilesWithCandidate.map((p) => (
+            <ProfileCard key={p.id} profileWithCandidate={p} />
+          ))}
+        </ProfileGrid>
+
         {/* TODO: split the cards into individual client components that have the edit buttons functionality built into them */}
         <Card className='mt-6 shadow-none'>
           <CardHeader>

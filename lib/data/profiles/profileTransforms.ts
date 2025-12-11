@@ -22,10 +22,7 @@ const normalize = <T extends object>(obj: T): NormalizeResult<T> =>
 // --- Main mapper ---
 export function mapProfileRowToProfileWithCandidate(
   row: InferSelectModel<typeof Profiles> & {
-    candidate: Pick<
-      InferSelectModel<typeof Candidates>,
-      keyof Omit<ExploreCandidate, 'initials'>
-    > & { initials: string };
+    candidate: Pick<InferSelectModel<typeof Candidates>, keyof ExploreCandidate>;
   },
 ) {
   const {
@@ -44,3 +41,13 @@ export function mapProfileRowToProfileWithCandidate(
     },
   };
 }
+
+export const mapProfileRowToProfile = (row: InferSelectModel<typeof Profiles>) => {
+  const { id, candidateId, ...profileFields } = row;
+
+  return {
+    id: createProfileId(id),
+    candidateId: createCandidateId(candidateId),
+    ...normalize(profileFields),
+  };
+};

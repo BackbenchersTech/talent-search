@@ -9,9 +9,13 @@ export async function getCandidates(limit = 20) {
 }
 
 export async function getCandidateById(id: string) {
-  return db.query.Candidates.findFirst({
+  const row = await db.query.Candidates.findFirst({
     where: (fields, { eq }) => eq(fields.id, id),
   });
+
+  if (!row) return null;
+
+  return mapCandidateRowToCandidate(row);
 }
 
 // WIP functions below

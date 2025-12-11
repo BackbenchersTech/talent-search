@@ -37,4 +37,4 @@ export type Candidate = {
 export type ExploreCandidate = Pick<
   Candidate,
   'id' | 'city' | 'state' | 'country' | 'availability'
-> & { initials: string };
+>;
