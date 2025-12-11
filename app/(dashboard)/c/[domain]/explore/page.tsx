@@ -1,5 +1,5 @@
-import { CandidateCard } from '@/app/components/CandidateCard';
-import { CandidateGrid } from '@/app/components/CandidateGrid';
+import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
+import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Search } from '@/app/components/Search';
 import { getProfiles } from '@/lib/data/profiles/profileData';
 
@@ -15,11 +15,11 @@ const ExplorePage = async () => {
       </div>
 
       <div className='mt-6 w-full'>
-        <CandidateGrid>
+        <ProfileGrid>
           {profilesWithCandidate.map((p) => (
-            <CandidateCard key={p.id} profileWithCandidate={p} />
+            <ProfileCard key={p.id} profileWithCandidate={p} />
           ))}
-        </CandidateGrid>
+        </ProfileGrid>
       </div>
     </main>
   );

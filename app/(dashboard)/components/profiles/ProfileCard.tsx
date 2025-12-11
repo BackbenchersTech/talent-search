@@ -7,11 +7,11 @@ import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface CandidateCardProps {
+interface ProfileCardProps {
   profileWithCandidate: ProfileWithCandidate;
 }
 
-export const CandidateCard = ({ profileWithCandidate }: CandidateCardProps) => {
+export const ProfileCard = ({ profileWithCandidate }: ProfileCardProps) => {
   const {
     id,
     title,
