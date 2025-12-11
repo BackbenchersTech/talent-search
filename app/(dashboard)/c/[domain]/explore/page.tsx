@@ -1,10 +1,10 @@
 import { CandidateCard } from '@/app/components/CandidateCard';
 import { CandidateGrid } from '@/app/components/CandidateGrid';
 import { Search } from '@/app/components/Search';
-import { getCandidates } from '@/lib/data/candidates/candidateData';
+import { getProfiles } from '@/lib/data/profiles/profileData';
 
 const ExplorePage = async () => {
-  const candidates = await getCandidates();
+  const profilesWithCandidate = await getProfiles();
 
   return (
     <main>
@@ -16,8 +16,8 @@ const ExplorePage = async () => {
 
       <div className='mt-6 w-full'>
         <CandidateGrid>
-          {candidates.map((candidate) => (
-            <CandidateCard key={candidate.id} candidate={candidate} />
+          {profilesWithCandidate.map((p) => (
+            <CandidateCard key={p.id} profileWithCandidate={p} />
           ))}
         </CandidateGrid>
       </div>

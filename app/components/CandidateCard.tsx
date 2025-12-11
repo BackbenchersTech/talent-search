@@ -1,18 +1,24 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Candidate, CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
+import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
+import { ProfileWithCandidate } from '@/lib/data/profiles/profileTypes';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface CandidateCardProps {
-  candidate: Candidate;
+  profileWithCandidate: ProfileWithCandidate;
 }
 
-export const CandidateCard = ({ candidate }: CandidateCardProps) => {
-  const { id, title, payRateMin, payRateMax, city, state, country, availability } =
-    candidate;
+export const CandidateCard = ({ profileWithCandidate }: CandidateCardProps) => {
+  const {
+    id,
+    title,
+    billRateMin,
+    billRateMax,
+    candidate: { city, state, country, availability },
+  } = profileWithCandidate;
 
   return (
     <Link
@@ -34,7 +40,7 @@ export const CandidateCard = ({ candidate }: CandidateCardProps) => {
 
         {/* Rate */}
         <p className='text-[15px] text-gray-600'>
-          {`$${payRateMin}${payRateMax ? ` - ${payRateMax}` : ''} / hour`}
+          {`$${billRateMin}${billRateMax ? ` - ${billRateMax}` : ''} / hour`}
         </p>
 
         {/* Location with timezone */}

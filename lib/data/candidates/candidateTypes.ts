@@ -9,7 +9,7 @@ const CandidateStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
   DRAFT: 'DRAFT',
-};
+} as const;
 export type CandidateStatus = keyof typeof CandidateStatus;
 
 export type Candidate = {
@@ -33,3 +33,8 @@ export type Candidate = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ExploreCandidate = Pick<
+  Candidate,
+  'id' | 'city' | 'state' | 'country' | 'availability'
+> & { initials: string };

@@ -4,7 +4,7 @@ import { Candidates } from './candidateSchema';
 import { Candidate } from './candidateTypes';
 
 export const CANDIDATE_ID_PREFIX = 'cand_';
-const createCandidateId = (id: string) => {
+export const createCandidateId = (id: string) => {
   return `${CANDIDATE_ID_PREFIX}${encodeUUID(id)}`;
 };
 
