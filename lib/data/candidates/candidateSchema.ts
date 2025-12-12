@@ -1,7 +1,4 @@
-import {
-  CandidateAvailability,
-  CandidateStatus,
-} from '@/lib/data/candidates/candidateTypes';
+import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
 import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const Candidates = pgTable('candidates', {
@@ -14,7 +11,9 @@ export const Candidates = pgTable('candidates', {
   state: text('state'),
   country: text('country'),
   availability: text('availability').$type<CandidateAvailability>(),
-  status: text('status').$type<CandidateStatus>(),
+  status: text('status', {
+    enum: ['ACTIVE', 'INACTIVE'],
+  }),
   email: text('email'),
   phone: text('phone'),
   payRateMin: integer('pay_rate_min'),

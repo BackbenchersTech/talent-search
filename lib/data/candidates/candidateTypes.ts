@@ -9,7 +9,7 @@ const CandidateStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 } as const;
-export type CandidateStatus = keyof typeof CandidateStatus;
+type CandidateStatus = keyof typeof CandidateStatus;
 
 export type Candidate = {
   id: string;
