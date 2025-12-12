@@ -8,7 +8,6 @@ export type CandidateAvailability = keyof typeof CandidateAvailability;
 const CandidateStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
-  DRAFT: 'DRAFT',
 } as const;
 export type CandidateStatus = keyof typeof CandidateStatus;
 
