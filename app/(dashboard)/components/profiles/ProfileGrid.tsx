@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { ProfileCard } from './ProfileCard';
 
 export const ProfileGrid = ({

@@ -1,3 +1,4 @@
+import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
 import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
 import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -38,7 +39,8 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
     },
   }));
 
-  const { firstName, lastName, city, state, country, profileImageUrl } = candidate;
+  const { firstName, lastName, city, state, country, profileImageUrl, status } =
+    candidate;
 
   return (
     <main>
@@ -50,7 +52,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
         <span className='font-medium'>View all candidates</span>
       </Link>
 
-      {/* TODO: add status tag and linkedin link as icon in header */}
+      {/* TODO: add linkedin link as icon in header */}
       {/* TODO: actions => make active/inactive, edit */}
       <div className='flex items-center gap-4'>
         <>
@@ -64,9 +66,13 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
         </>
 
         <div className='flex flex-col'>
-          <h1 className='text-2xl font-medium'>
-            {firstName} {lastName}
-          </h1>
+          <div className='flex items-center gap-2'>
+            <h1 className='text-2xl font-medium'>
+              {firstName} {lastName}
+            </h1>
+
+            <CandidateStatusBadge status={status} />
+          </div>
 
           <span className='flex items-center gap-1 text-gray-600'>
             <MapPinIcon className='size-4' />
@@ -101,24 +107,6 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
             <ProfileCard key={p.id} profileWithCandidate={p} />
           ))}
         </ProfileGrid>
-
-        <span className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 shadow-sm'>
-          <span className='flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 shadow-sm ring-2 ring-white' />
-
-          <span className='text-sm font-medium text-gray-800'>Active</span>
-        </span>
-
-        <span className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 shadow-sm'>
-          <span className='flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-red-300 via-red-500 to-red-600 shadow-sm ring-2 ring-white' />
-
-          <span className='text-sm font-medium text-gray-800'>Inactive</span>
-        </span>
-
-        <span className='inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 shadow-sm'>
-          <span className='flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500 shadow-sm ring-2 ring-white' />
-
-          <span className='text-sm font-medium text-gray-700'>Draft</span>
-        </span>
 
         <div>hoverable notes section that internal team adds</div>
       </section>

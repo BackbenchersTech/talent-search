@@ -13,7 +13,9 @@ export const Candidates = pgTable('candidates', {
   availability: text('availability').$type<CandidateAvailability>(),
   status: text('status', {
     enum: ['ACTIVE', 'INACTIVE'],
-  }),
+  })
+    .notNull()
+    .default('INACTIVE'),
   email: text('email'),
   phone: text('phone'),
   payRateMin: integer('pay_rate_min'),

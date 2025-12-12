@@ -5,11 +5,11 @@ export const CandidateAvailability = {
 };
 export type CandidateAvailability = keyof typeof CandidateAvailability;
 
-const CandidateStatus = {
+export const CandidateStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
 } as const;
-type CandidateStatus = keyof typeof CandidateStatus;
+export type CandidateStatus = keyof typeof CandidateStatus;
 
 export type Candidate = {
   id: string;
@@ -22,7 +22,7 @@ export type Candidate = {
   state?: string;
   country?: string;
   availability?: CandidateAvailability;
-  status?: CandidateStatus;
+  status: CandidateStatus;
   email?: string;
   phone?: string;
   payRateMin?: number;
