@@ -1,14 +1,8 @@
+import { CandidateInfoCard } from '@/app/(dashboard)/components/candidates/CandidateInfoCard';
 import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
 import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
 import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { getCandidateById } from '@/lib/data/candidates/candidateData';
 import { CANDIDATE_ID_PREFIX } from '@/lib/data/candidates/candidateTransforms';
 import { getCandidateProfiles } from '@/lib/data/profiles/profileData';
@@ -87,18 +81,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
       </div>
 
       <section>
-        {/* TODO: implement a single row/card that shows all of this */}
-        {/* TODO: split the cards into individual client components that have the edit buttons functionality built into them */}
-        <Card className='mt-6 shadow-none'>
-          <CardHeader>
-            <CardTitle>Basic information</CardTitle>
-            <CardAction>edit button on hover</CardAction>
-          </CardHeader>
-
-          <CardContent>
-            <p>email &middot; • phone, salary expected range</p>
-          </CardContent>
-        </Card>
+        <CandidateInfoCard className='mt-6' />
 
         <h2 className='mt-6 mb-3 text-lg font-medium'>Job profiles</h2>
         <ProfileGrid>
@@ -107,8 +90,6 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
             <ProfileCard key={p.id} profileWithCandidate={p} />
           ))}
         </ProfileGrid>
-
-        <div>hoverable notes section that internal team adds</div>
       </section>
     </main>
   );
