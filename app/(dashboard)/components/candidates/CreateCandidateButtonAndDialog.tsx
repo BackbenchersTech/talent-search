@@ -15,14 +15,23 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createCandidate, State } from '@/lib/data/candidates/actions';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export const CreateCandidateButtonAndDialog = () => {
+  const [open, setOpen] = useState(false);
   const initialState: State = { message: null, errors: {} };
   const [state, formAction, isPending] = useActionState(createCandidate, initialState);
 
+  useEffect(() => {
+    if (state.success) {
+      toast.success('Candidate created successfully!');
+      setTimeout(() => setOpen(false), 0);
+    }
+  }, [state.success]);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='cursor-pointer'>
           <PlusIcon className='size-4' />

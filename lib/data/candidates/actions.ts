@@ -1,9 +1,8 @@
 'use server';
 
-import { z } from 'zod';
-import postgres from 'postgres';
-import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import postgres from 'postgres';
+import { z } from 'zod';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -40,6 +39,7 @@ export type State = {
     lastName?: string;
     email?: string;
   };
+  success?: boolean;
 };
 
 const CreateCandidate = FormSchema.omit({ id: true });
@@ -60,6 +60,7 @@ export async function createCandidate(prevState: State, formData: FormData) {
         lastName: rawFormData.lastName?.toString() ?? '',
         email: rawFormData.email?.toString() ?? '',
       },
+      success: false,
     };
   }
 
@@ -69,13 +70,15 @@ export async function createCandidate(prevState: State, formData: FormData) {
     await sql`
       INSERT INTO candidates (first_name, last_name, email) VALUES (${firstName}, ${lastName}, ${email})
     `;
+
+    // TODO: work on refreshing when using the path instead of subdomain
+    revalidatePath('/candidates');
+
+    return { message: 'Candidate created successfully.', success: true };
   } catch {
     return {
       message: 'Database error: Failed to create candidate.',
+      success: false,
     };
   }
-
-  // TODO: work on refreshing when using the path instead of subdomain
-  revalidatePath('/candidates');
-  redirect('/candidates');
 }

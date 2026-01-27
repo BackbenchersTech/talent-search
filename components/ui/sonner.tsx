@@ -24,6 +24,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         error: <XCircleIcon className='size-4' />,
         loading: <ArcThirdIcon className='size-4 animate-spin' />,
       }}
+      position='top-center'
       style={
         {
           '--normal-bg': 'var(--popover)',

@@ -1,8 +1,10 @@
 import { SideNav } from '@/app/(dashboard)/components/navigation/SideNav';
 import { HtmlShell } from '@/app/components/HtmlShell';
-import '@/app/globals.css';
+import { Toaster } from '@/components/ui/sonner';
 import { MobileBottomNav } from './components/navigation/MobileBottomNav';
 import { MobileTopNav } from './components/navigation/MobileTopNav';
+
+import '@/app/globals.css';
 import styles from './dashboard.module.css';
 
 const ApplicationLayout = ({ children }: { children: React.ReactNode }) => (
@@ -23,6 +25,8 @@ const ApplicationLayout = ({ children }: { children: React.ReactNode }) => (
         </div>
       </div>
     </div>
+
+    <Toaster />
   </HtmlShell>
 );
 
