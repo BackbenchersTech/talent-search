@@ -5,7 +5,6 @@ import { MobileBottomNav } from './components/navigation/MobileBottomNav';
 import { MobileTopNav } from './components/navigation/MobileTopNav';
 
 import '@/app/globals.css';
-import styles from './dashboard.module.css';
 
 const ApplicationLayout = ({ children }: { children: React.ReactNode }) => (
   <HtmlShell>
@@ -20,7 +19,7 @@ const ApplicationLayout = ({ children }: { children: React.ReactNode }) => (
 
         <div className='h-full w-full flex-1'>
           <main className='no-scrollbar h-full w-full overflow-auto py-0 pt-16 sm:pt-0'>
-            <div className={styles['dashboard-page-container']}>{children}</div>
+            {children}
           </main>
         </div>
       </div>
