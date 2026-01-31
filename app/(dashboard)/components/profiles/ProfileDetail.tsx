@@ -18,7 +18,7 @@ export const ProfileDetail = () => {
   };
 
   return (
-    <aside className='fixed top-0 right-0 z-30 h-full w-full overflow-y-auto bg-white px-8 pt-5 lg:w-[calc((100%-(var(--spacing)*20))/2)]'>
+    <aside className='fixed top-0 right-0 z-30 h-full w-full overflow-y-auto bg-white px-8 pt-16 sm:w-[calc(100vw-(var(--spacing)*20))] sm:pt-5 lg:w-[calc((100vw-(var(--spacing)*20))/2)]'>
       <div className='flex items-center'>
         <Button
           variant='ghost'
