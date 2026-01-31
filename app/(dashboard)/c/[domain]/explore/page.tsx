@@ -44,7 +44,11 @@ const ExplorePage = async ({
         </div>
       </div>
 
-      {profileId && <ProfileDetail />}
+      {profileId && (
+        <ProfileDetail
+          profileWithCandidate={profilesWithCandidate.find((p) => p.id === profileId)}
+        />
+      )}
     </>
   );
 };
