@@ -13,7 +13,7 @@ export const ProfileDetail = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { title, billRateMin, billRateMax } = profileWithCandidate || {};
+  const { title, billRateMin, billRateMax, bio } = profileWithCandidate || {};
 
   const closePanel = () => {
     const params = new URLSearchParams(searchParams);
@@ -60,13 +60,23 @@ export const ProfileDetail = ({
           </div>
         </div>
 
-        {/* Bio section */}
-        {/* 3 highlighted/curated experiences */}
-        {/* Summary/timeline of all positions with option to view more details  */}
-        {/* Education, if any */}
+        <section className='mt-8'>
+          {/* Bio section */}
+          <section>
+            <h3 className='font-medium text-black'>
+              <strong>Summary</strong>
+            </h3>
 
-        {/* Footer */}
-        {/* 2 buttons, download resume and interested */}
+            <p className='text-gray-600'>{bio}</p>
+          </section>
+
+          {/* 3 highlighted/curated experiences */}
+          {/* Summary/timeline of all positions with option to view more details  */}
+          {/* Education, if any */}
+
+          {/* Footer */}
+          {/* 2 buttons, download resume and interested */}
+        </section>
       </article>
     </aside>
   );
