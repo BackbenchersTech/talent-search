@@ -10,6 +10,7 @@ import { decodeUUID } from '@/lib/utils/base62';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 
 const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props.params;
@@ -37,7 +38,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
     candidate;
 
   return (
-    <main>
+    <PageContainer>
       <Link
         href='/candidates'
         className='mb-2 inline-flex items-center gap-1 transition-opacity duration-200 hover:opacity-50'
@@ -91,7 +92,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
           ))}
         </ProfileGrid>
       </section>
-    </main>
+    </PageContainer>
   );
 };
 

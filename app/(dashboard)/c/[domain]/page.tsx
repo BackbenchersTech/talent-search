@@ -1,3 +1,5 @@
+import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
+
 const HomePage = async ({
   params,
   searchParams,
@@ -9,12 +11,12 @@ const HomePage = async ({
   const queryParams = await searchParams;
 
   return (
-    <div>
+    <PageContainer>
       Home page <br />
       Domain: {domain}
       <br />
       Query: {JSON.stringify(queryParams) || 'N/A'}
-    </div>
+    </PageContainer>
   );
 };
 
