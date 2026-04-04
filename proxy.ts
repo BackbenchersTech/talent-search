@@ -58,16 +58,38 @@ const getEffectivePath = (req: NextRequest) => {
   const subdomain = extractSubdomain(req);
   const { pathname } = req.nextUrl;
 
-  if (subdomain) {
+  if (subdomain && subdomain !== 'www') {
+    // pathname has a leading slash
     return `/c/${subdomain}${pathname}`;
   }
 
   return pathname;
 };
 
+const isTenantApplicationPath = (req: NextRequest) => {
+  const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith('/c')) {
+    return true;
+  }
+
+  return false;
+};
+
 export default clerkMiddleware(async (auth, request) => {
-  const effectivePath = getEffectivePath(request);
   const subdomain = extractSubdomain(request);
+
+  if ((!subdomain || subdomain === 'www') && isTenantApplicationPath(request)) {
+    const { pathname } = request.nextUrl;
+    const [, tenant, ...rest] = pathname.split('/').filter(Boolean);
+    const dest = new URL(request.url);
+    dest.host = `${tenant}.${rootDomain}`;
+    dest.pathname = rest.length > 0 ? `/${rest.join('/')}` : '/';
+
+    return NextResponse.redirect(dest, 308);
+  }
+
+  const effectivePath = getEffectivePath(request);
 
   if (isPathnameProtected(effectivePath)) {
     await auth.protect();
