@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils/cn';
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
 import {
   ArrowRightEndOnRectangleIcon,
   ArrowTrendingUpIcon,
@@ -9,10 +10,9 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export const SideNav = () => {
-  const router = useRouter();
   const pathname = usePathname();
 
   return (
@@ -133,20 +133,24 @@ export const SideNav = () => {
           <section aria-label='User actions'>
             <ul role='list' className='flex w-full flex-col items-center'>
               <li className='flex w-full flex-col items-center justify-center'>
-                <button
-                  onClick={() => {
-                    router.push('/login');
-                  }}
-                  className='group relative flex w-full cursor-pointer flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]'
-                >
-                  <div className='flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600'>
-                    <div className='p-2'>
-                      <ArrowRightEndOnRectangleIcon className='size-6' />
-                    </div>
+                <SignedOut>
+                  <SignInButton mode='modal'>
+                    <button className='group relative flex w-full cursor-pointer flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]'>
+                      <div className='flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600'>
+                        <div className='p-2'>
+                          <ArrowRightEndOnRectangleIcon className='size-6' />
+                        </div>
 
-                    <span className='text-[10px]'>Sign in</span>
+                        <span className='text-[10px]'>Sign in</span>
+                      </div>
+                    </button>
+                  </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <div className='flex w-full flex-col items-center justify-center px-3 py-[11px]'>
+                    <UserButton />
                   </div>
-                </button>
+                </SignedIn>
               </li>
             </ul>
           </section>
