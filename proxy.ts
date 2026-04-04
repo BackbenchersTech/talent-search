@@ -1,7 +1,20 @@
-import { NextResponse } from 'next/server';
+import { clerkMiddleware } from '@clerk/nextjs/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'localhost:3000';
+
+const isPathnameProtected = (pathname: string) => {
+  const pathSegments = pathname.split('/').filter(Boolean);
+
+  if (
+    pathSegments[0] !== 'c' ||
+    (pathSegments[0] === 'c' && pathSegments[2] === 'explore')
+  )
+    return false;
+
+  return true;
+};
 
 const extractSubdomain = (request: NextRequest): string | null => {
   const url = request.url;
@@ -41,9 +54,24 @@ const extractSubdomain = (request: NextRequest): string | null => {
   return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, '') : null;
 };
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+const getEffectivePath = (req: NextRequest) => {
+  const subdomain = extractSubdomain(req);
+  const { pathname } = req.nextUrl;
+
+  if (subdomain) {
+    return `/c/${subdomain}${pathname}`;
+  }
+
+  return pathname;
+};
+
+export default clerkMiddleware(async (auth, request) => {
+  const effectivePath = getEffectivePath(request);
   const subdomain = extractSubdomain(request);
+
+  if (isPathnameProtected(effectivePath)) {
+    await auth.protect();
+  }
 
   if (subdomain) {
     // Block access to unwanted pages from subdomains like:
@@ -52,24 +80,21 @@ export function proxy(request: NextRequest) {
     // }
 
     // Rewrite to the subdomain page
-    const target = new URL(`/c/${subdomain}${pathname}`, request.url);
+    const target = new URL(effectivePath, request.url);
     target.search = request.nextUrl.search;
+
     return NextResponse.rewrite(target);
   }
 
   // On the root domain, allow normal access
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: [
-    /*
-     * Match all paths except for:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. /.well-known (e.g. for chrome dev tools)
-     * 3. all root files inside /app (e.g. /favicon.ico)
-     */
-    '/((?!api|_next|\\.well-known|[\\w-]+\\.\\w+).*)',
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
   ],
 };
