@@ -1,10 +1,6 @@
 import { Footer } from '@/app/(marketing)/components/Footer';
 import { NavBar } from '@/app/(marketing)/components/NavBar';
-import { HtmlShell } from '@/app/components/HtmlShell';
-import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
-
-import '@/app/globals.css';
 
 export const metadata: Metadata = {
   title: 'Talent | Backbenchers',
@@ -14,19 +10,17 @@ export const metadata: Metadata = {
 
 const MarketingLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <HtmlShell>
-      <ClerkProvider>
-        <NavBar />
+    <>
+      <NavBar />
 
-        <div className='flex flex-row pt-16'>
-          <div className='mx-auto w-full max-w-[1600px] px-6 duration-300 md:px-8 lg:px-14 2xl:mt-16'>
-            {children}
+      <div className='flex flex-row pt-16'>
+        <div className='mx-auto w-full max-w-[1600px] px-6 duration-300 md:px-8 lg:px-14 2xl:mt-16'>
+          {children}
 
-            <Footer />
-          </div>
+          <Footer />
         </div>
-      </ClerkProvider>
-    </HtmlShell>
+      </div>
+    </>
   );
 };
 
