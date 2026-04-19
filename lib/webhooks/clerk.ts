@@ -37,28 +37,45 @@ const handleMembershipCreated = async (data: any) => {
   const clerkUserId = data.public_user_data.user_id;
   const clerkOrgId = data.organization.id;
 
-  // get internal userId
-  const [user] =
-    await sql`SELECT id FROM users WHERE clerk_user_id = ${clerkUserId} LIMIT 1`;
+  try {
+    await retryPromise(async () => {
+      // get internal userId
+      const [user] =
+        await sql`SELECT id FROM users WHERE clerk_user_id = ${clerkUserId} LIMIT 1`;
 
-  // get internal organizationID
-  const [organization] =
-    await sql`SELECT id FROM organizations WHERE clerk_organization_id = ${clerkOrgId} LIMIT 1`;
+      // get internal organizationID
+      const [organization] =
+        await sql`SELECT id FROM organizations WHERE clerk_org_id = ${clerkOrgId} LIMIT 1`;
 
-  if (!user || !organization) {
-    console.log('Missing user or organization for membership');
-    return;
+      if (!user) {
+        handleUserCreated({ id: clerkUserId, ...data.public_user_data });
+      }
+
+      if (!organization) {
+        handleOrganizationCreated({
+          id: clerkOrgId,
+          name: data.organization.name,
+          slug: data.organization.slug,
+        });
+      }
+      if (!user || !organization) {
+        console.log('Missing user or organization for membership');
+        return;
+      }
+
+      // TODO: Map role
+      const role = 'sdr';
+
+      await sql`
+      INSERT INTO memberships (user_id, organization_id, role)
+      VALUES (${user.id}, ${organization.id}, ${role})
+      ON CONFLICT (user_id, organization_id)
+      DO UPDATE SET role = EXCLUDED.role
+    `;
+    });
+  } catch (e) {
+    console.error('Failed to create membership', e);
   }
-
-  // TODO: Map role
-  const role = 'sdr';
-
-  await sql`
-    INSERT INTO memberships (user_id, organization_id, role)
-    VALUES (${user.id}, ${organization.id}, ${role})
-    ON CONFLICT (user_id, organization_id)
-    DO UPDATE SET role = EXCLUDED.role
-  `;
 };
 
 export const handleClerkWebhook = async (event: any) => {
