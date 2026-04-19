@@ -44,6 +44,10 @@ export default clerkMiddleware(async (auth, request) => {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get('host');
 
+  if (hostname?.includes('localhost')) {
+    return NextResponse.next();
+  }
+
   // Extract subdomain from hostname using utility function
   const subdomain = extractSubdomainFromHostname(hostname || '');
 

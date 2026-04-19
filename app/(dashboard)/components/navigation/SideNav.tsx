@@ -39,7 +39,7 @@ export const SideNav = () => {
                     { 'bg-indigo-50': pathname === '/explore' },
                   )}
                   aria-label='Explore'
-                  href='/explore'
+                  href='./explore'
                 >
                   <div
                     className={cn(
@@ -60,15 +60,15 @@ export const SideNav = () => {
                 <Link
                   className={cn(
                     'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
-                    { 'bg-indigo-50': pathname === '/' },
+                    { 'bg-indigo-50': pathname === '/home' },
                   )}
                   aria-label='Home'
-                  href='/'
+                  href='./home'
                 >
                   <div
                     className={cn(
                       'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
-                      { 'font-medium text-indigo-600': pathname === '/' },
+                      { 'font-medium text-indigo-600': pathname === '/home' },
                     )}
                   >
                     <div className='p-2'>
@@ -87,7 +87,7 @@ export const SideNav = () => {
                     { 'bg-indigo-50': pathname === '/candidates' },
                   )}
                   aria-label='Candidates'
-                  href='/candidates'
+                  href='./candidates'
                 >
                   <div
                     className={cn(
@@ -111,7 +111,7 @@ export const SideNav = () => {
                     { 'bg-indigo-50': pathname === '/analytics' },
                   )}
                   aria-label='Analytics'
-                  href='/analytics'
+                  href='./analytics'
                 >
                   <div
                     className={cn(

@@ -6,7 +6,9 @@ import '@/app/globals.css';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <HtmlShell>
-      <ClerkProvider>{children}</ClerkProvider>
+      <ClerkProvider taskUrls={{ 'choose-organization': '/onboarding' }}>
+        {children}
+      </ClerkProvider>
     </HtmlShell>
   );
 }
