@@ -3,6 +3,16 @@ import { NextResponse } from 'next/server';
 
 export const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'localhost:3000';
 
+const reservedSubdomains = [
+  'www',
+  // Clerk auth reserved CNAME records
+  'clerk',
+  'accounts',
+  'clkmail',
+  'clk._domainkey',
+  'clk2._domainkey',
+];
+
 const isPathnameProtected = (pathname: string) => {
   const pathSegments = pathname.split('/').filter(Boolean);
 
@@ -32,7 +42,7 @@ const extractSubdomainFromHostname = (hostname: string): string | null => {
   // For production (e.g., subdomain.protecteddomain.com)
   if (parts.length >= 3) {
     const subdomain = parts[0];
-    return subdomain && subdomain !== 'www' ? subdomain : null;
+    return subdomain && !reservedSubdomains.includes(subdomain) ? subdomain : null;
   }
 
   return null;
