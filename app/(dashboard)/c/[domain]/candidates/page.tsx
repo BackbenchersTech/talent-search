@@ -3,10 +3,12 @@ import { CreateCandidateButtonAndDialog } from '@/app/(dashboard)/components/can
 import { DataTable } from '@/app/(dashboard)/components/candidates/DataTable';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { Search } from '@/app/components/Search';
+import { getAppContext } from '@/lib/auth/getAppContext';
 import { getCandidates } from '@/lib/data/candidates/candidateData';
 
 const CandidatesPage = async () => {
-  const candidates = await getCandidates();
+  const { orgId } = await getAppContext();
+  const candidates = await getCandidates(orgId);
 
   return (
     <PageContainer>

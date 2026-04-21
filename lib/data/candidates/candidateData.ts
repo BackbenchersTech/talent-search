@@ -1,9 +1,9 @@
 import { db } from '@/lib/db/client';
-import { Candidates } from '@/lib/db/schema/index';
+import { withCandidateRepo } from '@/lib/repos/candidates';
 import { mapCandidateRowToCandidate } from './candidateTransforms';
 
-export async function getCandidates(limit = 20) {
-  return (await db.select().from(Candidates).limit(limit)).map(
+export async function getCandidates(orgId: string) {
+  return (await withCandidateRepo(orgId, (repo) => repo.getAll())).map(
     mapCandidateRowToCandidate,
   );
 }
