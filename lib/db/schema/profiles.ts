@@ -15,7 +15,7 @@ import { Organizations } from './organizations';
 const statusValues = ['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const;
 const visibilityValues = ['PRIVATE', 'PUBLIC'] as const;
 
-export const profiles = pgTable(
+export const Profiles = pgTable(
   'profiles',
   {
     id: uuid('id').defaultRandom().primaryKey(),

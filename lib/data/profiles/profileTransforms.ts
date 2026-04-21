@@ -1,9 +1,8 @@
+import { Candidates, Profiles } from '@/lib/db/schema';
 import { encodeUUID } from '@/lib/utils/base62';
 import { InferSelectModel } from 'drizzle-orm';
 import { createCandidateId } from '../candidates/candidateTransforms';
 import { ExploreCandidate } from '../candidates/candidateTypes';
-import { Profiles } from './profileSchema';
-import { Candidates } from '../candidates/candidateSchema';
 
 const PROFILE_ID_PREFIX = 'prof_';
 const createProfileId = (id: string) => `${PROFILE_ID_PREFIX}${encodeUUID(id)}`;

@@ -1,6 +1,6 @@
 import { encodeUUID } from '@/lib/utils/base62';
 import { InferSelectModel } from 'drizzle-orm';
-import { Candidates } from './candidateSchema';
+import { Candidates } from '@/lib/db/schema';
 import { Candidate } from './candidateTypes';
 
 export const CANDIDATE_ID_PREFIX = 'cand_';

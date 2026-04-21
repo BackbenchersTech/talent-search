@@ -1,5 +1,5 @@
 import { db } from '@/lib/db/client';
-import { Candidates } from '@/lib/db/schema';
+import { Candidates } from '@/lib/db/schema/index';
 import { mapCandidateRowToCandidate } from './candidateTransforms';
 
 export async function getCandidates(limit = 20) {
