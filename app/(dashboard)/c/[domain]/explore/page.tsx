@@ -6,6 +6,7 @@ import { getProfiles } from '@/lib/data/profiles/profileData';
 import { cn } from '@/lib/utils/cn';
 
 import styles from '@/app/(dashboard)/dashboard.module.css';
+import { getAppContext } from '@/lib/auth/getAppContext';
 
 const ExplorePage = async ({
   searchParams,
@@ -14,7 +15,8 @@ const ExplorePage = async ({
 }) => {
   const queryParams = await searchParams;
   const profileId = queryParams?.profileId;
-  const profilesWithCandidate = await getProfiles();
+  const { orgId } = await getAppContext();
+  const profilesWithCandidate = await getProfiles(orgId);
 
   return (
     <>

@@ -1,12 +1,12 @@
 import { db } from '@/lib/db/client';
+import { Candidates } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { Candidates } from '../db/schema';
 
 type GetAllOptions = {
   limit?: number;
 };
 
-export const createCandidateRepo = (orgId: string) => {
+const createCandidatesRepo = (orgId: string) => {
   const baseFilter = eq(Candidates.organizationId, orgId);
 
   return {
@@ -21,10 +21,10 @@ export const createCandidateRepo = (orgId: string) => {
   };
 };
 
-export const withCandidateRepo = <T>(
+export const withCandidatesRepo = <T>(
   orgId: string,
-  fn: (repo: ReturnType<typeof createCandidateRepo>) => Promise<T>,
+  fn: (repo: ReturnType<typeof createCandidatesRepo>) => Promise<T>,
 ) => {
-  const repo = createCandidateRepo(orgId ?? '');
+  const repo = createCandidatesRepo(orgId);
   return fn(repo);
 };

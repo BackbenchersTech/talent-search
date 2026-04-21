@@ -19,7 +19,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
   const decodedCandidateId = decodeUUID(encodedCandidateId);
   const { orgId } = await getAppContext();
   const candidate = await getCandidateById(orgId, decodedCandidateId);
-  const jobProfiles = await getCandidateProfiles(decodedCandidateId);
+  const jobProfiles = await getCandidateProfiles(orgId, decodedCandidateId);
 
   if (!candidate) {
     notFound();
