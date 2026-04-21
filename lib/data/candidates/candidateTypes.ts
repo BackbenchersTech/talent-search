@@ -2,8 +2,9 @@ export const CandidateAvailability = {
   AVAILABLE_NOW: 'AVAILABLE_NOW',
   TWO_WEEKS: 'TWO_WEEKS',
   ONE_MONTH: 'ONE_MONTH',
-};
-export type CandidateAvailability = keyof typeof CandidateAvailability;
+} as const;
+export type CandidateAvailability =
+  (typeof CandidateAvailability)[keyof typeof CandidateAvailability];
 
 export const CandidateStatus = {
   ACTIVE: 'ACTIVE',
