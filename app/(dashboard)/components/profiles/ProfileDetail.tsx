@@ -139,9 +139,6 @@ export const ProfileDetail = ({
           {/* 3 highlighted/curated experiences */}
           {/* Summary/timeline of all positions with option to view more details  */}
           {/* Education, if any */}
-
-          {/* Footer/CTAs */}
-          {/* 3, shortlist (primary), download anonymized resume and add to compare */}
         </section>
       </article>
     </aside>
