@@ -2,8 +2,14 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
 import { ProfileWithCandidate } from '@/lib/data/profiles/profileTypes';
-import { ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowDownTrayIcon,
+  ChevronDoubleRightIcon,
+  MapPinIcon,
+  PlusIcon,
+} from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export const ProfileDetail = ({
@@ -14,7 +20,14 @@ export const ProfileDetail = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { title, billRateMin, billRateMax, bio, skills } = profileWithCandidate || {};
+  const {
+    title,
+    billRateMin,
+    billRateMax,
+    bio,
+    skills,
+    candidate: { city, state, country, availability } = {},
+  } = profileWithCandidate || {};
   console.log(skills);
 
   const closePanel = () => {
@@ -44,12 +57,46 @@ export const ProfileDetail = ({
       <article>
         {/* Profile title and rate details */}
         <div className='flex justify-between max-lg:gap-6 lg:pt-8'>
-          <div className='flex flex-col items-start gap-1'>
-            <h1 className='text-2xl font-medium tracking-tight text-gray-900'>{title}</h1>
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-col items-start gap-1'>
+              <h1 className='text-2xl font-medium tracking-tight text-gray-900'>
+                {title}
+              </h1>
 
-            <h2 className='text-xl font-medium sm:hidden'>
-              {`$${billRateMin}${billRateMax ? ` - ${billRateMax}` : ''} / hour`}
-            </h2>
+              <h2 className='text-xl font-medium sm:hidden'>
+                {`$${billRateMin}${billRateMax ? ` - ${billRateMax}` : ''} / hour`}
+              </h2>
+            </div>
+
+            <div className='flex flex-wrap items-center gap-1'>
+              <span className='flex items-center gap-1 text-gray-600'>
+                <MapPinIcon className='size-4' />
+
+                <span className='text-sm'>
+                  {city ? `${city}` : ''}
+                  {state ? `, ${state}` : ''}
+                  {country && country !== 'USA' ? `, ${country}` : ''}
+                </span>
+              </span>
+              {city && <span>·</span>}
+              <span className='text-sm text-gray-600'>
+                Available
+                {` ${
+                  availability === CandidateAvailability.AVAILABLE_NOW
+                    ? 'immediately'
+                    : `in ${availability}`
+                }`}
+              </span>
+            </div>
+
+            <div className='flex gap-1.5'>
+              <Button className='cursor-pointer'>
+                <PlusIcon className='size-4' /> Shortlist
+              </Button>
+              <Button variant='outline' className='cursor-pointer shadow-none'>
+                <ArrowDownTrayIcon className='size-4' /> Download resume
+              </Button>
+            </div>
           </div>
 
           <div className='flex flex-col items-end max-sm:hidden'>
