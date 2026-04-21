@@ -32,9 +32,11 @@ export const Candidates = pgTable(
     payRateMax: integer('pay_rate_max'),
     payCurrency: text('pay_currency').default('USD'),
     education: text('education'),
-    organizationId: uuid('organization_id').references(() => Organizations.id, {
-      onDelete: 'cascade',
-    }),
+    organizationId: uuid('organization_id')
+      .references(() => Organizations.id, {
+        onDelete: 'cascade',
+      })
+      .notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
   },
