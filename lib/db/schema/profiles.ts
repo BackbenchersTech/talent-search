@@ -9,8 +9,8 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { Candidates } from '../candidates/candidateSchema';
-import { Organizations } from '../organizations/organizationSchema';
+import { Candidates } from './candidates';
+import { Organizations } from './organizations';
 
 const statusValues = ['DRAFT', 'PUBLISHED', 'ARCHIVED'] as const;
 const visibilityValues = ['PRIVATE', 'PUBLIC'] as const;

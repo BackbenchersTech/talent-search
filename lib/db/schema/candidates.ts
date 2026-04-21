@@ -1,3 +1,4 @@
+import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
 import { sql } from 'drizzle-orm';
 import {
   check,
@@ -8,8 +9,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { Organizations } from '../organizations/organizationSchema';
-import { CandidateAvailability } from './candidateTypes';
+import { Organizations } from './organizations';
 
 const statusValues = ['ACTIVE', 'INACTIVE'] as const;
 
