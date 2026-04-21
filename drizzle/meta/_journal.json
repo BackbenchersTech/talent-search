@@ -15,6 +15,13 @@
       "when": 1776806528072,
       "tag": "0001_gigantic_scarlet_witch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776806612675,
+      "tag": "0002_lowly_micromacro",
+      "breakpoints": true
     }
   ]
 }

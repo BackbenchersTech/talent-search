@@ -31,7 +31,6 @@ export const Candidates = pgTable(
     payRateMin: integer('pay_rate_min'),
     payRateMax: integer('pay_rate_max'),
     payCurrency: text('pay_currency').default('USD'),
-    education: text('education'),
     organizationId: uuid('organization_id')
       .references(() => Organizations.id, {
         onDelete: 'cascade',
