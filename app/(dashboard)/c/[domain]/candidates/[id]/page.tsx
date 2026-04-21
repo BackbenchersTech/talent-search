@@ -1,8 +1,10 @@
 import { CandidateInfoCard } from '@/app/(dashboard)/components/candidates/CandidateInfoCard';
 import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
+import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
 import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getAppContext } from '@/lib/auth/getAppContext';
 import { getCandidateById } from '@/lib/data/candidates/candidateData';
 import { CANDIDATE_ID_PREFIX } from '@/lib/data/candidates/candidateTransforms';
 import { getCandidateProfiles } from '@/lib/data/profiles/profileData';
@@ -10,13 +12,13 @@ import { decodeUUID } from '@/lib/utils/base62';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 
 const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) => {
   const { id } = await props.params;
   const encodedCandidateId = id.replace(CANDIDATE_ID_PREFIX, '');
   const decodedCandidateId = decodeUUID(encodedCandidateId);
-  const candidate = await getCandidateById(decodedCandidateId);
+  const { orgId } = await getAppContext();
+  const candidate = await getCandidateById(orgId, decodedCandidateId);
   const jobProfiles = await getCandidateProfiles(decodedCandidateId);
 
   if (!candidate) {

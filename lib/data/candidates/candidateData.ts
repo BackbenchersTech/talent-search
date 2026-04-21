@@ -8,14 +8,12 @@ export async function getCandidates(orgId: string) {
   );
 }
 
-export async function getCandidateById(id: string) {
-  const row = await db.query.Candidates.findFirst({
-    where: (fields, { eq }) => eq(fields.id, id),
-  });
+export async function getCandidateById(orgId: string, candidateId: string) {
+  const candidate = await withCandidateRepo(orgId, (repo) => repo.getById(candidateId));
 
-  if (!row) return null;
+  if (!candidate) return null;
 
-  return mapCandidateRowToCandidate(row);
+  return mapCandidateRowToCandidate(candidate);
 }
 
 // WIP functions below
