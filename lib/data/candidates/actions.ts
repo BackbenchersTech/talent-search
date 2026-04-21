@@ -1,10 +1,9 @@
 'use server';
 
+import { getAppContext } from '@/lib/auth/getAppContext';
+import { withCandidatesRepo } from '@/lib/repos/candidates';
 import { revalidatePath } from 'next/cache';
-import postgres from 'postgres';
 import { z } from 'zod';
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const FormSchema = z.object({
   id: z.string(),
@@ -67,9 +66,10 @@ export async function createCandidate(prevState: State, formData: FormData) {
   const { firstName, lastName, email } = validatedFields.data;
 
   try {
-    await sql`
-      INSERT INTO candidates (first_name, last_name, email) VALUES (${firstName}, ${lastName}, ${email})
-    `;
+    const { orgId } = await getAppContext();
+    await withCandidatesRepo(orgId, (repo) =>
+      repo.create({ firstName, lastName, email }),
+    );
 
     // TODO: work on refreshing when using the path instead of subdomain
     revalidatePath('/candidates');

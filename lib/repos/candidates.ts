@@ -16,8 +16,27 @@ const createCandidatesRepo = (orgId: string) => {
       await db.query.Candidates.findFirst({
         where: and(baseFilter, eq(Candidates.id, id)),
       }),
-    // WIP
-    create: async () => {},
+    create: async ({
+      firstName,
+      lastName,
+      email,
+    }: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    }) => {
+      const [candidate] = await db
+        .insert(Candidates)
+        .values({
+          firstName,
+          lastName,
+          email,
+          organizationId: orgId,
+        })
+        .returning();
+
+      return candidate;
+    },
   };
 };
 
