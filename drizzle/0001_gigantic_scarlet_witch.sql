@@ -1,0 +1,1 @@
+ALTER TABLE "education" ADD CONSTRAINT "education_degree_check" CHECK ("education"."degree" = ANY (ARRAY['BACHELORS', 'MASTERS']));

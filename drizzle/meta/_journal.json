@@ -8,6 +8,13 @@
       "when": 1776805294155,
       "tag": "0000_majestic_carlie_cooper",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776806528072,
+      "tag": "0001_gigantic_scarlet_witch",
+      "breakpoints": true
     }
   ]
 }
