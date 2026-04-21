@@ -38,7 +38,7 @@ export const Profiles = pgTable(
       .array()
       .notNull()
       .default(sql`'{}'`),
-    viewCount: integer('view_count').default(0),
+    viewCount: integer('view_count').notNull().default(0),
     organizationId: uuid('organization_id').references(() => Organizations.id, {
       onDelete: 'cascade',
     }),
