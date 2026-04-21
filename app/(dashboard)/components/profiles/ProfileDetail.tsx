@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProfileWithCandidate } from '@/lib/data/profiles/profileTypes';
 import { ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
@@ -13,7 +14,8 @@ export const ProfileDetail = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { title, billRateMin, billRateMax, bio } = profileWithCandidate || {};
+  const { title, billRateMin, billRateMax, bio, skills } = profileWithCandidate || {};
+  console.log(skills);
 
   const closePanel = () => {
     const params = new URLSearchParams(searchParams);
@@ -62,7 +64,7 @@ export const ProfileDetail = ({
 
         <section className='mt-8'>
           {/* Bio section */}
-          <section>
+          <section className='mb-4'>
             <h3 className='font-medium text-black'>
               <strong>Summary</strong>
             </h3>
@@ -70,12 +72,29 @@ export const ProfileDetail = ({
             <p className='text-gray-600'>{bio}</p>
           </section>
 
+          {/* Skills section */}
+          {skills?.length && (
+            <section className='mb-4'>
+              <h3 className='font-medium text-black'>
+                <strong>Skills</strong>
+              </h3>
+
+              <p className='text-gray-600'>
+                {skills.map((skill, idx) => (
+                  <Badge key={`skill-${idx}`} className='mr-1 bg-gray-200 text-black'>
+                    {skill}
+                  </Badge>
+                ))}
+              </p>
+            </section>
+          )}
+
           {/* 3 highlighted/curated experiences */}
           {/* Summary/timeline of all positions with option to view more details  */}
           {/* Education, if any */}
 
-          {/* Footer */}
-          {/* 2 buttons, download resume and interested */}
+          {/* Footer/CTAs */}
+          {/* 3, shortlist (primary), download anonymized resume and add to compare */}
         </section>
       </article>
     </aside>
