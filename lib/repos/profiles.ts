@@ -30,6 +30,10 @@ export const createProfilesRepo = (orgId: string) => {
       await db.query.Profiles.findMany({
         where: (fields) => and(baseFilter, eq(fields.candidateId, candidateId)),
       }),
+    getById: async (id: string) =>
+      await db.query.Profiles.findFirst({
+        where: and(baseFilter, eq(Profiles.id, id)),
+      }),
   };
 };
 

@@ -2,8 +2,9 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
-import { ProfileWithCandidate } from '@/lib/data/profiles/profileTypes';
+import { Candidate, CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
+import { Education } from '@/lib/data/education/educationTypes';
+import { Profile } from '@/lib/data/profiles/profileTypes';
 import {
   ArrowDownTrayIcon,
   ChevronDoubleRightIcon,
@@ -12,23 +13,20 @@ import {
 } from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export const ProfileDetail = ({
-  profileWithCandidate,
+export const ProfileDetailClient = ({
+  profile,
+  candidate,
+  education,
 }: {
-  profileWithCandidate?: ProfileWithCandidate;
+  profile?: Profile;
+  candidate?: Candidate;
+  education: Education[];
 }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const {
-    title,
-    billRateMin,
-    billRateMax,
-    bio,
-    skills,
-    candidate: { city, state, country, availability } = {},
-  } = profileWithCandidate || {};
-  console.log(skills);
+  const { title, billRateMin, billRateMax, bio, skills } = profile || {};
+  const { city, state, country, availability } = candidate || {};
 
   const closePanel = () => {
     const params = new URLSearchParams(searchParams);
@@ -38,7 +36,7 @@ export const ProfileDetail = ({
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  if (!profileWithCandidate) {
+  if (!profile) {
     return null;
   }
 
@@ -138,7 +136,25 @@ export const ProfileDetail = ({
 
           {/* 3 highlighted/curated experiences */}
           {/* Summary/timeline of all positions with option to view more details  */}
-          {/* Education, if any */}
+          {/* Education section */}
+          {education.length && (
+            <section>
+              <h3 className='font-medium text-black'>
+                <strong>Education</strong>
+              </h3>
+
+              <ul>
+                {education.map((edu, idx) => (
+                  <li key={`education-${idx}`} className='mb-2'>
+                    <span>
+                      {edu.degree}
+                      {edu.fieldOfStudy ? `; ${edu.fieldOfStudy}` : ''}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </section>
       </article>
     </aside>

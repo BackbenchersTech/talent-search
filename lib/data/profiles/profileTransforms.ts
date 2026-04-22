@@ -1,22 +1,12 @@
+import { createCandidateId } from '@/lib/data/candidates/candidateTransforms';
+import { ExploreCandidate } from '@/lib/data/candidates/candidateTypes';
 import { Candidates, Profiles } from '@/lib/db/schema';
 import { encodeUUID } from '@/lib/utils/base62';
+import { normalize } from '@/lib/utils/normalize';
 import { InferSelectModel } from 'drizzle-orm';
-import { createCandidateId } from '../candidates/candidateTransforms';
-import { ExploreCandidate } from '../candidates/candidateTypes';
 
-const PROFILE_ID_PREFIX = 'prof_';
+export const PROFILE_ID_PREFIX = 'prof_';
 const createProfileId = (id: string) => `${PROFILE_ID_PREFIX}${encodeUUID(id)}`;
-
-// Clean nulls → undefined
-// For each property, if the property type includes `null`, replace `null` with `undefined` in the result type.
-type NormalizeResult<T> = {
-  [K in keyof T]: null extends T[K] ? Exclude<T[K], null> | undefined : T[K];
-};
-
-const normalize = <T extends object>(obj: T): NormalizeResult<T> =>
-  Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key, value === null ? undefined : value]),
-  ) as unknown as NormalizeResult<T>;
 
 // --- Main mapper ---
 export function mapProfileRowToProfileWithCandidate(

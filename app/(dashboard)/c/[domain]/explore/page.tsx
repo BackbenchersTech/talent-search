@@ -1,10 +1,10 @@
 import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
-import { ProfileDetail } from '@/app/(dashboard)/components/profiles/ProfileDetail';
 import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Search } from '@/app/components/Search';
 import { getProfiles } from '@/lib/data/profiles/profileData';
 import { cn } from '@/lib/utils/cn';
 
+import { ProfileDetailWrapper } from '@/app/(dashboard)/components/profiles/ProfileDetailWrapper';
 import styles from '@/app/(dashboard)/dashboard.module.css';
 import { getAppContext } from '@/lib/auth/getAppContext';
 
@@ -46,11 +46,7 @@ const ExplorePage = async ({
         </div>
       </div>
 
-      {profileId && (
-        <ProfileDetail
-          profileWithCandidate={profilesWithCandidate.find((p) => p.id === profileId)}
-        />
-      )}
+      {profileId && <ProfileDetailWrapper key={profileId} profileId={profileId} />}
     </>
   );
 };
