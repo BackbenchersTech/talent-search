@@ -6,16 +6,19 @@ import { cn } from '@/lib/utils/cn';
 
 import { ProfileDetailWrapper } from '@/app/(dashboard)/components/profiles/ProfileDetailWrapper';
 import styles from '@/app/(dashboard)/dashboard.module.css';
-import { getAppContext } from '@/lib/auth/getAppContext';
+import { getOrgIdFromSlug } from '@/lib/auth/getOrgIdFromSlug';
 
 const ExplorePage = async ({
+  params,
   searchParams,
 }: {
+  params: Promise<{ domain: string }>;
   searchParams: Promise<{ profileId?: string }>;
 }) => {
+  const { domain } = await params;
   const queryParams = await searchParams;
   const profileId = queryParams?.profileId;
-  const { orgId } = await getAppContext();
+  const orgId = await getOrgIdFromSlug(domain);
   const profilesWithCandidate = await getProfiles(orgId);
 
   return (
