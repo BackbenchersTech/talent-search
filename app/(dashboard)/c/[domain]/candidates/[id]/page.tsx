@@ -13,8 +13,10 @@ import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) => {
-  const { id } = await props.params;
+const CandidateDetailPage = async (props: {
+  params: Promise<{ id: string; domain: string }>;
+}) => {
+  const { domain, id } = await props.params;
   const encodedCandidateId = id.replace(CANDIDATE_ID_PREFIX, '');
   const decodedCandidateId = decodeUUID(encodedCandidateId);
   const { orgId } = await getAppContext();
@@ -42,7 +44,7 @@ const CandidateDetailPage = async (props: { params: Promise<{ id: string }> }) =
   return (
     <PageContainer>
       <Link
-        href='/candidates'
+        href={`/c/${domain}/candidates`}
         className='mb-2 inline-flex items-center gap-1 transition-opacity duration-200 hover:opacity-50'
       >
         <ArrowLeftIcon className='size-4 stroke-2' />
