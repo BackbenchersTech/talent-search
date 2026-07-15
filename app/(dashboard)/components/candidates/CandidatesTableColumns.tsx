@@ -47,7 +47,6 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
       );
     },
   },
-  { accessorKey: 'title', header: 'Title' },
   { accessorKey: 'status', header: 'Status' },
   { accessorKey: 'availability', header: 'Availability' },
   {

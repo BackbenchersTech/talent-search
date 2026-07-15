@@ -17,7 +17,6 @@ export type Candidate = {
   firstName: string;
   lastName: string;
   profileImageUrl?: string;
-  title?: string;
   bio?: string;
   city?: string;
   state?: string;

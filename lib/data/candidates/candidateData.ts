@@ -23,7 +23,6 @@ export async function searchCandidates(term: string) {
       ops.or(
         ops.ilike(fields.firstName, `%${term}%`),
         ops.ilike(fields.lastName, `%${term}%`),
-        ops.ilike(fields.title, `%${term}%`),
       ),
   });
 }

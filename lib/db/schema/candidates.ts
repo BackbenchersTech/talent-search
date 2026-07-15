@@ -20,7 +20,6 @@ export const Candidates = pgTable(
     firstName: text('first_name').notNull(),
     lastName: text('last_name').notNull(),
     profileImageUrl: text('profile_image_url'),
-    title: text('title'),
     city: text('city'),
     state: text('state'),
     country: text('country'),
