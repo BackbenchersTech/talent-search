@@ -1,6 +1,7 @@
 import { CandidateInfoCard } from '@/app/(dashboard)/components/candidates/CandidateInfoCard';
 import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
+import { AddProfileCard } from '@/app/(dashboard)/components/profiles/AddProfileCard';
 import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
 import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -89,10 +90,10 @@ const CandidateDetailPage = async (props: {
 
         <h2 className='mt-6 mb-3 text-lg font-medium'>Job profiles</h2>
         <ProfileGrid>
-          {/* fetch profiles for candidate */}
           {profilesWithCandidate.map((p) => (
             <ProfileCard key={p.id} profileWithCandidate={p} />
           ))}
+          <AddProfileCard href={`/c/${domain}/candidates/${id}/profiles/new`} />
         </ProfileGrid>
       </section>
     </PageContainer>
