@@ -33,6 +33,33 @@ export const createProfilesRepo = (orgId: string) => {
       await db.query.Profiles.findFirst({
         where: and(baseFilter, eq(Profiles.id, id)),
       }),
+    create: async ({
+      candidateId,
+      title,
+      billRateMin,
+      billRateMax,
+      bio,
+    }: {
+      candidateId: string;
+      title: string;
+      billRateMin?: number;
+      billRateMax?: number;
+      bio?: string;
+    }) => {
+      const [profile] = await db
+        .insert(Profiles)
+        .values({
+          candidateId,
+          title,
+          billRateMin,
+          billRateMax,
+          bio,
+          organizationId: orgId,
+        })
+        .returning();
+
+      return profile;
+    },
   };
 };
 
