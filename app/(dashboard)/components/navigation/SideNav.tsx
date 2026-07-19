@@ -1,19 +1,17 @@
 'use client';
 
+import { createNavItems, isActive } from '@/app/(dashboard)/utils/navigation';
+import { NAV_ICONS } from '@/app/(dashboard)/utils/navIcons';
 import { cn } from '@/lib/utils/cn';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
-import {
-  ArrowRightEndOnRectangleIcon,
-  ArrowTrendingUpIcon,
-  HomeIcon,
-  MagnifyingGlassIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline';
+import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 export const SideNav = () => {
+  const params = useParams<{ domain: string }>();
   const pathname = usePathname();
+  const items = createNavItems(params.domain);
 
   return (
     <aside
@@ -21,7 +19,7 @@ export const SideNav = () => {
       aria-label='Main navigation sidebar'
     >
       <div className='flex w-20 grow flex-col overflow-x-visible border-r border-gray-200 bg-white/5'>
-        <section className='flex flex-1 flex-col'>
+        <section className='flex-1 flex flex-col'>
           <div className='flex justify-center p-3'>
             {/* TODO: replace with logo SVG */}
             <div className='flex h-[56px] w-[55px] items-center justify-center text-[30px]'>
@@ -31,102 +29,38 @@ export const SideNav = () => {
 
           <nav className='flex-1'>
             <ul role='list' className='flex flex-col items-center justify-center'>
-              <li className='flex w-full flex-col items-center justify-center'>
-                {/* TODO: fix routes to work for both domain paths and subdomains */}
-                <Link
-                  className={cn(
-                    'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
-                    { 'bg-indigo-50': pathname === '/explore' },
-                  )}
-                  aria-label='Explore'
-                  href='./explore'
-                >
-                  <div
-                    className={cn(
-                      'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
-                      { 'font-medium text-indigo-600': pathname === '/explore' },
-                    )}
+              {items.map((item) => {
+                const Icon = NAV_ICONS[item.key];
+
+                return (
+                  <li
+                    key={item.key}
+                    className='flex w-full flex-col items-center justify-center'
                   >
-                    <div className='p-2'>
-                      <MagnifyingGlassIcon className='size-5 stroke-2' />
-                    </div>
+                    <Link
+                      className={cn(
+                        'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
+                        { 'bg-indigo-50': isActive(pathname, item.href) },
+                      )}
+                      aria-label={item.label}
+                      href={item.href}
+                    >
+                      <div
+                        className={cn(
+                          'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
+                          { 'font-medium text-indigo-600': isActive(pathname, item.href) },
+                        )}
+                      >
+                        <div className='p-2'>
+                          <Icon className='size-5 stroke-2' />
+                        </div>
 
-                    <span className='text-[10px]'>Explore</span>
-                  </div>
-                </Link>
-              </li>
-
-              <li className='flex w-full flex-col items-center justify-center'>
-                <Link
-                  className={cn(
-                    'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
-                    { 'bg-indigo-50': pathname === '/home' },
-                  )}
-                  aria-label='Home'
-                  href='./home'
-                >
-                  <div
-                    className={cn(
-                      'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
-                      { 'font-medium text-indigo-600': pathname === '/home' },
-                    )}
-                  >
-                    <div className='p-2'>
-                      <HomeIcon className='size-5 stroke-2' />
-                    </div>
-
-                    <span className='text-[10px]'>Home</span>
-                  </div>
-                </Link>
-              </li>
-
-              <li className='flex w-full flex-col items-center justify-center'>
-                <Link
-                  className={cn(
-                    'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
-                    { 'bg-indigo-50': pathname === '/candidates' },
-                  )}
-                  aria-label='Candidates'
-                  href='./candidates'
-                >
-                  <div
-                    className={cn(
-                      'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
-                      { 'font-medium text-indigo-600': pathname === '/candidates' },
-                    )}
-                  >
-                    <div className='p-2'>
-                      <UsersIcon className='size-5 stroke-2' />
-                    </div>
-
-                    <span className='text-[10px]'>Candidates</span>
-                  </div>
-                </Link>
-              </li>
-
-              <li className='flex w-full flex-col items-center justify-center'>
-                <Link
-                  className={cn(
-                    'group relative flex w-full flex-col items-center justify-center px-3 py-[11px] hover:bg-[#F5F7FF]',
-                    { 'bg-indigo-50': pathname === '/analytics' },
-                  )}
-                  aria-label='Analytics'
-                  href='./analytics'
-                >
-                  <div
-                    className={cn(
-                      'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
-                      { 'font-medium text-indigo-600': pathname === '/analytics' },
-                    )}
-                  >
-                    <div className='p-2'>
-                      <ArrowTrendingUpIcon className='size-5 stroke-2' />
-                    </div>
-
-                    <span className='text-[10px]'>Analytics</span>
-                  </div>
-                </Link>
-              </li>
+                        <span className='text-[10px]'>{item.label}</span>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
