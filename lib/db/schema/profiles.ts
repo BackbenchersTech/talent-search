@@ -1,3 +1,4 @@
+import { ProfileAvailability } from '@/lib/data/profiles/profileTypes';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
@@ -22,6 +23,7 @@ export const Profiles = pgTable(
     candidateId: uuid('candidate_id')
       .notNull()
       .references(() => Candidates.id, { onDelete: 'cascade' }),
+    availability: text('availability').$type<ProfileAvailability>(),
     title: text('title').notNull(),
     industry: text('industry'),
     seniority: text('seniority'),

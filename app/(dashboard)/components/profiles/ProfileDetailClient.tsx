@@ -2,9 +2,9 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Candidate, CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
+import { Candidate } from '@/lib/data/candidates/candidateTypes';
 import { Education } from '@/lib/data/education/educationTypes';
-import { Profile } from '@/lib/data/profiles/profileTypes';
+import { Profile, ProfileAvailability } from '@/lib/data/profiles/profileTypes';
 import {
   ArrowDownTrayIcon,
   ChevronDoubleRightIcon,
@@ -25,8 +25,8 @@ export const ProfileDetailClient = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { title, billRateMin, billRateMax, bio, skills } = profile || {};
-  const { city, state, country, availability } = candidate || {};
+  const { title, billRateMin, billRateMax, bio, skills, availability } = profile || {};
+  const { city, state, country } = candidate || {};
 
   const closePanel = () => {
     const params = new URLSearchParams(searchParams);
@@ -80,7 +80,7 @@ export const ProfileDetailClient = ({
               <span className='text-sm text-gray-600'>
                 Available
                 {` ${
-                  availability === CandidateAvailability.AVAILABLE_NOW
+                  availability === ProfileAvailability.AVAILABLE_NOW
                     ? 'immediately'
                     : `in ${availability}`
                 }`}

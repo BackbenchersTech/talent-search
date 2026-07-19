@@ -1,11 +1,3 @@
-export const CandidateAvailability = {
-  AVAILABLE_NOW: 'AVAILABLE_NOW',
-  TWO_WEEKS: 'TWO_WEEKS',
-  ONE_MONTH: 'ONE_MONTH',
-} as const;
-export type CandidateAvailability =
-  (typeof CandidateAvailability)[keyof typeof CandidateAvailability];
-
 export const CandidateStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -21,7 +13,6 @@ export type Candidate = {
   city?: string;
   state?: string;
   country?: string;
-  availability?: CandidateAvailability;
   status: CandidateStatus;
   email?: string;
   phone?: string;
@@ -33,7 +24,4 @@ export type Candidate = {
   updatedAt: Date;
 };
 
-export type ExploreCandidate = Pick<
-  Candidate,
-  'id' | 'city' | 'state' | 'country' | 'availability'
->;
+export type ExploreCandidate = Pick<Candidate, 'id' | 'city' | 'state' | 'country'>;

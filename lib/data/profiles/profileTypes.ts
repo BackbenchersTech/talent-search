@@ -13,10 +13,19 @@ const ProfileVisibility = {
 } as const;
 export type ProfileVisibility = keyof typeof ProfileVisibility;
 
+export const ProfileAvailability = {
+  AVAILABLE_NOW: 'AVAILABLE_NOW',
+  TWO_WEEKS: 'TWO_WEEKS',
+  ONE_MONTH: 'ONE_MONTH',
+} as const;
+export type ProfileAvailability =
+  (typeof ProfileAvailability)[keyof typeof ProfileAvailability];
+
 export type Profile = {
   id: string;
   candidateId: string;
   title: string;
+  availability?: ProfileAvailability;
   industry?: string;
   seniority?: string;
   status: ProfileStatus;

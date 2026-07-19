@@ -19,7 +19,6 @@ export const createProfilesRepo = (orgId: string) => {
             city: Candidates.city,
             state: Candidates.state,
             country: Candidates.country,
-            availability: Candidates.availability,
           },
         })
         .from(Profiles)

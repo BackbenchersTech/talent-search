@@ -1,8 +1,10 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
-import { ProfileWithCandidate } from '@/lib/data/profiles/profileTypes';
+import {
+  ProfileWithCandidate,
+  ProfileAvailability,
+} from '@/lib/data/profiles/profileTypes';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,7 +19,8 @@ export const ProfileCard = ({ profileWithCandidate }: ProfileCardProps) => {
     title,
     billRateMin,
     billRateMax,
-    candidate: { city, state, country, availability },
+    availability,
+    candidate: { city, state, country },
   } = profileWithCandidate;
 
   return (
@@ -52,7 +55,7 @@ export const ProfileCard = ({ profileWithCandidate }: ProfileCardProps) => {
         <p className='text-sm text-gray-500'>
           Available{' '}
           {`${
-            availability === CandidateAvailability.AVAILABLE_NOW
+            availability === ProfileAvailability.AVAILABLE_NOW
               ? 'immediately'
               : `in ${availability}`
           }`}
@@ -73,7 +76,12 @@ export const ProfileCard = ({ profileWithCandidate }: ProfileCardProps) => {
                 {/* intentionally failing url */}
                 <AvatarImage src='/default-avatar' alt='@default' />
                 <AvatarFallback>
-                  <Image src='/default-avatar.svg' width={24} height={24} alt='' />
+                  <Image
+                    src='/default-avatar.svg'
+                    width={24}
+                    height={24}
+                    alt='Default Profile Image'
+                  />
                 </AvatarFallback>
               </Avatar>
             </div>

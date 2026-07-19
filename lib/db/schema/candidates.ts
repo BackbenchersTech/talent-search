@@ -1,4 +1,3 @@
-import { CandidateAvailability } from '@/lib/data/candidates/candidateTypes';
 import { sql } from 'drizzle-orm';
 import {
   check,
@@ -23,7 +22,6 @@ export const Candidates = pgTable(
     city: text('city'),
     state: text('state'),
     country: text('country'),
-    availability: text('availability').$type<CandidateAvailability>(),
     status: text('status', { enum: statusValues }).notNull().default('INACTIVE'),
     email: text('email'),
     phone: text('phone'),

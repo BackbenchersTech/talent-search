@@ -34,7 +34,6 @@ const CandidateDetailPage = async (props: {
       city: candidate.city,
       state: candidate.state,
       country: candidate.country,
-      availability: candidate.availability,
     },
   }));
 
