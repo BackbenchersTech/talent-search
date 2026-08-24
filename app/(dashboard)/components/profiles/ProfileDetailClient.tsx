@@ -1,6 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Candidate } from '@/lib/data/candidates/candidateTypes';
 import { Education } from '@/lib/data/education/educationTypes';
@@ -12,6 +11,7 @@ import {
   PlusIcon,
 } from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ProfileDetailContent } from './ProfileDetailContent';
 
 export const ProfileDetailClient = ({
   profile,
@@ -25,7 +25,7 @@ export const ProfileDetailClient = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { title, billRateMin, billRateMax, bio, skills, availability } = profile || {};
+  const { title, billRateMin, billRateMax, availability } = profile || {};
   const { city, state, country } = candidate || {};
 
   const closePanel = () => {
@@ -107,55 +107,7 @@ export const ProfileDetailClient = ({
           </div>
         </div>
 
-        <section className='mt-8'>
-          {/* Bio section */}
-          <section className='mb-4'>
-            <h3 className='font-medium text-black'>
-              <strong>Summary</strong>
-            </h3>
-
-            <p className='text-gray-600'>{bio}</p>
-          </section>
-
-          {/* Skills section */}
-          {skills?.length && (
-            <section className='mb-4'>
-              <h3 className='font-medium text-black'>
-                <strong>Skills</strong>
-              </h3>
-
-              <p className='text-gray-600'>
-                {skills.map((skill, idx) => (
-                  <Badge key={`skill-${idx}`} className='mr-1 bg-gray-200 text-black'>
-                    {skill}
-                  </Badge>
-                ))}
-              </p>
-            </section>
-          )}
-
-          {/* 3 highlighted/curated experiences */}
-          {/* Summary/timeline of all positions with option to view more details  */}
-          {/* Education section */}
-          {education.length && (
-            <section>
-              <h3 className='font-medium text-black'>
-                <strong>Education</strong>
-              </h3>
-
-              <ul>
-                {education.map((edu, idx) => (
-                  <li key={`education-${idx}`} className='mb-2'>
-                    <span>
-                      {edu.degree}
-                      {edu.fieldOfStudy ? `; ${edu.fieldOfStudy}` : ''}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </section>
+        <ProfileDetailContent profile={profile} education={education} />
       </article>
     </aside>
   );
