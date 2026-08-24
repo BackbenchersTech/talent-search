@@ -14,10 +14,7 @@ interface ProfileCardProps {
   href: string;
 }
 
-export const ProfileCard = ({
-  profileWithCandidate,
-  href,
-}: ProfileCardProps) => {
+export const ProfileCard = ({ profileWithCandidate, href }: ProfileCardProps) => {
   const {
     title,
     billRateMin,

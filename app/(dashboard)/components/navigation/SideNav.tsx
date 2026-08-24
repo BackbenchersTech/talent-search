@@ -19,7 +19,7 @@ export const SideNav = () => {
       aria-label='Main navigation sidebar'
     >
       <div className='flex w-20 grow flex-col overflow-x-visible border-r border-gray-200 bg-white/5'>
-        <section className='flex-1 flex flex-col'>
+        <section className='flex flex-1 flex-col'>
           <div className='flex justify-center p-3'>
             {/* TODO: replace with logo SVG */}
             <div className='flex h-[56px] w-[55px] items-center justify-center text-[30px]'>
@@ -48,7 +48,9 @@ export const SideNav = () => {
                       <div
                         className={cn(
                           'flex h-fit w-fit flex-col items-center justify-center text-black group-hover:text-indigo-600',
-                          { 'font-medium text-indigo-600': isActive(pathname, item.href) },
+                          {
+                            'font-medium text-indigo-600': isActive(pathname, item.href),
+                          },
                         )}
                       >
                         <div className='p-2'>

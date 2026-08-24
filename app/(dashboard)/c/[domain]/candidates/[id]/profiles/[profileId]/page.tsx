@@ -33,8 +33,7 @@ const ProfileDetailPage = async (props: {
     notFound();
   }
 
-  const { title, billRateMin, billRateMax, availability, status, visibility } =
-    profile;
+  const { title, billRateMin, billRateMax, availability, status, visibility } = profile;
   const { firstName, lastName, city, state, country } = candidate || {};
 
   return (
@@ -83,9 +82,7 @@ const ProfileDetailPage = async (props: {
       <article className='max-w-3xl'>
         <h2 className='mt-8 mb-3 text-[26px] font-semibold'>
           {`$${billRateMin}${billRateMax ? ` - ${billRateMax}` : ''}`}
-          <span className='ml-2 text-[14px] font-normal text-gray-500'>
-            per hour
-          </span>
+          <span className='ml-2 text-[14px] font-normal text-gray-500'>per hour</span>
         </h2>
 
         <ProfileDetailContent profile={profile} education={education} />
