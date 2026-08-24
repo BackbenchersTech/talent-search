@@ -6,7 +6,7 @@ import { normalize } from '@/lib/utils/normalize';
 import { InferSelectModel } from 'drizzle-orm';
 
 export const PROFILE_ID_PREFIX = 'prof_';
-const createProfileId = (id: string) => `${PROFILE_ID_PREFIX}${encodeUUID(id)}`;
+export const createProfileId = (id: string) => `${PROFILE_ID_PREFIX}${encodeUUID(id)}`;
 
 // --- Main mapper ---
 export function mapProfileRowToProfileWithCandidate(

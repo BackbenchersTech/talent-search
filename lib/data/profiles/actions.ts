@@ -4,7 +4,9 @@ import { getAppContext } from '@/lib/auth/getAppContext';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
 import { withProfilesRepo } from '@/lib/repos/profiles';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { createProfileId } from './profileTransforms';
 
 const optionalPositiveNumber = z.preprocess(
   (val) => {
@@ -69,6 +71,8 @@ export async function createProfile(
 
   const { title, billRateMin, billRateMax, bio } = validatedFields.data;
 
+  let createdProfileId: string | undefined;
+
   try {
     const { orgId } = await getAppContext();
 
@@ -79,17 +83,20 @@ export async function createProfile(
       return { message: 'Candidate not found.', success: false };
     }
 
-    await withProfilesRepo(orgId, (repo) =>
+    const profile = await withProfilesRepo(orgId, (repo) =>
       repo.create({ candidateId, title, billRateMin, billRateMax, bio }),
     );
 
-    revalidatePath(`/c/${domain}/candidates/${candidateUrlId}`);
-
-    return { message: 'Profile created successfully.', success: true };
+    createdProfileId = createProfileId(profile.id);
   } catch {
     return {
       message: 'Database error: Failed to create profile.',
       success: false,
     };
   }
+
+  revalidatePath(`/c/${domain}/candidates/${candidateUrlId}`);
+
+  // redirect() throws NEXT_REDIRECT, so it must live outside the try/catch.
+  redirect(`/c/${domain}/candidates/${candidateUrlId}/profiles/${createdProfileId}`);
 }

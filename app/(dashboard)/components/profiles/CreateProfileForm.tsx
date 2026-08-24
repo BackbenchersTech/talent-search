@@ -6,10 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { createProfile, State } from '@/lib/data/profiles/actions';
 import { cn } from '@/lib/utils/cn';
-import { useActionState, useEffect } from 'react';
+import { useActionState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
 interface CreateProfileFormProps {
   candidateId: string;
@@ -24,7 +22,6 @@ export const CreateProfileForm = ({
   candidateUrlId,
   className,
 }: CreateProfileFormProps) => {
-  const router = useRouter();
   const initialState: State = { message: null, errors: {} };
   const createProfileBound = createProfile.bind(
     null,
@@ -32,23 +29,10 @@ export const CreateProfileForm = ({
     domain,
     candidateUrlId,
   );
-  const [state, formAction, isPending] = useActionState(
-    createProfileBound,
-    initialState,
-  );
-
-  useEffect(() => {
-    if (state.success) {
-      toast.success('Profile created successfully!');
-      router.push(`/c/${domain}/candidates/${candidateUrlId}`);
-    }
-  }, [state.success, router, domain, candidateUrlId]);
+  const [state, formAction, isPending] = useActionState(createProfileBound, initialState);
 
   return (
-    <form
-      action={formAction}
-      className={cn('flex max-w-xl flex-col gap-5', className)}
-    >
+    <form action={formAction} className={cn('flex max-w-xl flex-col gap-5', className)}>
       <div className='grid gap-2'>
         <Label htmlFor='title'>Title</Label>
         <Input
@@ -135,9 +119,7 @@ export const CreateProfileForm = ({
         </Button>
       </div>
 
-      {state.message && !state.success ? (
-        <p className='text-sm text-red-500'>{state.message}</p>
-      ) : null}
+      {state.message && <p className='text-sm text-red-500'>{state.message}</p>}
     </form>
   );
 };
