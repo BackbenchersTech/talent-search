@@ -7,3 +7,8 @@ export type Education = {
   orderIndex: number;
   createdAt: Date;
 };
+
+export const DEGREE_LABELS: Record<Education['degree'], string> = {
+  BACHELORS: "Bachelor's",
+  MASTERS: "Master's",
+};

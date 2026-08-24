@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Education } from '@/lib/data/education/educationTypes';
+import { DEGREE_LABELS, Education } from '@/lib/data/education/educationTypes';
 import { Profile } from '@/lib/data/profiles/profileTypes';
 
 interface ProfileDetailContentProps {
@@ -17,23 +17,19 @@ export const ProfileDetailContent = ({
     <section className='mt-8'>
       {/* Bio section */}
       <section className='mb-4'>
-        <h3 className='font-medium text-black'>
-          <strong>Summary</strong>
-        </h3>
+        <h3 className='font-semibold text-black'>Summary</h3>
 
         <p className='text-gray-600'>{bio}</p>
       </section>
 
       {/* Skills section */}
-      {skills?.length && (
+      {!!skills?.length && (
         <section className='mb-4'>
-          <h3 className='font-medium text-black'>
-            <strong>Skills</strong>
-          </h3>
+          <h3 className='font-semibold text-black'>Skills</h3>
 
           <p className='text-gray-600'>
-            {skills.map((skill, idx) => (
-              <Badge key={`skill-${idx}`} className='mr-1 bg-gray-200 text-black'>
+            {skills.map((skill) => (
+              <Badge key={skill} className='mr-1 bg-gray-200 text-black'>
                 {skill}
               </Badge>
             ))}
@@ -44,21 +40,25 @@ export const ProfileDetailContent = ({
       {/* 3 highlighted/curated experiences */}
       {/* Summary/timeline of all positions with option to view more details  */}
       {/* Education section */}
-      {education.length && (
+      {education.length > 0 && (
         <section>
-          <h3 className='font-medium text-black'>
-            <strong>Education</strong>
-          </h3>
+          <h3 className='font-semibold text-black'>Education</h3>
 
-          <ul>
-            {education.map((edu, idx) => (
-              <li key={`education-${idx}`} className='mb-2'>
-                <span>
-                  {edu.degree}
-                  {edu.fieldOfStudy ? `; ${edu.fieldOfStudy}` : ''}
-                </span>
-              </li>
-            ))}
+          <ul className='mt-2'>
+            {[...education]
+              .sort((a, b) => a.orderIndex - b.orderIndex)
+              .map((edu) => {
+                const credential = [DEGREE_LABELS[edu.degree], edu.fieldOfStudy]
+                  .filter(Boolean)
+                  .join(' · ');
+
+                return (
+                  <li key={edu.id} className='mb-3'>
+                    <p className='font-medium text-black'>{edu.school || credential}</p>
+                    {edu.school && <p className='text-sm text-gray-600'>{credential}</p>}
+                  </li>
+                );
+              })}
           </ul>
         </section>
       )}
