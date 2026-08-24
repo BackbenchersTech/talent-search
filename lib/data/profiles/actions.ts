@@ -3,10 +3,11 @@
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
 import { withProfilesRepo } from '@/lib/repos/profiles';
+import { MAX_BIO_LENGTH } from '@/lib/data/profiles/profileTypes';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { createProfileId } from './profileTransforms';
+import { createProfileId, decodeProfileId } from './profileTransforms';
 
 const optionalPositiveNumber = z.preprocess(
   (val) => {
@@ -20,7 +21,12 @@ const FormSchema = z.object({
   title: z.string().trim().min(1, { error: 'Please enter a title.' }),
   billRateMin: optionalPositiveNumber,
   billRateMax: optionalPositiveNumber,
-  bio: z.string().trim().optional(),
+  bio: z
+    .string()
+    .trim()
+    .max(MAX_BIO_LENGTH, {
+      error: `Summary must be ${MAX_BIO_LENGTH} characters or fewer.`,
+    }),
 });
 
 export type State = {
@@ -99,4 +105,53 @@ export async function createProfile(
 
   // redirect() throws NEXT_REDIRECT, so it must live outside the try/catch.
   redirect(`/c/${domain}/candidates/${candidateUrlId}/profiles/${createdProfileId}`);
+}
+
+const BioSchema = z.string().max(MAX_BIO_LENGTH, {
+  error: `Summary must be ${MAX_BIO_LENGTH} characters or fewer.`,
+});
+
+export type UpdateSummaryResult = {
+  bio?: string;
+  error?: string;
+};
+
+export async function updateProfileSummary(
+  profileUrlId: string,
+  bio: string,
+): Promise<UpdateSummaryResult> {
+  const validatedFields = BioSchema.safeParse(bio.trim());
+
+  if (!validatedFields.success) {
+    return { error: validatedFields.error.issues[0]?.message };
+  }
+
+  try {
+    const { orgId } = await getAppContext();
+
+    let profileId: string;
+    try {
+      profileId = decodeProfileId(profileUrlId);
+    } catch {
+      return { error: 'Profile not found.' };
+    }
+
+    const profile = await withProfilesRepo(orgId, (repo) => repo.getById(profileId));
+    if (!profile) {
+      return { error: 'Profile not found.' };
+    }
+
+    await withProfilesRepo(orgId, (repo) =>
+      repo.update(profileId, { bio: validatedFields.data }),
+    );
+  } catch {
+    return { error: 'Database error: Failed to update summary.' };
+  }
+
+  // Invalidate every route this profile can render on — detail page and the
+  // explore slide-over — without needing the concrete URL segments.
+  revalidatePath(`/c/[domain]/candidates/[id]/profiles/${profileUrlId}`, 'page');
+  revalidatePath(`/c/[domain]/explore`, 'page');
+
+  return { bio: validatedFields.data };
 }

@@ -85,7 +85,7 @@ const ProfileDetailPage = async (props: {
           <span className='ml-2 text-[14px] font-normal text-gray-500'>per hour</span>
         </h2>
 
-        <ProfileDetailContent profile={profile} education={education} />
+        <ProfileDetailContent profile={profile} education={education} editable />
       </article>
     </PageContainer>
   );

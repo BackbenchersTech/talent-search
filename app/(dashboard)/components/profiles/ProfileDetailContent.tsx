@@ -1,26 +1,25 @@
 import { Badge } from '@/components/ui/badge';
 import { DEGREE_LABELS, Education } from '@/lib/data/education/educationTypes';
 import { Profile } from '@/lib/data/profiles/profileTypes';
+import { SummarySection } from './SummarySection';
 
 interface ProfileDetailContentProps {
-  profile?: Profile;
+  profile: Profile;
   education: Education[];
+  editable?: boolean;
 }
 
 export const ProfileDetailContent = ({
   profile,
   education,
+  editable = false,
 }: ProfileDetailContentProps) => {
-  const { bio, skills } = profile || {};
+  const { id: profileId, bio, skills } = profile;
 
   return (
     <section className='mt-8'>
       {/* Bio section */}
-      <section className='mb-4'>
-        <h3 className='font-semibold text-black'>Summary</h3>
-
-        <p className='text-gray-600'>{bio}</p>
-      </section>
+      <SummarySection profileId={profileId} bio={bio} editable={editable} />
 
       {/* Skills section */}
       {!!skills?.length && (

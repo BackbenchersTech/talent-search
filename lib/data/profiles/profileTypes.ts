@@ -1,5 +1,7 @@
 import { ExploreCandidate } from '../candidates/candidateTypes';
 
+export const MAX_BIO_LENGTH = 2000;
+
 const ProfileStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',

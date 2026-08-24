@@ -60,6 +60,24 @@ export const createProfilesRepo = (orgId: string) => {
 
       return profile;
     },
+    update: async (
+      id: string,
+      values: Partial<{
+        title: string;
+        billRateMin: number;
+        billRateMax: number;
+        bio: string;
+        skills: string[];
+      }>,
+    ) => {
+      const [profile] = await db
+        .update(Profiles)
+        .set(values)
+        .where(and(baseFilter, eq(Profiles.id, id)))
+        .returning();
+
+      return profile;
+    },
   };
 };
 
