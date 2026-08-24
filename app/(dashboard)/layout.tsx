@@ -5,7 +5,7 @@ import { MobileTopNav } from './components/navigation/MobileTopNav';
 
 const ApplicationLayout = ({ children }: { children: React.ReactNode }) => (
   <>
-    <div className='min-h-full'>
+    <div className='h-full'>
       <MobileTopNav />
 
       <MobileBottomNav />

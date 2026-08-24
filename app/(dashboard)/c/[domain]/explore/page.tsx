@@ -28,7 +28,7 @@ const ExplorePage = async ({
         className={cn(
           'transition-all duration-100',
           profileId
-            ? 'h-full w-[calc((100vw-(var(--spacing)*20))/2)] overflow-y-scroll border-r px-10 pt-16 pb-8'
+            ? 'no-scrollbar h-full w-[calc((100vw-(var(--spacing)*20))/2)] overflow-y-scroll border-r px-10 pt-16 pb-8'
             : styles['dashboard-page-container'],
         )}
       >
