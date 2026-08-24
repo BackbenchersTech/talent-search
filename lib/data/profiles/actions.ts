@@ -107,6 +107,31 @@ export async function createProfile(
   redirect(`/c/${domain}/candidates/${candidateUrlId}/profiles/${createdProfileId}`);
 }
 
+// Invalidate every route this profile can render on — detail page and the
+// explore slide-over — without needing the concrete URL segments.
+const revalidateProfileRoutes = (profileUrlId: string) => {
+  revalidatePath(`/c/[domain]/candidates/[id]/profiles/${profileUrlId}`, 'page');
+  revalidatePath(`/c/[domain]/explore`, 'page');
+};
+
+const getProfileForUpdate = async (profileUrlId: string) => {
+  const { orgId } = await getAppContext();
+
+  let profileId: string;
+  try {
+    profileId = decodeProfileId(profileUrlId);
+  } catch {
+    return { error: 'Profile not found.' } as const;
+  }
+
+  const profile = await withProfilesRepo(orgId, (repo) => repo.getById(profileId));
+  if (!profile) {
+    return { error: 'Profile not found.' } as const;
+  }
+
+  return { orgId, profileId, profile } as const;
+};
+
 const BioSchema = z.string().max(MAX_BIO_LENGTH, {
   error: `Summary must be ${MAX_BIO_LENGTH} characters or fewer.`,
 });
@@ -127,31 +152,86 @@ export async function updateProfileSummary(
   }
 
   try {
-    const { orgId } = await getAppContext();
-
-    let profileId: string;
-    try {
-      profileId = decodeProfileId(profileUrlId);
-    } catch {
-      return { error: 'Profile not found.' };
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
     }
 
-    const profile = await withProfilesRepo(orgId, (repo) => repo.getById(profileId));
-    if (!profile) {
-      return { error: 'Profile not found.' };
-    }
-
-    await withProfilesRepo(orgId, (repo) =>
-      repo.update(profileId, { bio: validatedFields.data }),
+    await withProfilesRepo(existing.orgId, (repo) =>
+      repo.update(existing.profileId, { bio: validatedFields.data }),
     );
   } catch {
     return { error: 'Database error: Failed to update summary.' };
   }
 
-  // Invalidate every route this profile can render on — detail page and the
-  // explore slide-over — without needing the concrete URL segments.
-  revalidatePath(`/c/[domain]/candidates/[id]/profiles/${profileUrlId}`, 'page');
-  revalidatePath(`/c/[domain]/explore`, 'page');
+  revalidateProfileRoutes(profileUrlId);
 
   return { bio: validatedFields.data };
+}
+
+export type UpdateSkillsResult = {
+  skills?: string[];
+  error?: string;
+};
+
+const parseSkillsInput = (input: string) =>
+  input
+    .split(',')
+    .map((skill) => skill.trim())
+    .filter(Boolean);
+
+export async function addProfileSkills(
+  profileUrlId: string,
+  input: string,
+): Promise<UpdateSkillsResult> {
+  const parsed = [...new Set(parseSkillsInput(input))];
+
+  if (!parsed.length) {
+    return { error: 'Enter at least one skill.' };
+  }
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const existingSkills = existing.profile.skills ?? [];
+    const skills = [...new Set([...existingSkills, ...parsed])];
+
+    await withProfilesRepo(existing.orgId, (repo) =>
+      repo.update(existing.profileId, { skills }),
+    );
+
+    revalidateProfileRoutes(profileUrlId);
+
+    return { skills };
+  } catch {
+    return { error: 'Database error: Failed to add skills.' };
+  }
+}
+
+export async function removeProfileSkill(
+  profileUrlId: string,
+  skill: string,
+): Promise<UpdateSkillsResult> {
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const existingSkills = existing.profile.skills ?? [];
+    const skills = existingSkills.filter((s) => s !== skill);
+
+    await withProfilesRepo(existing.orgId, (repo) =>
+      repo.update(existing.profileId, { skills }),
+    );
+
+    revalidateProfileRoutes(profileUrlId);
+
+    return { skills };
+  } catch {
+    return { error: 'Database error: Failed to remove skill.' };
+  }
 }

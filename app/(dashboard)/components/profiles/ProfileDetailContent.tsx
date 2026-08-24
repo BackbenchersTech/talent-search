@@ -1,6 +1,6 @@
-import { Badge } from '@/components/ui/badge';
 import { DEGREE_LABELS, Education } from '@/lib/data/education/educationTypes';
 import { Profile } from '@/lib/data/profiles/profileTypes';
+import { SkillsSection } from './SkillsSection';
 import { SummarySection } from './SummarySection';
 
 interface ProfileDetailContentProps {
@@ -18,23 +18,9 @@ export const ProfileDetailContent = ({
 
   return (
     <section className='mt-8'>
-      {/* Bio section */}
       <SummarySection profileId={profileId} bio={bio} editable={editable} />
 
-      {/* Skills section */}
-      {!!skills?.length && (
-        <section className='mb-4'>
-          <h3 className='font-semibold text-black'>Skills</h3>
-
-          <p className='text-gray-600'>
-            {skills.map((skill) => (
-              <Badge key={skill} className='mr-1 bg-gray-200 text-black'>
-                {skill}
-              </Badge>
-            ))}
-          </p>
-        </section>
-      )}
+      <SkillsSection profileId={profileId} skills={skills} editable={editable} />
 
       {/* 3 highlighted/curated experiences */}
       {/* Summary/timeline of all positions with option to view more details  */}
