@@ -27,6 +27,10 @@ export const SummarySection = ({
   const [error, setError] = useState<string | null>(null);
   const [isSaving, startTransition] = useTransition();
 
+  if (!bio && !editable) {
+    return null;
+  }
+
   const startEditing = () => {
     setDraft(bio ?? '');
     setIsEditing(true);
@@ -133,8 +137,12 @@ export const SummarySection = ({
             </Button>
           </div>
         </div>
-      ) : (
+      ) : bio ? (
         <p className='text-gray-600'>{bio}</p>
+      ) : (
+        <p className='text-center text-sm italic text-gray-400'>
+          No summary yet — add one now.
+        </p>
       )}
     </section>
   );
