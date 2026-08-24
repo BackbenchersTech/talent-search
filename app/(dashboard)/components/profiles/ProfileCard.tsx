@@ -11,11 +11,14 @@ import Link from 'next/link';
 
 interface ProfileCardProps {
   profileWithCandidate: ProfileWithCandidate;
+  href: string;
 }
 
-export const ProfileCard = ({ profileWithCandidate }: ProfileCardProps) => {
+export const ProfileCard = ({
+  profileWithCandidate,
+  href,
+}: ProfileCardProps) => {
   const {
-    id,
     title,
     billRateMin,
     billRateMax,
@@ -25,7 +28,7 @@ export const ProfileCard = ({ profileWithCandidate }: ProfileCardProps) => {
 
   return (
     <Link
-      href={`?profileId=${id}`}
+      href={href}
       className='group block rounded-md bg-white p-3 shadow ring-1 ring-gray-200 transition-all hover:bg-gray-100/70 hover:shadow-md hover:ring-2 hover:ring-gray-600 active:shadow-none'
     >
       <article className='relative p-1'>

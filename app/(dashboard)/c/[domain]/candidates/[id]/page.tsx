@@ -91,7 +91,11 @@ const CandidateDetailPage = async (props: {
         <h2 className='mt-6 mb-3 text-lg font-medium'>Job profiles</h2>
         <ProfileGrid>
           {profilesWithCandidate.map((p) => (
-            <ProfileCard key={p.id} profileWithCandidate={p} />
+            <ProfileCard
+              key={p.id}
+              profileWithCandidate={p}
+              href={`/c/${domain}/candidates/${id}/profiles/${p.id}`}
+            />
           ))}
           <AddProfileCard href={`/c/${domain}/candidates/${id}/profiles/new`} />
         </ProfileGrid>

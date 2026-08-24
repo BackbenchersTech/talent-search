@@ -42,7 +42,11 @@ const ExplorePage = async ({
           <div className='mt-6 w-full'>
             <ProfileGrid>
               {profilesWithCandidate.map((p) => (
-                <ProfileCard key={p.id} profileWithCandidate={p} />
+                <ProfileCard
+                  key={p.id}
+                  profileWithCandidate={p}
+                  href={`?profileId=${p.id}`}
+                />
               ))}
             </ProfileGrid>
           </div>
