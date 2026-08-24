@@ -56,13 +56,17 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 cursor-pointer p-0'>
+            <Button
+              variant='ghost'
+              className='h-8 w-8 cursor-pointer p-0'
+              onClick={(e) => e.stopPropagation()}
+            >
               <span className='sr-only'>Open menu</span>
               <EllipsisHorizontalIcon className='h-4 w-4' />
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent align='end'>
+          <DropdownMenuContent align='end' onClick={(e) => e.stopPropagation()}>
             <DropdownMenuItem>
               <Link href={`candidates/${id}`}>View details</Link>
             </DropdownMenuItem>

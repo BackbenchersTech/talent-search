@@ -1,6 +1,5 @@
-import { CandidatesTableColumns } from '@/app/(dashboard)/components/candidates/CandidatesTableColumns';
+import { CandidatesTable } from '@/app/(dashboard)/components/candidates/CandidatesTable';
 import { CreateCandidateButtonAndDialog } from '@/app/(dashboard)/components/candidates/CreateCandidateButtonAndDialog';
-import { DataTable } from '@/app/(dashboard)/components/candidates/DataTable';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { Search } from '@/app/components/Search';
 import { getAppContext } from '@/lib/auth/getAppContext';
@@ -21,7 +20,7 @@ const CandidatesPage = async () => {
       </div>
 
       <div className='mt-6 w-full'>
-        <DataTable data={candidates} columns={CandidatesTableColumns} />
+        <CandidatesTable candidates={candidates} />
       </div>
     </PageContainer>
   );
