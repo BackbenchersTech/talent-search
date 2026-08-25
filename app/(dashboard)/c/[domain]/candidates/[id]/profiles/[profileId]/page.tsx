@@ -24,7 +24,7 @@ const ProfileDetailPage = async (props: {
   }
 
   const { orgId } = await getAppContext();
-  const { profile, candidate, education } = await getFullProfileDetails(
+  const { profile, candidate, education, experiences } = await getFullProfileDetails(
     orgId,
     decodedProfileId,
   );
@@ -84,7 +84,12 @@ const ProfileDetailPage = async (props: {
           <span className='ml-2 text-[14px] font-normal text-gray-500'>per hour</span>
         </h2>
 
-        <ProfileDetailContent profile={profile} education={education} editable />
+        <ProfileDetailContent
+          profile={profile}
+          education={education}
+          experiences={experiences}
+          editable
+        />
       </article>
     </PageContainer>
   );

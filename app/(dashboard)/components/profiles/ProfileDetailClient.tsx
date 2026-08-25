@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Candidate } from '@/lib/data/candidates/candidateTypes';
 import { Education } from '@/lib/data/education/educationTypes';
+import { Experience } from '@/lib/data/experiences/experienceTypes';
 import { Profile, ProfileAvailability } from '@/lib/data/profiles/profileTypes';
 import {
   ArrowDownTrayIcon,
@@ -17,10 +18,12 @@ export const ProfileDetailClient = ({
   profile,
   candidate,
   education,
+  experiences,
 }: {
   profile?: Profile;
   candidate?: Candidate;
   education: Education[];
+  experiences: Experience[];
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -107,7 +110,11 @@ export const ProfileDetailClient = ({
           </div>
         </div>
 
-        <ProfileDetailContent profile={profile} education={education} />
+        <ProfileDetailContent
+          profile={profile}
+          education={education}
+          experiences={experiences}
+        />
       </article>
     </aside>
   );

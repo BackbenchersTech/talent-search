@@ -1,18 +1,22 @@
 import { Education } from '@/lib/data/education/educationTypes';
+import { Experience } from '@/lib/data/experiences/experienceTypes';
 import { Profile } from '@/lib/data/profiles/profileTypes';
 import { EducationSection } from './EducationSection';
+import { ExperienceSection } from './ExperienceSection';
 import { SkillsSection } from './SkillsSection';
 import { SummarySection } from './SummarySection';
 
 interface ProfileDetailContentProps {
   profile: Profile;
   education: Education[];
+  experiences: Experience[];
   editable?: boolean;
 }
 
 export const ProfileDetailContent = ({
   profile,
   education,
+  experiences,
   editable = false,
 }: ProfileDetailContentProps) => {
   const { id: profileId, bio, skills } = profile;
@@ -23,8 +27,11 @@ export const ProfileDetailContent = ({
 
       <SkillsSection profileId={profileId} skills={skills} editable={editable} />
 
-      {/* TODO: ExperienceSection */}
-      {/* Summary/timeline of all positions with option to view more details  */}
+      <ExperienceSection
+        profileId={profileId}
+        experiences={experiences}
+        editable={editable}
+      />
 
       <EducationSection profileId={profileId} education={education} editable={editable} />
     </section>

@@ -8,12 +8,17 @@ export const ProfileDetailWrapper = async ({ profileId }: { profileId: string })
   const { orgId } = await getAppContext();
   const encodedProfileId = profileId.replace(PROFILE_ID_PREFIX, '');
   const decodedProfileId = decodeUUID(encodedProfileId);
-  const { profile, candidate, education } = await getFullProfileDetails(
+  const { profile, candidate, education, experiences } = await getFullProfileDetails(
     orgId,
     decodedProfileId,
   );
 
   return (
-    <ProfileDetailClient profile={profile} candidate={candidate} education={education} />
+    <ProfileDetailClient
+      profile={profile}
+      candidate={candidate}
+      education={education}
+      experiences={experiences}
+    />
   );
 };

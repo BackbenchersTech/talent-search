@@ -3,6 +3,7 @@
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
 import { withEducationRepo } from '@/lib/repos/education';
+import { withExperiencesRepo } from '@/lib/repos/experiences';
 import { withProfilesRepo } from '@/lib/repos/profiles';
 import { MAX_BIO_LENGTH } from '@/lib/data/profiles/profileTypes';
 import { revalidatePath } from 'next/cache';
@@ -371,6 +372,200 @@ export async function removeProfileEducation(
     }
   } catch {
     return { error: 'Database error: Failed to remove education.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+const LocationTypeSchema = z.enum(['REMOTE', 'HYBRID', 'ONSITE']);
+const ExperienceSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, { error: 'Please enter a title.' })
+    .max(200, { error: 'Title must be 200 characters or fewer.' }),
+  company: z
+    .string()
+    .trim()
+    .min(1, { error: 'Please enter a company.' })
+    .max(200, { error: 'Company must be 200 characters or fewer.' }),
+  startDate: z.iso.date({ error: 'Please enter a start date.' }),
+  endDate: z.iso.date({ error: 'Please enter a valid end date.' }).optional(),
+  isCurrent: z.boolean(),
+  description: z
+    .string()
+    .trim()
+    .max(2000, { error: 'Description must be 2000 characters or fewer.' })
+    .optional(),
+  locationText: z
+    .string()
+    .trim()
+    .max(200, { error: 'Location must be 200 characters or fewer.' })
+    .optional(),
+  locationType: LocationTypeSchema.optional(),
+});
+
+export type ExperienceInput = z.infer<typeof ExperienceSchema>;
+export type ExperienceFieldErrors = Partial<Record<keyof ExperienceInput, string>>;
+export type ExperienceMutationResult = {
+  errors?: ExperienceFieldErrors;
+  error?: string;
+};
+
+const collectExperienceFieldErrors = (
+  error: z.ZodError<ExperienceInput>,
+): ExperienceFieldErrors => {
+  const fieldErrors: ExperienceFieldErrors = {};
+
+  for (const issue of error.issues) {
+    const field = issue.path[0] as keyof ExperienceInput | undefined;
+
+    if (field && !fieldErrors[field]) {
+      fieldErrors[field] = issue.message;
+    }
+  }
+
+  return fieldErrors;
+};
+
+// The DB requires endDate when isCurrent is false, and forbids it when true.
+const reconcileEndDate = (input: ExperienceInput) => {
+  if (input.isCurrent) {
+    return { ...input, endDate: undefined };
+  }
+
+  return input;
+};
+
+// The form always submits the full record, so absent optional fields mean
+// "cleared" — write null rather than leaving the column untouched (drizzle
+// skips undefined keys in .set()).
+const nullClearedFields = (input: ExperienceInput) => ({
+  ...input,
+  description: input.description ?? null,
+  locationText: input.locationText ?? null,
+  locationType: input.locationType ?? null,
+});
+
+const validateExperienceDates = (input: ExperienceInput): ExperienceFieldErrors => {
+  if (!input.isCurrent && !input.endDate) {
+    return { endDate: 'Enter an end date, or mark the role as current.' };
+  }
+
+  if (input.endDate && input.endDate < input.startDate) {
+    return { endDate: 'End date must be after the start date.' };
+  }
+
+  return {};
+};
+
+export async function addProfileExperience(
+  profileUrlId: string,
+  input: ExperienceInput,
+): Promise<ExperienceMutationResult> {
+  const validatedFields = ExperienceSchema.safeParse(input);
+
+  if (!validatedFields.success) {
+    return { errors: collectExperienceFieldErrors(validatedFields.error) };
+  }
+
+  const dateErrors = validateExperienceDates(validatedFields.data);
+  if (Object.keys(dateErrors).length) {
+    return { errors: dateErrors };
+  }
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const { endDate, ...values } = reconcileEndDate(validatedFields.data);
+
+    await withExperiencesRepo(existing.profileId, (repo) =>
+      repo.create({
+        ...values,
+        endDate,
+        // Manually created experiences come from the SDR flow; RESUME is
+        // reserved for the (future) AI-agent import.
+        source: 'SDR',
+      }),
+    );
+  } catch {
+    return { error: 'Database error: Failed to add experience.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+export async function updateProfileExperience(
+  profileUrlId: string,
+  experienceId: string,
+  input: ExperienceInput,
+): Promise<ExperienceMutationResult> {
+  const validatedFields = ExperienceSchema.safeParse(input);
+
+  if (!validatedFields.success) {
+    return { errors: collectExperienceFieldErrors(validatedFields.error) };
+  }
+
+  const dateErrors = validateExperienceDates(validatedFields.data);
+  if (Object.keys(dateErrors).length) {
+    return { errors: dateErrors };
+  }
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const { endDate, ...values } = nullClearedFields(
+      reconcileEndDate(validatedFields.data),
+    );
+
+    const updated = await withExperiencesRepo(existing.profileId, (repo) =>
+      repo.update(experienceId, {
+        ...values,
+        endDate: endDate ?? null,
+      }),
+    );
+
+    if (!updated) {
+      return { error: 'Experience not found.' };
+    }
+  } catch {
+    return { error: 'Database error: Failed to update experience.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+export async function removeProfileExperience(
+  profileUrlId: string,
+  experienceId: string,
+): Promise<ExperienceMutationResult> {
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const removed = await withExperiencesRepo(existing.profileId, (repo) =>
+      repo.remove(experienceId),
+    );
+
+    if (!removed) {
+      return { error: 'Experience not found.' };
+    }
+  } catch {
+    return { error: 'Database error: Failed to remove experience.' };
   }
 
   revalidateProfileRoutes(profileUrlId);
