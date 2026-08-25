@@ -1,5 +1,6 @@
 'use client';
 
+import { NotFoundState } from '@/app/(dashboard)/components/NotFoundState';
 import { Button } from '@/components/ui/button';
 import { Candidate } from '@/lib/data/candidates/candidateTypes';
 import { Education } from '@/lib/data/education/educationTypes';
@@ -12,7 +13,14 @@ import {
   PlusIcon,
 } from '@heroicons/react/24/outline';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ReactNode } from 'react';
 import { ProfileDetailContent } from './ProfileDetailContent';
+
+const Panel = ({ children }: { children: ReactNode }) => (
+  <aside className='fixed top-0 right-0 z-30 h-full w-full overflow-y-auto bg-white px-8 pt-16 sm:w-[calc(100vw-(var(--spacing)*20))] sm:pt-5 lg:w-[calc((100vw-(var(--spacing)*20))/2)]'>
+    {children}
+  </aside>
+);
 
 export const ProfileDetailClient = ({
   profile,
@@ -31,20 +39,34 @@ export const ProfileDetailClient = ({
   const { title, billRateMin, billRateMax, availability } = profile || {};
   const { city, state, country } = candidate || {};
 
-  const closePanel = () => {
+  const closeHref = (() => {
     const params = new URLSearchParams(searchParams);
-
     params.delete('profileId');
 
-    router.push(`${pathname}?${params.toString()}`);
+    const qs = params.toString();
+
+    return qs ? `${pathname}?${qs}` : pathname;
+  })();
+
+  const closePanel = () => {
+    router.push(closeHref);
   };
 
   if (!profile) {
-    return null;
+    return (
+      <Panel>
+        <NotFoundState
+          primaryText='Couldn&lsquo;t find what you were looking for'
+          secondaryText='This profile doesn&lsquo;t exist or may have been deleted.'
+          backHref={closeHref}
+          backLabel='Go back to explore'
+        />
+      </Panel>
+    );
   }
 
   return (
-    <aside className='fixed top-0 right-0 z-30 h-full w-full overflow-y-auto bg-white px-8 pt-16 sm:w-[calc(100vw-(var(--spacing)*20))] sm:pt-5 lg:w-[calc((100vw-(var(--spacing)*20))/2)]'>
+    <Panel>
       <div className='flex items-center'>
         <Button
           variant='ghost'
@@ -116,6 +138,6 @@ export const ProfileDetailClient = ({
           experiences={experiences}
         />
       </article>
-    </aside>
+    </Panel>
   );
 };

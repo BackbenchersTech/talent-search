@@ -1,5 +1,6 @@
 import { CandidateInfoCard } from '@/app/(dashboard)/components/candidates/CandidateInfoCard';
 import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
+import { NotFoundState } from '@/app/(dashboard)/components/NotFoundState';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { AddProfileCard } from '@/app/(dashboard)/components/profiles/AddProfileCard';
 import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
@@ -10,7 +11,6 @@ import { getCandidateById } from '@/lib/data/candidates/candidateData';
 import { getCandidateProfiles } from '@/lib/data/profiles/profileData';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 const CandidateDetailPage = async (props: {
   params: Promise<{ id: string; domain: string }>;
@@ -21,7 +21,16 @@ const CandidateDetailPage = async (props: {
   const jobProfiles = await getCandidateProfiles(orgId, id);
 
   if (!candidate) {
-    notFound();
+    return (
+      <PageContainer>
+        <NotFoundState
+          primaryText='Couldn&lsquo;t find what you were looking for'
+          secondaryText='This candidate doesn&lsquo;t exist or may have been deleted.'
+          backHref={`/c/${domain}/candidates`}
+          backLabel='View all candidates'
+        />
+      </PageContainer>
+    );
   }
 
   const profilesWithCandidate = jobProfiles.map((jp) => ({

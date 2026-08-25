@@ -1,3 +1,4 @@
+import { NotFoundState } from '@/app/(dashboard)/components/NotFoundState';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { ProfileDetailContent } from '@/app/(dashboard)/components/profiles/ProfileDetailContent';
 import { ProfileStatusBadge } from '@/app/(dashboard)/components/profiles/ProfileStatusBadge';
@@ -20,25 +21,12 @@ const ProfileDetailPage = async (props: {
   if (!profile || profile.candidateId !== id) {
     return (
       <PageContainer>
-        <div className='mx-auto mt-24 max-w-md text-center'>
-          <h1 className='text-xl font-medium text-gray-900'>
-            Couldn&lsquo;t find what you were looking for
-          </h1>
-
-          <p className='mt-2 text-sm text-gray-600'>
-            This profile doesn&lsquo;t exist or may have been deleted.
-          </p>
-
-          <div className='mt-6'>
-            <Link
-              href={`/c/${domain}/candidates/${id}`}
-              className='inline-flex items-center gap-1 text-sm font-medium underline-offset-2 transition-opacity hover:opacity-50 hover:underline'
-            >
-              <ArrowLeftIcon className='size-4 stroke-2' />
-              Go back to candidate
-            </Link>
-          </div>
-        </div>
+        <NotFoundState
+          primaryText='Couldn&lsquo;t find what you were looking for'
+          secondaryText='This profile doesn&lsquo;t exist or may have been deleted.'
+          backHref={`/c/${domain}/candidates/${id}`}
+          backLabel='Go back to candidate'
+        />
       </PageContainer>
     );
   }
