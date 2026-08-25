@@ -33,10 +33,8 @@ export async function getFullProfileDetails(orgId: string, profileId: string) {
     repo.getById(profileRow.candidateId),
   );
   const education = (
-    await withEducationRepo(orgId, (repo) =>
-      repo.getByCandidateId(profileRow.candidateId),
-    )
-  ).map(({ education }) => mapEducationRowToEducation(education));
+    await withEducationRepo(profileRow.candidateId, (repo) => repo.getAll())
+  ).map(mapEducationRowToEducation);
   const experiences = (
     await withExperiencesRepo(profileRow.id, (repo) => repo.getAll())
   ).map(mapExperienceRowToExperience);

@@ -294,11 +294,10 @@ export async function addProfileEducation(
 
     const { school, degree, fieldOfStudy } = validatedFields.data;
 
-    await withEducationRepo(existing.orgId, async (repo) => {
-      const education = await repo.getByCandidateId(existing.profile.candidateId);
+    await withEducationRepo(existing.profile.candidateId, async (repo) => {
+      const education = await repo.getAll();
 
       await repo.create({
-        candidateId: existing.profile.candidateId,
         school,
         degree,
         fieldOfStudy,
@@ -333,8 +332,8 @@ export async function updateProfileEducation(
 
     const { school, degree, fieldOfStudy } = validatedFields.data;
 
-    const updated = await withEducationRepo(existing.orgId, (repo) =>
-      repo.update(educationId, existing.profile.candidateId, {
+    const updated = await withEducationRepo(existing.profile.candidateId, (repo) =>
+      repo.update(educationId, {
         school,
         degree,
         fieldOfStudy,
@@ -363,8 +362,8 @@ export async function removeProfileEducation(
       return existing;
     }
 
-    const removed = await withEducationRepo(existing.orgId, (repo) =>
-      repo.remove(educationId, existing.profile.candidateId),
+    const removed = await withEducationRepo(existing.profile.candidateId, (repo) =>
+      repo.remove(educationId),
     );
 
     if (!removed) {

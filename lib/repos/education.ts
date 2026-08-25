@@ -1,29 +1,23 @@
 import { db } from '@/lib/db/client';
 import { Education } from '@/lib/data/education/educationTypes';
-import { Candidates, Education as EducationRow } from '@/lib/db/schema';
+import { Education as EducationRow } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
 
-const createEducationRepo = (orgId: string) => {
+// Education has no organizationId — org membership derives from the parent
+// candidate, reached via the parent profile. Callers must have already
+// org-verified the profile (see getProfileForUpdate / withProfilesRepo)
+// before using this repo; candidateId is the scoping key.
+const createEducationRepo = (candidateId: string) => {
+  const baseFilter = eq(EducationRow.candidateId, candidateId);
+
   return {
-    getByCandidateId: async (candidateId: string) =>
-      await db
-        .select()
-        .from(EducationRow)
-        .innerJoin(Candidates, eq(EducationRow.candidateId, Candidates.id))
-        .where(
-          and(
-            eq(Candidates.organizationId, orgId),
-            eq(EducationRow.candidateId, candidateId),
-          ),
-        ),
+    getAll: async () => await db.select().from(EducationRow).where(baseFilter),
     create: async ({
-      candidateId,
       school,
       degree,
       fieldOfStudy,
       orderIndex,
     }: {
-      candidateId: string;
       school: string;
       degree: Education['degree'];
       fieldOfStudy: string;
@@ -39,7 +33,6 @@ const createEducationRepo = (orgId: string) => {
     },
     update: async (
       id: string,
-      candidateId: string,
       values: Partial<{
         school: string;
         degree: Education['degree'];
@@ -49,15 +42,15 @@ const createEducationRepo = (orgId: string) => {
       const [education] = await db
         .update(EducationRow)
         .set(values)
-        .where(and(eq(EducationRow.candidateId, candidateId), eq(EducationRow.id, id)))
+        .where(and(baseFilter, eq(EducationRow.id, id)))
         .returning();
 
       return education;
     },
-    remove: async (id: string, candidateId: string) => {
+    remove: async (id: string) => {
       const [education] = await db
         .delete(EducationRow)
-        .where(and(eq(EducationRow.candidateId, candidateId), eq(EducationRow.id, id)))
+        .where(and(baseFilter, eq(EducationRow.id, id)))
         .returning();
 
       return education;
@@ -66,9 +59,9 @@ const createEducationRepo = (orgId: string) => {
 };
 
 export const withEducationRepo = <T>(
-  orgId: string,
+  candidateId: string,
   fn: (repo: ReturnType<typeof createEducationRepo>) => Promise<T>,
 ) => {
-  const repo = createEducationRepo(orgId);
+  const repo = createEducationRepo(candidateId);
   return fn(repo);
 };
