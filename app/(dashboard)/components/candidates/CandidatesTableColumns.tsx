@@ -1,6 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -8,12 +9,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Candidate } from '@/lib/data/candidates/candidateTypes';
+import { CandidateWithProfiles } from '@/lib/data/candidates/candidateTypes';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 
-export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
+export const CandidatesTableColumns: ColumnDef<CandidateWithProfiles>[] = [
   {
     id: 'candidateName',
     header: 'Name',
@@ -43,6 +44,30 @@ export const CandidatesTableColumns: ColumnDef<Candidate>[] = [
               {country && country !== 'USA' ? `, ${country}` : ''}
             </span>
           </div>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'profiles',
+    header: 'Profiles',
+    cell: ({ row }) => {
+      const { id: candidateId, profiles } = row.original;
+      const [firstProfile, ...rest] = profiles;
+
+      if (!firstProfile) return <span className='text-gray-400'>-</span>;
+
+      return (
+        <div className='flex items-center gap-2'>
+          <Link
+            href={`candidates/${candidateId}/profiles/${firstProfile.id}`}
+            className='underline-offset-2 transition-opacity hover:underline'
+            onClick={(e) => e.stopPropagation()}
+          >
+            {firstProfile.title}
+          </Link>
+
+          {rest.length > 0 && <Badge variant='secondary'>+{rest.length}</Badge>}
         </div>
       );
     },

@@ -3,11 +3,11 @@ import { CreateCandidateButtonAndDialog } from '@/app/(dashboard)/components/can
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { Search } from '@/app/components/Search';
 import { getAppContext } from '@/lib/auth/getAppContext';
-import { getCandidates } from '@/lib/data/candidates/candidateData';
+import { getCandidatesWithProfiles } from '@/lib/data/candidates/candidateData';
 
 const CandidatesPage = async () => {
   const { orgId } = await getAppContext();
-  const candidates = await getCandidates(orgId);
+  const candidates = await getCandidatesWithProfiles(orgId);
 
   return (
     <PageContainer>

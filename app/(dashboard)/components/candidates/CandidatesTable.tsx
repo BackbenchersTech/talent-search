@@ -2,19 +2,19 @@
 
 import { CandidatesTableColumns } from '@/app/(dashboard)/components/candidates/CandidatesTableColumns';
 import { DataTable } from '@/app/(dashboard)/components/candidates/DataTable';
-import { Candidate } from '@/lib/data/candidates/candidateTypes';
+import { CandidateWithProfiles } from '@/lib/data/candidates/candidateTypes';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 interface CandidatesTableProps {
-  candidates: Candidate[];
+  candidates: CandidateWithProfiles[];
 }
 
 export const CandidatesTable = ({ candidates }: CandidatesTableProps) => {
   const router = useRouter();
 
   const handleRowClick = useCallback(
-    (candidate: Candidate) => router.push(`candidates/${candidate.id}`),
+    (candidate: CandidateWithProfiles) => router.push(`candidates/${candidate.id}`),
     [router],
   );
 

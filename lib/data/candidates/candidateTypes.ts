@@ -1,3 +1,5 @@
+import type { Profile } from '@/lib/data/profiles/profileTypes';
+
 export const CandidateStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -25,3 +27,9 @@ export type Candidate = {
 };
 
 export type ExploreCandidate = Pick<Candidate, 'id' | 'city' | 'state' | 'country'>;
+
+export type CandidateProfileSummary = Pick<Profile, 'id' | 'title'>;
+
+export type CandidateWithProfiles = Candidate & {
+  profiles: CandidateProfileSummary[];
+};

@@ -1,6 +1,6 @@
 import { db } from '@/lib/db/client';
 import { Candidates, Profiles } from '@/lib/db/schema';
-import { and, eq, getTableColumns } from 'drizzle-orm';
+import { and, asc, eq, getTableColumns, inArray } from 'drizzle-orm';
 
 type GetAllOptions = {
   limit?: number;
@@ -10,6 +10,18 @@ export const createProfilesRepo = (orgId: string) => {
   const baseFilter = eq(Profiles.organizationId, orgId);
 
   return {
+    getByCandidateIds: async (candidateIds: string[]) =>
+      candidateIds.length
+        ? await db
+            .select({
+              id: Profiles.id,
+              candidateId: Profiles.candidateId,
+              title: Profiles.title,
+            })
+            .from(Profiles)
+            .where(and(baseFilter, inArray(Profiles.candidateId, candidateIds)))
+            .orderBy(asc(Profiles.createdAt))
+        : [],
     getAllWithCandidate: async ({ limit = 20 }: GetAllOptions = {}) =>
       await db
         .select({
