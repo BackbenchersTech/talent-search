@@ -3,34 +3,44 @@ import { ProfileDetailContent } from '@/app/(dashboard)/components/profiles/Prof
 import { ProfileStatusBadge } from '@/app/(dashboard)/components/profiles/ProfileStatusBadge';
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { getFullProfileDetails } from '@/lib/data/profiles/profileData';
-import { PROFILE_ID_PREFIX } from '@/lib/data/profiles/profileTransforms';
 import { ProfileAvailability } from '@/lib/data/profiles/profileTypes';
-import { decodeUUID } from '@/lib/utils/base62';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 const ProfileDetailPage = async (props: {
   params: Promise<{ domain: string; id: string; profileId: string }>;
 }) => {
   const { domain, id, profileId } = await props.params;
-  const encodedProfileId = profileId.replace(PROFILE_ID_PREFIX, '');
-
-  let decodedProfileId: string;
-  try {
-    decodedProfileId = decodeUUID(encodedProfileId);
-  } catch {
-    notFound();
-  }
-
   const { orgId } = await getAppContext();
   const { profile, candidate, education, experiences } = await getFullProfileDetails(
     orgId,
-    decodedProfileId,
+    profileId,
   );
 
   if (!profile || profile.candidateId !== id) {
-    notFound();
+    return (
+      <PageContainer>
+        <div className='mx-auto mt-24 max-w-md text-center'>
+          <h1 className='text-xl font-medium text-gray-900'>
+            Couldn&lsquo;t find what you were looking for
+          </h1>
+
+          <p className='mt-2 text-sm text-gray-600'>
+            This profile doesn&lsquo;t exist or may have been deleted.
+          </p>
+
+          <div className='mt-6'>
+            <Link
+              href={`/c/${domain}/candidates/${id}`}
+              className='inline-flex items-center gap-1 text-sm font-medium underline-offset-2 transition-opacity hover:opacity-50 hover:underline'
+            >
+              <ArrowLeftIcon className='size-4 stroke-2' />
+              Go back to candidate
+            </Link>
+          </div>
+        </div>
+      </PageContainer>
+    );
   }
 
   const { title, billRateMin, billRateMax, availability, status } = profile;

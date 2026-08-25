@@ -9,8 +9,20 @@ export const encodeUUID = (uuid: string) => {
   return base62.encode(bytes);
 };
 
-export const decodeUUID = (encoded: string) => {
-  const bytes = Buffer.from(base62.decode(encoded)); // Buffer
+export const decodeUUID = (encoded: string): string | null => {
+  let bytes: Buffer;
+  try {
+    bytes = Buffer.from(base62.decode(encoded));
+  } catch {
+    return null; // not valid base62
+  }
+
+  // A valid UUID is 16 bytes; anything else would produce a string Postgres
+  // rejects with "invalid input syntax for type uuid".
+  if (bytes.length !== 16) {
+    return null;
+  }
+
   const hex = bytes.toString('hex'); // entire buffer as hex string
 
   return [

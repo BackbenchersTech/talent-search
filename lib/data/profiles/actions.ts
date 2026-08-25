@@ -33,10 +33,8 @@ export async function createProfile(
   prevState: State,
   formData: FormData,
 ) {
-  let candidateId: string;
-  try {
-    candidateId = decodeCandidateId(candidateUrlId);
-  } catch {
+  const candidateId = decodeCandidateId(candidateUrlId);
+  if (!candidateId) {
     return { message: 'Candidate not found.', success: false };
   }
 
@@ -98,10 +96,8 @@ const revalidateProfileRoutes = (profileUrlId: string) => {
 const getProfileForUpdate = async (profileUrlId: string) => {
   const { orgId } = await getAppContext();
 
-  let profileId: string;
-  try {
-    profileId = decodeProfileId(profileUrlId);
-  } catch {
+  const profileId = decodeProfileId(profileUrlId);
+  if (!profileId) {
     return { error: 'Profile not found.' } as const;
   }
 

@@ -1,14 +1,14 @@
 import { createCandidateId } from '@/lib/data/candidates/candidateTransforms';
 import { ExploreCandidate } from '@/lib/data/candidates/candidateTypes';
 import { Candidates, Profiles } from '@/lib/db/schema';
-import { decodeUUID, encodeUUID } from '@/lib/utils/base62';
+import { encodeUUID } from '@/lib/utils/base62';
+import { createUrlIdDecoder } from '@/lib/utils/createUrlIdDecoder';
 import { normalize } from '@/lib/utils/normalize';
 import { InferSelectModel } from 'drizzle-orm';
 
 export const PROFILE_ID_PREFIX = 'prof_';
 export const createProfileId = (id: string) => `${PROFILE_ID_PREFIX}${encodeUUID(id)}`;
-export const decodeProfileId = (profileUrlId: string) =>
-  decodeUUID(profileUrlId.replace(PROFILE_ID_PREFIX, ''));
+export const decodeProfileId = createUrlIdDecoder(PROFILE_ID_PREFIX);
 
 // --- Main mapper ---
 export function mapProfileRowToProfileWithCandidate(

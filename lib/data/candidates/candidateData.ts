@@ -1,6 +1,6 @@
 import { db } from '@/lib/db/client';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
-import { mapCandidateRowToCandidate } from './candidateTransforms';
+import { decodeCandidateId, mapCandidateRowToCandidate } from './candidateTransforms';
 
 export async function getCandidates(orgId: string) {
   return (await withCandidatesRepo(orgId, (repo) => repo.getAll())).map(
@@ -8,7 +8,10 @@ export async function getCandidates(orgId: string) {
   );
 }
 
-export async function getCandidateById(orgId: string, candidateId: string) {
+export async function getCandidateById(orgId: string, candidateUrlId: string) {
+  const candidateId = decodeCandidateId(candidateUrlId);
+  if (!candidateId) return null;
+
   const candidate = await withCandidatesRepo(orgId, (repo) => repo.getById(candidateId));
 
   if (!candidate) return null;
