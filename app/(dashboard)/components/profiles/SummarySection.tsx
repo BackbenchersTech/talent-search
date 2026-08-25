@@ -140,8 +140,15 @@ export const SummarySection = ({
       ) : bio ? (
         <p className='text-gray-600'>{bio}</p>
       ) : (
-        <p className='text-center text-sm italic text-gray-400'>
-          No summary yet — add one now.
+        <p className='text-center'>
+          <Button
+            variant='link'
+            size='sm'
+            className='h-auto cursor-pointer p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
+            onClick={startEditing}
+          >
+            Add summary
+          </Button>
         </p>
       )}
     </section>
