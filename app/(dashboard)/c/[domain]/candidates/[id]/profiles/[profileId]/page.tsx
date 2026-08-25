@@ -1,6 +1,6 @@
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { ProfileDetailContent } from '@/app/(dashboard)/components/profiles/ProfileDetailContent';
-import { Badge } from '@/components/ui/badge';
+import { ProfileStatusBadge } from '@/app/(dashboard)/components/profiles/ProfileStatusBadge';
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { getFullProfileDetails } from '@/lib/data/profiles/profileData';
 import { PROFILE_ID_PREFIX } from '@/lib/data/profiles/profileTransforms';
@@ -33,7 +33,7 @@ const ProfileDetailPage = async (props: {
     notFound();
   }
 
-  const { title, billRateMin, billRateMax, availability, status, visibility } = profile;
+  const { title, billRateMin, billRateMax, availability, status } = profile;
   const { firstName, lastName, city, state, country } = candidate || {};
 
   return (
@@ -49,12 +49,11 @@ const ProfileDetailPage = async (props: {
         </span>
       </Link>
 
-      <h1 className='flex flex-wrap items-center gap-2 text-2xl font-medium tracking-tight text-gray-900'>
-        {title}
+      <div className='flex flex-wrap items-center gap-2'>
+        <h1 className='text-2xl font-medium'>{title}</h1>
 
-        <Badge variant='outline'>{status}</Badge>
-        <Badge variant='outline'>{visibility}</Badge>
-      </h1>
+        <ProfileStatusBadge status={status} />
+      </div>
 
       <div className='mt-2 flex flex-wrap items-center gap-1'>
         <span className='flex items-center gap-1 text-gray-600'>
