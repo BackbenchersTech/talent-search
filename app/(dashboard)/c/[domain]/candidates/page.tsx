@@ -3,11 +3,32 @@ import { CreateCandidateButtonAndDialog } from '@/app/(dashboard)/components/can
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { Search } from '@/app/components/Search';
 import { getAppContext } from '@/lib/auth/getAppContext';
-import { getCandidatesWithProfiles } from '@/lib/data/candidates/candidateData';
+import { getCandidatesWithProfilesPage } from '@/lib/data/candidates/candidateData';
 
-const CandidatesPage = async () => {
+const PAGE_SIZE = 10;
+
+const CandidatesPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) => {
   const { orgId } = await getAppContext();
-  const candidates = await getCandidatesWithProfiles(orgId);
+
+  const requestedPage = Number((await searchParams).page);
+  const page = Math.max(1, Number.isInteger(requestedPage) ? requestedPage : 1);
+
+  let candidatesPage = await getCandidatesWithProfilesPage(orgId, {
+    page,
+    pageSize: PAGE_SIZE,
+  });
+
+  // serve the last page when the link is stale (e.g. candidates were removed)
+  if (candidatesPage.rows.length === 0 && page > candidatesPage.totalPages) {
+    candidatesPage = await getCandidatesWithProfilesPage(orgId, {
+      page: candidatesPage.totalPages,
+      pageSize: PAGE_SIZE,
+    });
+  }
 
   return (
     <PageContainer>
@@ -20,7 +41,7 @@ const CandidatesPage = async () => {
       </div>
 
       <div className='mt-6 w-full'>
-        <CandidatesTable candidates={candidates} />
+        <CandidatesTable candidatesPage={candidatesPage} pageSize={PAGE_SIZE} />
       </div>
     </PageContainer>
   );
