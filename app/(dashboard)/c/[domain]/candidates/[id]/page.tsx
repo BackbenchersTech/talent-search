@@ -7,9 +7,8 @@ import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { getCandidateById } from '@/lib/data/candidates/candidateData';
-import { CANDIDATE_ID_PREFIX } from '@/lib/data/candidates/candidateTransforms';
+import { decodeCandidateId } from '@/lib/data/candidates/candidateTransforms';
 import { getCandidateProfiles } from '@/lib/data/profiles/profileData';
-import { decodeUUID } from '@/lib/utils/base62';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -18,8 +17,7 @@ const CandidateDetailPage = async (props: {
   params: Promise<{ id: string; domain: string }>;
 }) => {
   const { domain, id } = await props.params;
-  const encodedCandidateId = id.replace(CANDIDATE_ID_PREFIX, '');
-  const decodedCandidateId = decodeUUID(encodedCandidateId);
+  const decodedCandidateId = decodeCandidateId(id);
   const { orgId } = await getAppContext();
   const candidate = await getCandidateById(orgId, decodedCandidateId);
   const jobProfiles = await getCandidateProfiles(orgId, decodedCandidateId);
@@ -97,7 +95,7 @@ const CandidateDetailPage = async (props: {
               href={`/c/${domain}/candidates/${id}/profiles/${p.id}`}
             />
           ))}
-          <AddProfileCard href={`/c/${domain}/candidates/${id}/profiles/new`} />
+          <AddProfileCard />
         </ProfileGrid>
       </section>
     </PageContainer>

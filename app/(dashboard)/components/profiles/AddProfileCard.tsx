@@ -3,14 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import { useRef, useState } from 'react';
+import { CreateProfileDialog } from './CreateProfileDialog';
 
-interface AddProfileCardProps {
-  href: string;
-}
-
-export const AddProfileCard = ({ href }: AddProfileCardProps) => {
+export const AddProfileCard = () => {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -64,12 +60,14 @@ export const AddProfileCard = ({ href }: AddProfileCardProps) => {
             Upload
           </Button>
 
-          <Link
-            href={href}
-            className='text-sm text-gray-600 underline-offset-2 transition-colors hover:text-gray-900 hover:underline'
-          >
-            or create manually
-          </Link>
+          <CreateProfileDialog>
+            <button
+              type='button'
+              className='cursor-pointer text-sm text-gray-600 underline-offset-2 transition-colors hover:text-gray-900 hover:underline'
+            >
+              or create manually
+            </button>
+          </CreateProfileDialog>
         </>
       )}
     </div>

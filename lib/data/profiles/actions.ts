@@ -9,57 +9,39 @@ import { MAX_BIO_LENGTH } from '@/lib/data/profiles/profileTypes';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { decodeCandidateId } from '@/lib/data/candidates/candidateTransforms';
 import { createProfileId, decodeProfileId } from './profileTransforms';
-
-const optionalPositiveNumber = z.preprocess(
-  (val) => {
-    if (val === '' || val == null) return undefined;
-    return Number(val);
-  },
-  z.number().min(0, { error: 'Enter a positive number.' }).optional(),
-);
 
 const FormSchema = z.object({
   title: z.string().trim().min(1, { error: 'Please enter a title.' }),
-  billRateMin: optionalPositiveNumber,
-  billRateMax: optionalPositiveNumber,
-  bio: z
-    .string()
-    .trim()
-    .max(MAX_BIO_LENGTH, {
-      error: `Summary must be ${MAX_BIO_LENGTH} characters or fewer.`,
-    }),
 });
 
 export type State = {
   errors?: {
     title?: { errors?: string[] };
-    billRateMin?: { errors?: string[] };
-    billRateMax?: { errors?: string[] };
-    bio?: { errors?: string[] };
   };
   message?: string | null;
   fields?: {
     title?: string;
-    billRateMin?: string;
-    billRateMax?: string;
-    bio?: string;
   };
   success?: boolean;
 };
 
 export async function createProfile(
-  candidateId: string,
-  domain: string,
   candidateUrlId: string,
+  domain: string,
   prevState: State,
   formData: FormData,
 ) {
+  let candidateId: string;
+  try {
+    candidateId = decodeCandidateId(candidateUrlId);
+  } catch {
+    return { message: 'Candidate not found.', success: false };
+  }
+
   const rawFormData = {
     title: formData.get('title'),
-    billRateMin: formData.get('billRateMin'),
-    billRateMax: formData.get('billRateMax'),
-    bio: formData.get('bio'),
   };
 
   const validatedFields = FormSchema.safeParse(rawFormData);
@@ -69,15 +51,12 @@ export async function createProfile(
       message: 'Please correct the errors in the form.',
       fields: {
         title: rawFormData.title?.toString() ?? '',
-        billRateMin: rawFormData.billRateMin?.toString() ?? '',
-        billRateMax: rawFormData.billRateMax?.toString() ?? '',
-        bio: rawFormData.bio?.toString() ?? '',
       },
       success: false,
     };
   }
 
-  const { title, billRateMin, billRateMax, bio } = validatedFields.data;
+  const { title } = validatedFields.data;
 
   let createdProfileId: string | undefined;
 
@@ -92,7 +71,7 @@ export async function createProfile(
     }
 
     const profile = await withProfilesRepo(orgId, (repo) =>
-      repo.create({ candidateId, title, billRateMin, billRateMax, bio }),
+      repo.create({ candidateId, title }),
     );
 
     createdProfileId = createProfileId(profile.id);
