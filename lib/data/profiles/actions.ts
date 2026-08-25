@@ -2,6 +2,7 @@
 
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
+import { withEducationRepo } from '@/lib/repos/education';
 import { withProfilesRepo } from '@/lib/repos/profiles';
 import { MAX_BIO_LENGTH } from '@/lib/data/profiles/profileTypes';
 import { revalidatePath } from 'next/cache';
@@ -234,4 +235,145 @@ export async function removeProfileSkill(
   } catch {
     return { error: 'Database error: Failed to remove skill.' };
   }
+}
+
+const DegreeSchema = z.enum(['BACHELORS', 'MASTERS']);
+const EducationSchema = z.object({
+  school: z
+    .string()
+    .trim()
+    .min(1, { error: 'Please enter a school.' })
+    .max(200, { error: 'School must be 200 characters or fewer.' }),
+  degree: DegreeSchema,
+  fieldOfStudy: z
+    .string()
+    .trim()
+    .min(1, { error: 'Please enter a field of study.' })
+    .max(200, { error: 'Field of study must be 200 characters or fewer.' }),
+});
+
+export type EducationInput = z.infer<typeof EducationSchema>;
+export type EducationFieldErrors = Partial<Record<keyof EducationInput, string>>;
+export type EducationMutationResult = {
+  errors?: EducationFieldErrors;
+  error?: string;
+};
+
+const collectEducationFieldErrors = (
+  error: z.ZodError<EducationInput>,
+): EducationFieldErrors => {
+  const fieldErrors: EducationFieldErrors = {};
+
+  for (const issue of error.issues) {
+    const field = issue.path[0] as keyof EducationInput | undefined;
+
+    if (field && !fieldErrors[field]) {
+      fieldErrors[field] = issue.message;
+    }
+  }
+
+  return fieldErrors;
+};
+
+export async function addProfileEducation(
+  profileUrlId: string,
+  input: EducationInput,
+): Promise<EducationMutationResult> {
+  const validatedFields = EducationSchema.safeParse(input);
+
+  if (!validatedFields.success) {
+    return { errors: collectEducationFieldErrors(validatedFields.error) };
+  }
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const { school, degree, fieldOfStudy } = validatedFields.data;
+
+    await withEducationRepo(existing.orgId, async (repo) => {
+      const education = await repo.getByCandidateId(existing.profile.candidateId);
+
+      await repo.create({
+        candidateId: existing.profile.candidateId,
+        school,
+        degree,
+        fieldOfStudy,
+        orderIndex: education.length,
+      });
+    });
+  } catch {
+    return { error: 'Database error: Failed to add education.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+export async function updateProfileEducation(
+  profileUrlId: string,
+  educationId: string,
+  input: EducationInput,
+): Promise<EducationMutationResult> {
+  const validatedFields = EducationSchema.safeParse(input);
+
+  if (!validatedFields.success) {
+    return { errors: collectEducationFieldErrors(validatedFields.error) };
+  }
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const { school, degree, fieldOfStudy } = validatedFields.data;
+
+    const updated = await withEducationRepo(existing.orgId, (repo) =>
+      repo.update(educationId, existing.profile.candidateId, {
+        school,
+        degree,
+        fieldOfStudy,
+      }),
+    );
+
+    if (!updated) {
+      return { error: 'Education not found.' };
+    }
+  } catch {
+    return { error: 'Database error: Failed to update education.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+export async function removeProfileEducation(
+  profileUrlId: string,
+  educationId: string,
+): Promise<EducationMutationResult> {
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    const removed = await withEducationRepo(existing.orgId, (repo) =>
+      repo.remove(educationId, existing.profile.candidateId),
+    );
+
+    if (!removed) {
+      return { error: 'Education not found.' };
+    }
+  } catch {
+    return { error: 'Database error: Failed to remove education.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
 }
