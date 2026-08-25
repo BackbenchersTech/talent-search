@@ -53,12 +53,10 @@ export const ProfileCard = ({ profileWithCandidate, href }: ProfileCardProps) =>
 
         {/* Availability */}
         <p className='text-sm text-gray-500'>
-          Available{' '}
-          {`${
-            availability === ProfileAvailability.AVAILABLE_NOW
-              ? 'immediately'
-              : `in ${availability}`
-          }`}
+          Available
+          {availability === ProfileAvailability.AVAILABLE_NOW
+            ? ' immediately'
+            : ` in ${availability}`}
         </p>
 
         <section className='mt-6 flex items-center justify-between'>

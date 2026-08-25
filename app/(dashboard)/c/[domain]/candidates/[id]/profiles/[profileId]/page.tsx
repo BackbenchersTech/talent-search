@@ -67,11 +67,9 @@ const ProfileDetailPage = async (props: {
         {availability && (
           <span className='text-sm text-gray-600'>
             Available
-            {` ${
-              availability === ProfileAvailability.AVAILABLE_NOW
-                ? 'immediately'
-                : `in ${availability}`
-            }`}
+            {availability === ProfileAvailability.AVAILABLE_NOW
+              ? ' immediately'
+              : ` in ${availability}`}
           </span>
         )}
       </div>
