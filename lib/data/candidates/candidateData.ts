@@ -5,6 +5,7 @@ import {
   Candidate,
   CandidateWithProfiles,
   CandidateProfileSummary,
+  CandidatesSort,
 } from './candidateTypes';
 import { createProfileId } from '@/lib/data/profiles/profileTransforms';
 import { decodeCandidateId, mapCandidateRowToCandidate } from './candidateTransforms';
@@ -38,10 +39,18 @@ const attachProfiles = async (orgId: string, candidates: Candidate[]) => {
 
 export const getCandidatesWithProfilesPage = async (
   orgId: string,
-  { page, pageSize }: { page: number; pageSize: number },
+  {
+    page,
+    pageSize,
+    sort,
+  }: { page: number; pageSize: number; sort?: CandidatesSort },
 ) => {
   const { rows, total } = await withCandidatesRepo(orgId, (repo) =>
-    repo.getPaginated({ limit: pageSize, offset: (page - 1) * pageSize }),
+    repo.getPaginated({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      sort,
+    }),
   );
 
   const candidates = rows.map(mapCandidateRowToCandidate);

@@ -4,22 +4,26 @@ import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { Search } from '@/app/components/Search';
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { getCandidatesWithProfilesPage } from '@/lib/data/candidates/candidateData';
+import { parseCandidatesSort } from '@/app/(dashboard)/utils/candidateTable';
 
 const PAGE_SIZE = 10;
 
 const CandidatesPage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; sort?: string; order?: string }>;
 }) => {
   const { orgId } = await getAppContext();
 
-  const requestedPage = Number((await searchParams).page);
+  const params = await searchParams;
+  const requestedPage = Number(params.page);
   const page = Math.max(1, Number.isInteger(requestedPage) ? requestedPage : 1);
+  const sort = parseCandidatesSort(params);
 
   let candidatesPage = await getCandidatesWithProfilesPage(orgId, {
     page,
     pageSize: PAGE_SIZE,
+    sort,
   });
 
   // serve the last page when the link is stale (e.g. candidates were removed)
@@ -27,6 +31,7 @@ const CandidatesPage = async ({
     candidatesPage = await getCandidatesWithProfilesPage(orgId, {
       page: candidatesPage.totalPages,
       pageSize: PAGE_SIZE,
+      sort,
     });
   }
 
@@ -41,7 +46,11 @@ const CandidatesPage = async ({
       </div>
 
       <div className='mt-6 w-full'>
-        <CandidatesTable candidatesPage={candidatesPage} pageSize={PAGE_SIZE} />
+        <CandidatesTable
+          candidatesPage={candidatesPage}
+          pageSize={PAGE_SIZE}
+          sort={sort}
+        />
       </div>
     </PageContainer>
   );
