@@ -3,6 +3,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes table-loading {
+  0% {
+    left: 0%;
+    right: 100%;
+  }
+  45% {
+    left: 0%;
+    right: 35%;
+  }
+  55% {
+    left: 35%;
+    right: 0%;
+  }
+  100% {
+    left: 100%;
+    right: 0%;
+  }
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -39,6 +58,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --animate-table-loading: table-loading 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 :root {

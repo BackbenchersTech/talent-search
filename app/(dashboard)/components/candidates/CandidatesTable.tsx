@@ -83,6 +83,7 @@ export const CandidatesTable = ({
           data={candidatesPage.rows}
           columns={getCandidatesTableColumns(sort, handleSortChange)}
           onRowClick={handleRowClick}
+          isLoading={isPending}
         />
       </div>
 

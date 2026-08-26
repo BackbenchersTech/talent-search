@@ -19,12 +19,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
+  isLoading?: boolean;
 }
 
 export const DataTable = <TData, TValue>({
   columns,
   data,
   onRowClick,
+  isLoading,
 }: DataTableProps<TData, TValue>) => {
   // Memoization incompatible issue - https://github.com/TanStack/table/issues/5567
   const table = useReactTable({
@@ -34,7 +36,13 @@ export const DataTable = <TData, TValue>({
   });
 
   return (
-    <div className='overflow-hidden rounded-md border'>
+    <div className='relative overflow-hidden rounded-md border'>
+      {isLoading && (
+        <div
+          aria-hidden='true'
+          className='animate-table-loading bg-foreground absolute top-10 h-0.5'
+        />
+      )}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
