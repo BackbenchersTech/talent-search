@@ -112,7 +112,6 @@ export type UpdateNameAndLocationState = {
     country?: string;
   };
   success?: boolean;
-  timestamp?: number;
 };
 
 // Invalidate every route this candidate can render on — the detail page and
@@ -186,7 +185,6 @@ export async function updateCandidateNameAndLocation(
   return {
     message: 'Candidate updated successfully.',
     success: true,
-    timestamp: Date.now(),
   };
 }
 
