@@ -110,8 +110,6 @@ export const EducationSection = ({
     return null;
   }
 
-  const sorted = [...education].sort((a, b) => a.orderIndex - b.orderIndex);
-
   return (
     <section className='mb-4'>
       <div className='flex items-center justify-between gap-2'>
@@ -131,9 +129,9 @@ export const EducationSection = ({
         )}
       </div>
 
-      {sorted.length > 0 ? (
+      {education.length > 0 ? (
         <ul className='mt-2'>
-          {sorted.map((edu) => {
+          {education.map((edu) => {
             const credential = [DEGREE_LABELS[edu.degree], edu.fieldOfStudy]
               .filter(Boolean)
               .join(' · ');

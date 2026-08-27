@@ -1,7 +1,7 @@
 import { db } from '@/lib/db/client';
 import { Education } from '@/lib/data/education/educationTypes';
 import { Education as EducationRow } from '@/lib/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
 
 // Education has no organizationId — org membership derives from the parent
 // candidate, reached via the parent profile. Callers must have already
@@ -11,7 +11,12 @@ const createEducationRepo = (candidateId: string) => {
   const baseFilter = eq(EducationRow.candidateId, candidateId);
 
   return {
-    getAll: async () => await db.select().from(EducationRow).where(baseFilter),
+    getAll: async () =>
+      await db
+        .select()
+        .from(EducationRow)
+        .where(baseFilter)
+        .orderBy(asc(EducationRow.orderIndex)),
     create: async ({
       school,
       degree,
