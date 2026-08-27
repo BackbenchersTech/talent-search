@@ -1,8 +1,9 @@
-import { sql } from 'drizzle-orm';
+import { desc, sql } from 'drizzle-orm';
 import {
   boolean,
   check,
   date,
+  index,
   pgTable,
   text,
   timestamp,
@@ -76,6 +77,14 @@ export const Experiences = pgTable(
     check(
       'experiences_date_order_check',
       sql`${table.endDate} IS NULL OR ${table.endDate} >= ${table.startDate}`,
+    ),
+
+    // Matches getAll()'s ordering: WHERE profile_id = ? ORDER BY is_current
+    // DESC, start_date DESC walks this index directly.
+    index('idx_experiences_profile_dates').on(
+      table.profileId,
+      desc(table.isCurrent),
+      desc(table.startDate),
     ),
   ],
 );
