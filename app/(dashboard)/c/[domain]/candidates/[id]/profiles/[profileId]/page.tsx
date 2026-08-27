@@ -3,9 +3,10 @@ import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { ProfileActionsMenu } from '@/app/(dashboard)/components/profiles/ProfileActionsMenu';
 import { ProfileDetailContent } from '@/app/(dashboard)/components/profiles/ProfileDetailContent';
 import { ProfileHeader } from '@/app/(dashboard)/components/profiles/ProfileHeader';
+import { Button } from '@/components/ui/button';
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { getFullProfileDetails } from '@/lib/data/profiles/profileData';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, EyeIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 const ProfileDetailPage = async (props: {
@@ -50,6 +51,11 @@ const ProfileDetailPage = async (props: {
           profile={profile}
           candidate={candidate}
           editable
+          actions={
+            <Button className='cursor-pointer'>
+              <EyeIcon className='size-4' /> Preview Resume
+            </Button>
+          }
           endActions={<ProfileActionsMenu profile={profile} />}
         />
 
