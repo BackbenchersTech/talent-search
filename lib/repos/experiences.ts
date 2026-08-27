@@ -1,7 +1,7 @@
 import { db } from '@/lib/db/client';
 import { ExperienceSource, LocationType } from '@/lib/data/experiences/experienceTypes';
 import { Experiences } from '@/lib/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 // Experiences has no organizationId — org membership derives from the parent
 // profile. Callers must have already org-verified the profile (see
@@ -11,7 +11,12 @@ const createExperiencesRepo = (profileId: string) => {
   const baseFilter = eq(Experiences.profileId, profileId);
 
   return {
-    getAll: async () => await db.select().from(Experiences).where(baseFilter),
+    getAll: async () =>
+      await db
+        .select()
+        .from(Experiences)
+        .where(baseFilter)
+        .orderBy(desc(Experiences.isCurrent), desc(Experiences.startDate)),
     create: async ({
       title,
       company,

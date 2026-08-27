@@ -115,10 +115,6 @@ export const ExperienceSection = ({
     return null;
   }
 
-  const sorted = [...experiences].sort(
-    (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-  );
-
   return (
     <section className='mb-4'>
       <div className='flex items-center justify-between gap-2'>
@@ -138,9 +134,9 @@ export const ExperienceSection = ({
         )}
       </div>
 
-      {sorted.length > 0 ? (
+      {experiences.length > 0 ? (
         <ul className='mt-2'>
-          {sorted.map((experience) => {
+          {experiences.map((experience) => {
             const dateRange = formatDateRange(experience);
             const tenure = formatTenure(experience);
             const dates = dateRange && tenure ? `${dateRange} · ${tenure}` : dateRange;
