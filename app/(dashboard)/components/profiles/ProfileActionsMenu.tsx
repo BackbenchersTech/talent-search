@@ -128,12 +128,12 @@ export const ProfileActionsMenu = ({ profile }: ProfileActionsMenuProps) => {
       </DropdownMenu>
 
       <Dialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
-        <DialogContent className='sm:max-w-[425px]'>
+        <DialogContent className='sm:max-w-[425px]' showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>Delete profile</DialogTitle>
             <DialogDescription>
               This permanently deletes &lsquo;{profile.title}&rsquo; and its experiences.
-              This action can&rsquo;t be undone.
+              This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
 
