@@ -59,7 +59,6 @@ const handleMembershipCreated = async (data: any) => {
         });
       }
       if (!user || !organization) {
-        console.log('Missing user or organization for membership');
         return;
       }
 

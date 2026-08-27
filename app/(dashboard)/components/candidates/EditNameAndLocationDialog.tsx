@@ -44,10 +44,6 @@ export const EditNameAndLocationDialog = ({
   const [state, formAction, isPending] = useActionState(updateCandidate, initialState);
 
   useEffect(() => {
-    console.log('ispending', isPending, state);
-  }, [isPending, state]);
-
-  useEffect(() => {
     if (!state.timestamp) return;
 
     if (state.success) {

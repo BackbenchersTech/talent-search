@@ -10,6 +10,7 @@ import { ChangeEvent } from 'react';
 
 export const Search = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // TODO: implement search functionality
     console.log('Search query:', e.target.value);
   };
 
