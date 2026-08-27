@@ -99,6 +99,15 @@ const createCandidatesRepo = (orgId: string) => {
 
       return candidate;
     },
+    delete: async (id: string) => {
+      // profiles (and their experiences) + education cascade in the DB
+      const deleted = await db
+        .delete(Candidates)
+        .where(and(baseFilter, eq(Candidates.id, id)))
+        .returning({ id: Candidates.id });
+
+      return deleted.length > 0;
+    },
   };
 };
 

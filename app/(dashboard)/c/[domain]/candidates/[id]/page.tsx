@@ -1,6 +1,6 @@
+import { CandidateActionsMenu } from '@/app/(dashboard)/components/candidates/CandidateActionsMenu';
 import { CandidateInfoCard } from '@/app/(dashboard)/components/candidates/CandidateInfoCard';
 import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
-import { CandidateStatusToggle } from '@/app/(dashboard)/components/candidates/CandidateStatusToggle';
 import { EditNameAndLocationDialog } from '@/app/(dashboard)/components/candidates/EditNameAndLocationDialog';
 import { NotFoundState } from '@/app/(dashboard)/components/NotFoundState';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
@@ -95,7 +95,7 @@ const CandidateDetailPage = async (props: {
         </div>
 
         <div>
-          <CandidateStatusToggle candidateId={candidate.id} status={status} />
+          <CandidateActionsMenu candidate={candidate} />
         </div>
       </div>
 

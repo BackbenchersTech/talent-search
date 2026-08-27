@@ -188,14 +188,14 @@ export async function updateCandidateNameAndLocation(
   };
 }
 
-export type SetCandidateStatusResult = {
+export type CandidateActionResult = {
   error?: string;
 };
 
 export async function setCandidateStatus(
   candidateUrlId: string,
   status: CandidateStatus,
-): Promise<SetCandidateStatusResult> {
+): Promise<CandidateActionResult> {
   const candidateId = decodeCandidateId(candidateUrlId);
   if (!candidateId) {
     return { error: 'Candidate not found.' };
@@ -213,6 +213,32 @@ export async function setCandidateStatus(
     return { error: 'Failed to update candidate status.' };
   }
 
+  revalidateCandidateRoutes();
+
+  return {};
+}
+
+export async function deleteCandidate(
+  candidateUrlId: string,
+): Promise<CandidateActionResult> {
+  const candidateId = decodeCandidateId(candidateUrlId);
+  if (!candidateId) {
+    return { error: 'Candidate not found.' };
+  }
+
+  try {
+    const { orgId } = await getAppContext();
+    const deleted = await withCandidatesRepo(orgId, (repo) =>
+      repo.delete(candidateId),
+    );
+    if (!deleted) {
+      return { error: 'Candidate not found.' };
+    }
+  } catch {
+    return { error: 'Failed to delete candidate.' };
+  }
+
+  // the detail page no longer exists; clear it along with the table
   revalidateCandidateRoutes();
 
   return {};
