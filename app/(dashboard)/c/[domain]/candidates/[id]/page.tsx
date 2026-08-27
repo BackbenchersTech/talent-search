@@ -109,6 +109,7 @@ const CandidateDetailPage = async (props: {
               key={p.id}
               profileWithCandidate={p}
               href={`/c/${domain}/candidates/${id}/profiles/${p.id}`}
+              showStatus
             />
           ))}
           <AddProfileCard />

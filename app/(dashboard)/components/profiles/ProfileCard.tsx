@@ -8,18 +8,25 @@ import {
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ProfileStatusBadge } from './ProfileStatusBadge';
 
 interface ProfileCardProps {
   profileWithCandidate: ProfileWithCandidate;
   href: string;
+  showStatus?: boolean;
 }
 
-export const ProfileCard = ({ profileWithCandidate, href }: ProfileCardProps) => {
+export const ProfileCard = ({
+  profileWithCandidate,
+  href,
+  showStatus = false,
+}: ProfileCardProps) => {
   const {
     title,
     billRateMin,
     billRateMax,
     availability,
+    status,
     candidate: { city, state, country },
   } = profileWithCandidate;
 
@@ -29,6 +36,12 @@ export const ProfileCard = ({ profileWithCandidate, href }: ProfileCardProps) =>
       className='group block rounded-md bg-white p-3 shadow ring-1 ring-gray-200 transition-all hover:bg-gray-100/70 hover:shadow-md hover:ring-2 hover:ring-gray-600 active:shadow-none'
     >
       <article className='relative p-1'>
+        {showStatus && (
+          <section className='mb-0.5'>
+            <ProfileStatusBadge status={status} />
+          </section>
+        )}
+
         <section className='mb-2 flex items-center gap-2'>
           <h2 className='line-clamp-1 pe-2 font-medium group-hover:max-w-[75%]'>
             {title}
