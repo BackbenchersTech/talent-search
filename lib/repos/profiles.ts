@@ -1,5 +1,8 @@
 import { db } from '@/lib/db/client';
-import { ProfileAvailability } from '@/lib/data/profiles/profileTypes';
+import {
+  ProfileAvailability,
+  ProfileStatus,
+} from '@/lib/data/profiles/profileTypes';
 import { Candidates, Profiles } from '@/lib/db/schema';
 import { and, asc, eq, getTableColumns, inArray } from 'drizzle-orm';
 
@@ -82,6 +85,7 @@ export const createProfilesRepo = (orgId: string) => {
         billRateMax: number | null;
         bio: string | null;
         skills: string[];
+        status: ProfileStatus;
       }>,
     ) => {
       const [profile] = await db
@@ -91,6 +95,9 @@ export const createProfilesRepo = (orgId: string) => {
         .returning();
 
       return profile;
+    },
+    delete: async (id: string) => {
+      await db.delete(Profiles).where(and(baseFilter, eq(Profiles.id, id)));
     },
   };
 };

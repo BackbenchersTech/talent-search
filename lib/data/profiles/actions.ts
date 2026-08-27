@@ -8,7 +8,9 @@ import { withProfilesRepo } from '@/lib/repos/profiles';
 import {
   MAX_BIO_LENGTH,
   ProfileAvailability,
+  ProfileStatus,
 } from '@/lib/data/profiles/profileTypes';
+import { createCandidateId } from '@/lib/data/candidates/candidateTransforms';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -299,6 +301,54 @@ export async function updateProfileDetails(
   }
 
   revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+export async function setProfileStatus(
+  profileUrlId: string,
+  status: ProfileStatus,
+): Promise<{ error?: string }> {
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    await withProfilesRepo(existing.orgId, (repo) =>
+      repo.update(existing.profileId, { status }),
+    );
+  } catch {
+    return { error: 'Database error: Failed to update profile status.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+export async function deleteProfile(
+  profileUrlId: string,
+): Promise<{ error?: string }> {
+  let candidateUrlId: string | undefined;
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    candidateUrlId = createCandidateId(existing.profile.candidateId);
+
+    await withProfilesRepo(existing.orgId, (repo) =>
+      repo.delete(existing.profileId),
+    );
+  } catch {
+    return { error: 'Database error: Failed to delete profile.' };
+  }
+
+  revalidatePath(`/c/[domain]/candidates/${candidateUrlId}`, 'page');
+  revalidatePath(`/c/[domain]/explore`, 'page');
 
   return {};
 }

@@ -1,5 +1,6 @@
 import { NotFoundState } from '@/app/(dashboard)/components/NotFoundState';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
+import { ProfileActionsMenu } from '@/app/(dashboard)/components/profiles/ProfileActionsMenu';
 import { ProfileDetailContent } from '@/app/(dashboard)/components/profiles/ProfileDetailContent';
 import { ProfileHeader } from '@/app/(dashboard)/components/profiles/ProfileHeader';
 import { getAppContext } from '@/lib/auth/getAppContext';
@@ -45,7 +46,12 @@ const ProfileDetailPage = async (props: {
       </Link>
 
       <article className='max-w-3xl'>
-        <ProfileHeader profile={profile} candidate={candidate} editable />
+        <ProfileHeader
+          profile={profile}
+          candidate={candidate}
+          editable
+          endActions={<ProfileActionsMenu profile={profile} />}
+        />
 
         <ProfileDetailContent
           profile={profile}
