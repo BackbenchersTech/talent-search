@@ -1,5 +1,7 @@
 import { CandidateInfoCard } from '@/app/(dashboard)/components/candidates/CandidateInfoCard';
 import { CandidateStatusBadge } from '@/app/(dashboard)/components/candidates/CandidateStatusBadge';
+import { CandidateStatusToggle } from '@/app/(dashboard)/components/candidates/CandidateStatusToggle';
+import { EditNameAndLocationDialog } from '@/app/(dashboard)/components/candidates/EditNameAndLocationDialog';
 import { NotFoundState } from '@/app/(dashboard)/components/NotFoundState';
 import { PageContainer } from '@/app/(dashboard)/components/PageContainer';
 import { AddProfileCard } from '@/app/(dashboard)/components/profiles/AddProfileCard';
@@ -57,9 +59,8 @@ const CandidateDetailPage = async (props: {
       </Link>
 
       {/* TODO: add linkedin link as icon in header */}
-      {/* TODO: actions => make active/inactive, edit */}
-      <div className='flex items-center gap-4'>
-        <>
+      <div className='flex justify-between'>
+        <div className='flex items-center gap-4'>
           <Avatar className='size-13'>
             <AvatarImage src={profileImageUrl || undefined} alt='' />
             <AvatarFallback className='bg-black text-white'>
@@ -67,26 +68,34 @@ const CandidateDetailPage = async (props: {
               {lastName.at(0)}
             </AvatarFallback>
           </Avatar>
-        </>
 
-        <div className='flex flex-col'>
-          <div className='flex items-center gap-2'>
-            <h1 className='text-2xl font-medium'>
-              {firstName} {lastName}
-            </h1>
+          <div className='flex flex-col'>
+            <div className='flex items-center gap-2'>
+              <h1 className='text-2xl font-medium'>
+                {firstName} {lastName}
+              </h1>
 
-            <CandidateStatusBadge status={status} />
-          </div>
+              <CandidateStatusBadge status={status} />
 
-          <span className='flex items-center gap-1 text-gray-600'>
-            <MapPinIcon className='size-4' />
+              <EditNameAndLocationDialog
+                candidate={{ firstName, lastName, city, state, country }}
+              />
+            </div>
 
-            <span className='text-sm'>
-              {city ? `${city}` : ''}
-              {state ? `, ${state}` : ''}
-              {country && country !== 'USA' ? `, ${country}` : ''}
+            <span className='flex items-center gap-1 text-gray-600'>
+              <MapPinIcon className='size-4' />
+
+              <span className='text-sm'>
+                {city ? `${city}` : ''}
+                {state ? `, ${state}` : ''}
+                {country && country !== 'USA' ? `, ${country}` : ''}
+              </span>
             </span>
-          </span>
+          </div>
+        </div>
+
+        <div>
+          <CandidateStatusToggle candidateId={candidate.id} status={status} />
         </div>
       </div>
 

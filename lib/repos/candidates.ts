@@ -5,6 +5,7 @@ import type { PgColumn } from 'drizzle-orm/pg-core';
 import {
   CANDIDATES_DEFAULT_SORT,
   CANDIDATES_SORT_COLUMN,
+  CandidateStatus,
   CandidatesSort,
   CandidatesSortColumn,
 } from '@/lib/data/candidates/candidateTypes';
@@ -75,6 +76,25 @@ const createCandidatesRepo = (orgId: string) => {
           email,
           organizationId: orgId,
         })
+        .returning();
+
+      return candidate;
+    },
+    update: async (
+      id: string,
+      values: Partial<{
+        firstName: string;
+        lastName: string;
+        city: string | null;
+        state: string | null;
+        country: string | null;
+        status: CandidateStatus;
+      }>,
+    ) => {
+      const [candidate] = await db
+        .update(Candidates)
+        .set({ ...values, updatedAt: new Date() })
+        .where(and(baseFilter, eq(Candidates.id, id)))
         .returning();
 
       return candidate;
