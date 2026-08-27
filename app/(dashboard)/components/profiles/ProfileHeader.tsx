@@ -76,9 +76,7 @@ export const ProfileHeader = ({
 
       {(actions || endActions) && (
         <div className='flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between'>
-          {actions && (
-            <div className='flex flex-wrap items-center gap-1.5'>{actions}</div>
-          )}
+          <div className='flex flex-wrap items-center gap-1.5'>{actions}</div>
 
           {endActions && (
             <div className='flex flex-wrap items-center gap-1.5'>{endActions}</div>
