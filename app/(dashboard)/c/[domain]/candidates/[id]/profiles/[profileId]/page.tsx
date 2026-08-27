@@ -45,7 +45,7 @@ const ProfileDetailPage = async (props: {
       </Link>
 
       <article className='max-w-3xl'>
-        <ProfileHeader profile={profile} candidate={candidate} />
+        <ProfileHeader profile={profile} candidate={candidate} editable />
 
         <ProfileDetailContent
           profile={profile}

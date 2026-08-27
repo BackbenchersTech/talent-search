@@ -1,18 +1,24 @@
 import { Candidate } from '@/lib/data/candidates/candidateTypes';
-import { Profile, ProfileAvailability } from '@/lib/data/profiles/profileTypes';
+import {
+  PROFILE_AVAILABILITY_LABELS,
+  Profile,
+} from '@/lib/data/profiles/profileTypes';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import { ReactNode } from 'react';
+import { EditProfileDetailsDialog } from './EditProfileDetailsDialog';
 import { ProfileStatusBadge } from './ProfileStatusBadge';
 
 interface ProfileHeaderProps {
   profile: Profile;
   candidate?: Candidate;
+  editable?: boolean;
   actions?: ReactNode;
 }
 
 export const ProfileHeader = ({
   profile,
   candidate,
+  editable = false,
   actions,
 }: ProfileHeaderProps) => {
   const { title, billRateMin, billRateMax, availability, status } = profile;
@@ -28,6 +34,8 @@ export const ProfileHeader = ({
             </h1>
 
             <ProfileStatusBadge status={status} />
+
+            {editable && <EditProfileDetailsDialog profile={profile} />}
           </div>
 
           <h2 className='text-xl font-medium sm:hidden'>
@@ -48,10 +56,7 @@ export const ProfileHeader = ({
           {city && <span>·</span>}
           {availability && (
             <span className='text-sm text-gray-600'>
-              Available
-              {availability === ProfileAvailability.AVAILABLE_NOW
-                ? ' immediately'
-                : ` in ${availability}`}
+              {PROFILE_AVAILABILITY_LABELS[availability]}
             </span>
           )}
         </div>

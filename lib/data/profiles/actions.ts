@@ -5,7 +5,10 @@ import { withCandidatesRepo } from '@/lib/repos/candidates';
 import { withEducationRepo } from '@/lib/repos/education';
 import { withExperiencesRepo } from '@/lib/repos/experiences';
 import { withProfilesRepo } from '@/lib/repos/profiles';
-import { MAX_BIO_LENGTH } from '@/lib/data/profiles/profileTypes';
+import {
+  MAX_BIO_LENGTH,
+  ProfileAvailability,
+} from '@/lib/data/profiles/profileTypes';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -211,6 +214,93 @@ export async function removeProfileSkill(
   } catch {
     return { error: 'Database error: Failed to remove skill.' };
   }
+}
+
+const ProfileDetailsSchema = z
+  .object({
+    title: z
+      .string()
+      .trim()
+      .min(1, { error: 'Please enter a title.' })
+      .max(200, { error: 'Title must be 200 characters or fewer.' }),
+    // null means "cleared" (set the column to null); absent means "don't touch".
+    availability: z.enum(ProfileAvailability).nullish(),
+    billRateMin: z
+      .number()
+      .int('Rate must be a whole number.')
+      .positive('Rate must be greater than 0.')
+      .nullish(),
+    billRateMax: z
+      .number()
+      .int('Rate must be a whole number.')
+      .positive('Rate must be greater than 0.')
+      .nullish(),
+  })
+  .refine(
+    (details) =>
+      details.billRateMin == null ||
+      details.billRateMax == null ||
+      details.billRateMax > details.billRateMin,
+    {
+      error: 'Max rate must be greater than min rate.',
+      path: ['billRateMax'],
+    },
+  );
+
+export type ProfileDetailsInput = z.input<typeof ProfileDetailsSchema>;
+export type ProfileDetailsFieldErrors = Partial<
+  Record<keyof ProfileDetailsInput, string>
+>;
+export type UpdateProfileDetailsResult = {
+  errors?: ProfileDetailsFieldErrors;
+  error?: string;
+};
+
+export async function updateProfileDetails(
+  profileUrlId: string,
+  input: ProfileDetailsInput,
+): Promise<UpdateProfileDetailsResult> {
+  const validatedFields = ProfileDetailsSchema.safeParse(input);
+
+  if (!validatedFields.success) {
+    const fieldErrors: ProfileDetailsFieldErrors = {};
+
+    for (const issue of validatedFields.error.issues) {
+      const field = issue.path[0] as keyof ProfileDetailsInput | undefined;
+
+      if (field && !fieldErrors[field]) {
+        fieldErrors[field] = issue.message;
+      }
+    }
+
+    return { errors: fieldErrors };
+  }
+
+  try {
+    const existing = await getProfileForUpdate(profileUrlId);
+    if ('error' in existing) {
+      return existing;
+    }
+
+    // `undefined` keys are dropped by the repo's Partial update; expand them to
+    // explicit nulls so a field the dialog always sends is cleared, not kept.
+    const { title, availability, billRateMin, billRateMax } = validatedFields.data;
+
+    await withProfilesRepo(existing.orgId, (repo) =>
+      repo.update(existing.profileId, {
+        title,
+        availability: availability ?? null,
+        billRateMin: billRateMin ?? null,
+        billRateMax: billRateMax ?? null,
+      }),
+    );
+  } catch {
+    return { error: 'Database error: Failed to update profile details.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
 }
 
 const DegreeSchema = z.enum(['BACHELORS', 'MASTERS']);

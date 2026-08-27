@@ -1,4 +1,5 @@
 import { db } from '@/lib/db/client';
+import { ProfileAvailability } from '@/lib/data/profiles/profileTypes';
 import { Candidates, Profiles } from '@/lib/db/schema';
 import { and, asc, eq, getTableColumns, inArray } from 'drizzle-orm';
 
@@ -76,9 +77,10 @@ export const createProfilesRepo = (orgId: string) => {
       id: string,
       values: Partial<{
         title: string;
-        billRateMin: number;
-        billRateMax: number;
-        bio: string;
+        availability: ProfileAvailability | null;
+        billRateMin: number | null;
+        billRateMax: number | null;
+        bio: string | null;
         skills: string[];
       }>,
     ) => {

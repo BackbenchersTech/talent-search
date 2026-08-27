@@ -23,6 +23,12 @@ export const ProfileAvailability = {
 export type ProfileAvailability =
   (typeof ProfileAvailability)[keyof typeof ProfileAvailability];
 
+export const PROFILE_AVAILABILITY_LABELS: Record<ProfileAvailability, string> = {
+  AVAILABLE_NOW: 'Available immediately',
+  TWO_WEEKS: 'Available in 2 weeks',
+  ONE_MONTH: 'Available in 1 month',
+};
+
 export type Profile = {
   id: string;
   candidateId: string;
