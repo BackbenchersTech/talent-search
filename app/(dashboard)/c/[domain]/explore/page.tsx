@@ -35,7 +35,7 @@ const ExplorePage = async ({
         <div className='flex flex-col'>
           <h1 className='text-2xl font-semibold'>Explore candidates</h1>
 
-          <div className='mt-5'>
+          <div className='mt-5 w-full max-w-[500px]'>
             <Search />
           </div>
 

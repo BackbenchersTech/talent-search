@@ -15,6 +15,7 @@ type GetPaginatedOptions = {
   limit: number;
   offset: number;
   sort?: CandidatesSort;
+  status?: CandidateStatus;
 };
 
 // first-of-chain tie-breakers keep pagination stable
@@ -31,6 +32,7 @@ const createCandidatesRepo = (orgId: string) => {
       limit,
       offset,
       sort = CANDIDATES_DEFAULT_SORT,
+      status,
     }: GetPaginatedOptions) => {
       const dir = sort.order === SORT_ORDER.DESC ? desc : asc;
       const orderBy = [
@@ -42,15 +44,17 @@ const createCandidatesRepo = (orgId: string) => {
         asc(Candidates.id),
       ];
 
+      const filter = status ? and(baseFilter, eq(Candidates.status, status)) : baseFilter;
+
       const [rows, [{ total }]] = await Promise.all([
         db
           .select()
           .from(Candidates)
-          .where(baseFilter)
+          .where(filter)
           .orderBy(...orderBy)
           .limit(limit)
           .offset(offset),
-        db.select({ total: count() }).from(Candidates).where(baseFilter),
+        db.select({ total: count() }).from(Candidates).where(filter),
       ]);
 
       return { rows, total };

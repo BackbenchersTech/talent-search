@@ -3,6 +3,7 @@ import { withProfilesRepo } from '@/lib/repos/profiles';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
 import {
   Candidate,
+  CandidateStatus,
   CandidateWithProfiles,
   CandidateProfileSummary,
   CandidatesSort,
@@ -43,13 +44,15 @@ export const getCandidatesWithProfilesPage = async (
     page,
     pageSize,
     sort,
-  }: { page: number; pageSize: number; sort?: CandidatesSort },
+    status,
+  }: { page: number; pageSize: number; sort?: CandidatesSort; status?: CandidateStatus },
 ) => {
   const { rows, total } = await withCandidatesRepo(orgId, (repo) =>
     repo.getPaginated({
       limit: pageSize,
       offset: (page - 1) * pageSize,
       sort,
+      status,
     }),
   );
 

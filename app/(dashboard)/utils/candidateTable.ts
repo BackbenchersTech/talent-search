@@ -1,6 +1,7 @@
 import {
   CANDIDATES_DEFAULT_SORT,
   CANDIDATES_SORT_COLUMN,
+  CandidateStatus,
   CandidatesSort,
   CandidatesSortColumn,
 } from '@/lib/data/candidates/candidateTypes';
@@ -39,6 +40,12 @@ export const parseCandidatesSort = ({
   const parsedOrder = Object.values(SORT_ORDER).find((value) => value === order);
 
   return { column, order: parsedOrder ?? DEFAULT_ORDER_BY_COLUMN[column] };
+};
+
+export const parseCandidateStatus = (status?: string): CandidateStatus | undefined => {
+  if (!status || !Object.hasOwn(CandidateStatus, status)) return undefined;
+
+  return CandidateStatus[status as keyof typeof CandidateStatus];
 };
 
 export const candidatesSortToParams = (sort: CandidatesSort, params: URLSearchParams) => {

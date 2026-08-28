@@ -15,7 +15,7 @@ export const Search = () => {
   };
 
   return (
-    <InputGroup className='w-full max-w-[500px] shadow-none'>
+    <InputGroup className='w-full shadow-none'>
       <InputGroupInput placeholder='Type to search' onChange={handleChange} />
 
       <InputGroupAddon>

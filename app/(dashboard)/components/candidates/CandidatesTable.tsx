@@ -1,12 +1,16 @@
 'use client';
 
+import { CandidatesStatusFilter } from '@/app/(dashboard)/components/candidates/CandidatesStatusFilter';
 import { getCandidatesTableColumns } from '@/app/(dashboard)/components/candidates/CandidatesTableColumns';
+import { CreateCandidateButtonAndDialog } from '@/app/(dashboard)/components/candidates/CreateCandidateButtonAndDialog';
 import { DataTable } from '@/app/(dashboard)/components/candidates/DataTable';
 import { TablePagination } from '@/app/(dashboard)/components/candidates/TablePagination';
+import { Search } from '@/app/components/Search';
 import { CandidatesPage } from '@/lib/data/candidates/candidateData';
 import {
   CandidatesSort,
   CandidatesSortColumn,
+  CandidateStatus,
   CandidateWithProfiles,
 } from '@/lib/data/candidates/candidateTypes';
 import {
@@ -21,12 +25,14 @@ interface CandidatesTableProps {
   candidatesPage: CandidatesPage;
   pageSize: number;
   sort: CandidatesSort;
+  status?: CandidateStatus;
 }
 
 export const CandidatesTable = ({
   candidatesPage,
   pageSize,
   sort,
+  status,
 }: CandidatesTableProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -58,6 +64,21 @@ export const CandidatesTable = ({
     [updateParams, sort],
   );
 
+  const handleStatusChange = useCallback(
+    (next: CandidateStatus | undefined) => {
+      updateParams((params) => {
+        // a changed result set can only be valid from the first page
+        params.delete('page');
+        if (next) {
+          params.set('status', next);
+        } else {
+          params.delete('status');
+        }
+      });
+    },
+    [updateParams],
+  );
+
   const handlePageChange = useCallback(
     (nextPage: number) => {
       updateParams((params) => params.set('page', String(nextPage)));
@@ -72,6 +93,21 @@ export const CandidatesTable = ({
 
   return (
     <div className='flex flex-col gap-4'>
+      {/* search takes a full row when narrow; filter and CTA share the row below */}
+      <div className='grid grid-cols-2 items-center gap-2 sm:flex sm:flex-row sm:items-center'>
+        <div className='col-span-2 sm:w-[500px] sm:min-w-0'>
+          <Search />
+        </div>
+
+        <div className='justify-self-start sm:ml-auto sm:justify-self-auto'>
+          <CandidatesStatusFilter status={status} onStatusChange={handleStatusChange} />
+        </div>
+
+        <div className='flex justify-end'>
+          <CreateCandidateButtonAndDialog />
+        </div>
+      </div>
+
       <div
         aria-busy={isPending}
         className={cn(

@@ -131,7 +131,6 @@ export const getCandidatesTableColumns = (
       );
     },
   },
-  { accessorKey: 'status', header: 'Status' },
   {
     id: 'createdOn',
     header: () => (
