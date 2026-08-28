@@ -3,7 +3,9 @@
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { decodeCandidateId } from '@/lib/data/candidates/candidateTransforms';
 import { CandidateStatus } from '@/lib/data/candidates/candidateTypes';
+import { createProfileId } from '@/lib/data/profiles/profileTransforms';
 import { withCandidatesRepo } from '@/lib/repos/candidates';
+import { withProfilesRepo } from '@/lib/repos/profiles';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -201,6 +203,8 @@ export async function setCandidateStatus(
     return { error: 'Candidate not found.' };
   }
 
+  let unpublishedProfileUrlIds: string[] = [];
+
   try {
     const { orgId } = await getAppContext();
     const updated = await withCandidatesRepo(orgId, (repo) =>
@@ -209,11 +213,25 @@ export async function setCandidateStatus(
     if (!updated) {
       return { error: 'Candidate not found.' };
     }
+
+    // Deactivating a candidate unpublishes their published profiles.
+    if (status === CandidateStatus.INACTIVE) {
+      const profileIds = await withProfilesRepo(orgId, (repo) =>
+        repo.unpublishByCandidateId(candidateId),
+      );
+      unpublishedProfileUrlIds = profileIds.map(createProfileId);
+    }
   } catch {
     return { error: 'Failed to update candidate status.' };
   }
 
   revalidateCandidateRoutes();
+  unpublishedProfileUrlIds.forEach((profileUrlId) => {
+    revalidatePath(`/c/[domain]/candidates/[id]/profiles/${profileUrlId}`, 'page');
+  });
+  if (unpublishedProfileUrlIds.length) {
+    revalidatePath(`/c/[domain]/explore`, 'page');
+  }
 
   return {};
 }
@@ -228,9 +246,7 @@ export async function deleteCandidate(
 
   try {
     const { orgId } = await getAppContext();
-    const deleted = await withCandidatesRepo(orgId, (repo) =>
-      repo.delete(candidateId),
-    );
+    const deleted = await withCandidatesRepo(orgId, (repo) => repo.delete(candidateId));
     if (!deleted) {
       return { error: 'Candidate not found.' };
     }

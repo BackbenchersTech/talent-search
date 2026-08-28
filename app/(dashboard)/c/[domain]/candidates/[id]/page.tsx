@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAppContext } from '@/lib/auth/getAppContext';
 import { getCandidateById } from '@/lib/data/candidates/candidateData';
 import { getCandidateProfiles } from '@/lib/data/profiles/profileData';
+import { ProfileStatus } from '@/lib/data/profiles/profileTypes';
 import { ArrowLeftIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -95,7 +96,12 @@ const CandidateDetailPage = async (props: {
         </div>
 
         <div>
-          <CandidateActionsMenu candidate={candidate} />
+          <CandidateActionsMenu
+            candidate={candidate}
+            publishedProfiles={jobProfiles
+              .filter((p) => p.status === ProfileStatus.PUBLISHED)
+              .map((p) => ({ id: p.id, title: p.title }))}
+          />
         </div>
       </div>
 

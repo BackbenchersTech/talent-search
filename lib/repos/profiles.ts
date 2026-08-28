@@ -1,8 +1,5 @@
 import { db } from '@/lib/db/client';
-import {
-  ProfileAvailability,
-  ProfileStatus,
-} from '@/lib/data/profiles/profileTypes';
+import { ProfileAvailability, ProfileStatus } from '@/lib/data/profiles/profileTypes';
 import { Candidates, Profiles } from '@/lib/db/schema';
 import { and, asc, eq, getTableColumns, inArray } from 'drizzle-orm';
 
@@ -98,6 +95,23 @@ export const createProfilesRepo = (orgId: string) => {
     },
     delete: async (id: string) => {
       await db.delete(Profiles).where(and(baseFilter, eq(Profiles.id, id)));
+    },
+    // Deactivating a candidate pulls their published profiles from explore;
+    // returns the ids so callers can revalidate those profile routes.
+    unpublishByCandidateId: async (candidateId: string) => {
+      const rows = await db
+        .update(Profiles)
+        .set({ status: ProfileStatus.DRAFT })
+        .where(
+          and(
+            baseFilter,
+            eq(Profiles.candidateId, candidateId),
+            eq(Profiles.status, ProfileStatus.PUBLISHED),
+          ),
+        )
+        .returning({ id: Profiles.id });
+
+      return rows.map((row) => row.id);
     },
   };
 };
