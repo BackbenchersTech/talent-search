@@ -70,7 +70,7 @@ export const SummarySection = ({
           <Button
             variant='ghost'
             size='icon-sm'
-            className='cursor-pointer text-gray-400 hover:text-gray-600'
+            className='text-gray-400 hover:text-gray-600'
             onClick={startEditing}
             aria-label={SUMMARY_EDITOR_LABEL}
             title={SUMMARY_EDITOR_LABEL}
@@ -117,22 +117,11 @@ export const SummarySection = ({
               </span>
             )}
 
-            <Button
-              variant='outline'
-              size='sm'
-              className='cursor-pointer'
-              onClick={cancel}
-              disabled={isSaving}
-            >
+            <Button variant='outline' size='sm' onClick={cancel} disabled={isSaving}>
               Cancel
             </Button>
 
-            <Button
-              size='sm'
-              className='cursor-pointer'
-              onClick={save}
-              disabled={isSaving || overLimit}
-            >
+            <Button size='sm' onClick={save} disabled={isSaving || overLimit}>
               {isSaving ? 'Saving…' : 'Save'}
             </Button>
           </div>
@@ -144,7 +133,7 @@ export const SummarySection = ({
           <Button
             variant='link'
             size='sm'
-            className='h-auto cursor-pointer p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
+            className='h-auto p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
             onClick={startEditing}
           >
             Add summary

@@ -78,19 +78,19 @@ export const ProfileDetailClient = ({
       <article>
         <div className='lg:pt-8'>
           <ProfileHeader
-          profile={profile}
-          candidate={candidate}
-          actions={
-            <>
-              <Button className='cursor-pointer'>
-                <PlusIcon className='size-4' /> Shortlist
-              </Button>
-              <Button variant='outline' className='cursor-pointer shadow-none'>
-                <ArrowDownTrayIcon className='size-4' /> Download resume
-              </Button>
-            </>
-          }
-        />
+            profile={profile}
+            candidate={candidate}
+            actions={
+              <>
+                <Button>
+                  <PlusIcon className='size-4' /> Shortlist
+                </Button>
+                <Button variant='outline' className='shadow-none'>
+                  <ArrowDownTrayIcon className='size-4' /> Download resume
+                </Button>
+              </>
+            }
+          />
         </div>
 
         <ProfileDetailContent

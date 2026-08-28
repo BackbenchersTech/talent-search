@@ -74,21 +74,11 @@ const RemoveEducationDialog = ({
         </DialogHeader>
 
         <DialogFooter>
-          <Button
-            variant='outline'
-            className='cursor-pointer'
-            onClick={onClose}
-            disabled={isRemoving}
-          >
+          <Button variant='outline' onClick={onClose} disabled={isRemoving}>
             Cancel
           </Button>
 
-          <Button
-            variant='destructive'
-            className='cursor-pointer'
-            onClick={remove}
-            disabled={isRemoving}
-          >
+          <Button variant='destructive' onClick={remove} disabled={isRemoving}>
             {isRemoving ? 'Removing…' : 'Remove'}
           </Button>
         </DialogFooter>
@@ -119,7 +109,7 @@ export const EducationSection = ({
           <Button
             variant='ghost'
             size='icon-sm'
-            className='cursor-pointer text-gray-400 hover:text-gray-600'
+            className='text-gray-400 hover:text-gray-600'
             onClick={() => setIsAddDialogOpen(true)}
             aria-label={ADD_EDUCATION_LABEL}
             title={ADD_EDUCATION_LABEL}
@@ -151,7 +141,7 @@ export const EducationSection = ({
                     <Button
                       variant='ghost'
                       size='icon-sm'
-                      className='cursor-pointer text-gray-400 hover:text-gray-600'
+                      className='text-gray-400 hover:text-gray-600'
                       onClick={() => setDialogEducation(edu)}
                       aria-label={EDIT_EDUCATION_LABEL}
                       title={EDIT_EDUCATION_LABEL}
@@ -162,7 +152,7 @@ export const EducationSection = ({
                     <Button
                       variant='ghost'
                       size='icon-sm'
-                      className='cursor-pointer text-gray-400 hover:text-gray-600'
+                      className='text-gray-400 hover:text-gray-600'
                       onClick={() => setRemovalCandidate(edu)}
                       aria-label={REMOVE_EDUCATION_LABEL}
                       title={REMOVE_EDUCATION_LABEL}
@@ -180,7 +170,7 @@ export const EducationSection = ({
           <Button
             variant='link'
             size='sm'
-            className='h-auto cursor-pointer p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
+            className='h-auto p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
             onClick={() => setIsAddDialogOpen(true)}
           >
             Add education

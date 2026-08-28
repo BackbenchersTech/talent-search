@@ -27,10 +27,7 @@ export const CreateProfileDialog = ({ children }: CreateProfileDialogProps) => {
   const { domain, id } = useParams<{ domain: string; id: string }>();
   const initialState: State = { message: null, errors: {} };
   const createProfileBound = createProfile.bind(null, id, domain);
-  const [state, formAction, isPending] = useActionState(
-    createProfileBound,
-    initialState,
-  );
+  const [state, formAction, isPending] = useActionState(createProfileBound, initialState);
 
   // On success the action redirects to the new profile, which unmounts this
   // dialog — no explicit close handling needed.
@@ -43,8 +40,8 @@ export const CreateProfileDialog = ({ children }: CreateProfileDialogProps) => {
         <DialogHeader>
           <DialogTitle>New profile</DialogTitle>
           <DialogDescription>
-            Enter a title for the new job profile. Everything else can be filled
-            in on the profile page.
+            Enter a title for the new job profile. Everything else can be filled in on the
+            profile page.
           </DialogDescription>
         </DialogHeader>
 
@@ -69,12 +66,10 @@ export const CreateProfileDialog = ({ children }: CreateProfileDialogProps) => {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant='outline' className='cursor-pointer'>
-                  Cancel
-                </Button>
+                <Button variant='outline'>Cancel</Button>
               </DialogClose>
 
-              <Button type='submit' className='cursor-pointer' disabled={isPending}>
+              <Button type='submit' disabled={isPending}>
                 Create
               </Button>
             </DialogFooter>

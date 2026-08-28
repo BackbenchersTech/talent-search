@@ -96,7 +96,7 @@ export const ProfileActionsMenu = ({ profile }: ProfileActionsMenuProps) => {
           <Button
             variant='outline'
             size='sm'
-            className='cursor-pointer shadow-none'
+            className='shadow-none'
             disabled={isPending}
           >
             Actions
@@ -139,17 +139,12 @@ export const ProfileActionsMenu = ({ profile }: ProfileActionsMenuProps) => {
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant='outline' className='cursor-pointer' disabled={isPending}>
+              <Button variant='outline' disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
 
-            <Button
-              variant='destructive'
-              className='cursor-pointer'
-              onClick={handleDelete}
-              disabled={isPending}
-            >
+            <Button variant='destructive' onClick={handleDelete} disabled={isPending}>
               {isPending ? 'Deleting…' : 'Delete profile'}
             </Button>
           </DialogFooter>

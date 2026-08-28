@@ -93,7 +93,7 @@ export const CandidateActionsMenu = ({
           <Button
             variant='outline'
             size='sm'
-            className='cursor-pointer shadow-none'
+            className='shadow-none'
             disabled={isPending}
           >
             Actions
@@ -137,17 +137,12 @@ export const CandidateActionsMenu = ({
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant='outline' className='cursor-pointer' disabled={isPending}>
+              <Button variant='outline' disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
 
-            <Button
-              variant='destructive'
-              className='cursor-pointer'
-              onClick={handleDelete}
-              disabled={isPending}
-            >
+            <Button variant='destructive' onClick={handleDelete} disabled={isPending}>
               {isPending ? 'Deleting…' : 'Delete candidate'}
             </Button>
           </DialogFooter>
@@ -182,16 +177,12 @@ export const CandidateActionsMenu = ({
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant='outline' className='cursor-pointer' disabled={isPending}>
+              <Button variant='outline' disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
 
-            <Button
-              className='cursor-pointer'
-              onClick={handleDeactivate}
-              disabled={isPending}
-            >
+            <Button onClick={handleDeactivate} disabled={isPending}>
               {isPending ? 'Deactivating…' : 'Deactivate'}
             </Button>
           </DialogFooter>

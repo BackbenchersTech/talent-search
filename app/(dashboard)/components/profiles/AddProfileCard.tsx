@@ -51,11 +51,7 @@ export const AddProfileCard = () => {
       <span className='text-sm text-gray-600'>Upload a resume to create a profile</span>
       {!isDragging && (
         <>
-          <Button
-            type='button'
-            onClick={() => inputRef.current?.click()}
-            className='cursor-pointer'
-          >
+          <Button type='button' onClick={() => inputRef.current?.click()}>
             <ArrowUpTrayIcon className='size-4' />
             Upload
           </Button>

@@ -25,10 +25,7 @@ const INITIAL_STATE: State = { message: null, errors: {} };
  * when closed), so form state resets between opens.
  */
 const CreateCandidateForm = ({ onSuccess }: { onSuccess: () => void }) => {
-  const handleSubmit = async (
-    _prevState: State,
-    formData: FormData,
-  ): Promise<State> => {
+  const handleSubmit = async (_prevState: State, formData: FormData): Promise<State> => {
     const result = await createCandidate(_prevState, formData);
 
     if (result.success) {
@@ -103,12 +100,10 @@ const CreateCandidateForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant='outline' className='cursor-pointer'>
-              Cancel
-            </Button>
+            <Button variant='outline'>Cancel</Button>
           </DialogClose>
 
-          <Button type='submit' className='cursor-pointer' disabled={isPending}>
+          <Button type='submit' disabled={isPending}>
             Create
           </Button>
         </DialogFooter>
@@ -123,7 +118,7 @@ export const CreateCandidateButtonAndDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='cursor-pointer'>
+        <Button>
           <PlusIcon className='size-4' />
           <span>Add candidate</span>
         </Button>

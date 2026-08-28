@@ -10,14 +10,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { removeProfileExperience } from '@/lib/data/profiles/actions';
-import {
-  LOCATION_TYPE_LABELS,
-  Experience,
-} from '@/lib/data/experiences/experienceTypes';
-import {
-  formatDateRange,
-  formatTenure,
-} from '@/app/(dashboard)/utils/experienceFormat';
+import { LOCATION_TYPE_LABELS, Experience } from '@/lib/data/experiences/experienceTypes';
+import { formatDateRange, formatTenure } from '@/app/(dashboard)/utils/experienceFormat';
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
@@ -79,21 +73,11 @@ const RemoveExperienceDialog = ({
         </DialogHeader>
 
         <DialogFooter>
-          <Button
-            variant='outline'
-            className='cursor-pointer'
-            onClick={onClose}
-            disabled={isRemoving}
-          >
+          <Button variant='outline' onClick={onClose} disabled={isRemoving}>
             Cancel
           </Button>
 
-          <Button
-            variant='destructive'
-            className='cursor-pointer'
-            onClick={remove}
-            disabled={isRemoving}
-          >
+          <Button variant='destructive' onClick={remove} disabled={isRemoving}>
             {isRemoving ? 'Removing…' : 'Remove'}
           </Button>
         </DialogFooter>
@@ -124,7 +108,7 @@ export const ExperienceSection = ({
           <Button
             variant='ghost'
             size='icon-sm'
-            className='cursor-pointer text-gray-400 hover:text-gray-600'
+            className='text-gray-400 hover:text-gray-600'
             onClick={() => setIsAddDialogOpen(true)}
             aria-label={ADD_EXPERIENCE_LABEL}
             title={ADD_EXPERIENCE_LABEL}
@@ -171,7 +155,7 @@ export const ExperienceSection = ({
                     <Button
                       variant='ghost'
                       size='icon-sm'
-                      className='cursor-pointer text-gray-400 hover:text-gray-600'
+                      className='text-gray-400 hover:text-gray-600'
                       onClick={() => setDialogExperience(experience)}
                       aria-label={EDIT_EXPERIENCE_LABEL}
                       title={EDIT_EXPERIENCE_LABEL}
@@ -182,7 +166,7 @@ export const ExperienceSection = ({
                     <Button
                       variant='ghost'
                       size='icon-sm'
-                      className='cursor-pointer text-gray-400 hover:text-gray-600'
+                      className='text-gray-400 hover:text-gray-600'
                       onClick={() => setRemovalCandidate(experience)}
                       aria-label={REMOVE_EXPERIENCE_LABEL}
                       title={REMOVE_EXPERIENCE_LABEL}
@@ -200,7 +184,7 @@ export const ExperienceSection = ({
           <Button
             variant='link'
             size='sm'
-            className='h-auto cursor-pointer p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
+            className='h-auto p-0 text-sm text-gray-500 italic underline hover:text-gray-700'
             onClick={() => setIsAddDialogOpen(true)}
           >
             Add experience

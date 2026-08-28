@@ -43,7 +43,6 @@ export const TablePagination = ({
           <Button
             variant='outline'
             size='icon-sm'
-            className='cursor-pointer'
             disabled={disabled || page === 1}
             onClick={() => goTo(1)}
           >
@@ -53,7 +52,6 @@ export const TablePagination = ({
           <Button
             variant='outline'
             size='icon-sm'
-            className='cursor-pointer'
             disabled={disabled || page === 1}
             onClick={() => goTo(page - 1)}
           >
@@ -66,7 +64,6 @@ export const TablePagination = ({
               key={pageNumber}
               variant={pageNumber === page ? 'default' : 'outline'}
               size='icon-sm'
-              className='cursor-pointer'
               disabled={disabled}
               onClick={() => goTo(pageNumber)}
             >
@@ -77,7 +74,6 @@ export const TablePagination = ({
           <Button
             variant='outline'
             size='icon-sm'
-            className='cursor-pointer'
             disabled={disabled || page === totalPages}
             onClick={() => goTo(page + 1)}
           >
@@ -87,7 +83,6 @@ export const TablePagination = ({
           <Button
             variant='outline'
             size='icon-sm'
-            className='cursor-pointer'
             disabled={disabled || page === totalPages}
             onClick={() => goTo(totalPages)}
           >

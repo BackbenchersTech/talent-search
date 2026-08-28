@@ -88,14 +88,13 @@ const AddSkillsDialog = ({ profileId, onClose }: AddSkillsDialogProps) => {
               <Button
                 type='button'
                 variant='outline'
-                className='cursor-pointer'
                 onClick={onClose}
                 disabled={isSaving}
               >
                 Cancel
               </Button>
 
-              <Button type='submit' className='cursor-pointer' disabled={isSaving}>
+              <Button type='submit' disabled={isSaving}>
                 {isSaving ? 'Adding…' : 'Add'}
               </Button>
             </DialogFooter>
@@ -140,7 +139,7 @@ export const SkillsSection = ({
           <Button
             variant='ghost'
             size='icon-sm'
-            className='cursor-pointer text-gray-400 hover:text-gray-600'
+            className='text-gray-400 hover:text-gray-600'
             onClick={() => setIsAddDialogOpen(true)}
             aria-label={ADD_SKILLS_LABEL}
             title={ADD_SKILLS_LABEL}
@@ -175,7 +174,7 @@ export const SkillsSection = ({
           <Button
             variant='outline'
             size='sm'
-            className='h-auto cursor-pointer gap-1 rounded-full px-2 py-0.5 text-xs shadow-none'
+            className='h-auto gap-1 rounded-full px-2 py-0.5 text-xs shadow-none'
             onClick={() => setIsAddDialogOpen(true)}
             disabled={isSaving}
           >

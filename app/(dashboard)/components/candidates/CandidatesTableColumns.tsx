@@ -43,7 +43,7 @@ const SortHeader = ({
     <Button
       variant='ghost'
       size='sm'
-      className='-ml-2.5 cursor-pointer gap-1 px-2 has-[>svg]:px-2'
+      className='-ml-2.5 gap-1 px-2 has-[>svg]:px-2'
       aria-label={
         isActive
           ? `Sort by ${label.toLowerCase()}, sorted ${isDesc ? 'descending' : 'ascending'}`
@@ -176,7 +176,7 @@ export const getCandidatesTableColumns = (
           <DropdownMenuTrigger asChild>
             <Button
               variant='ghost'
-              className='h-8 w-8 cursor-pointer p-0'
+              className='h-8 w-8 p-0'
               onClick={(e) => e.stopPropagation()}
             >
               <span className='sr-only'>Open menu</span>

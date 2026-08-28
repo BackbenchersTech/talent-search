@@ -38,7 +38,11 @@ interface EducationDialogProps {
   onClose: () => void;
 }
 
-export const EducationDialog = ({ profileId, education, onClose }: EducationDialogProps) => {
+export const EducationDialog = ({
+  profileId,
+  education,
+  onClose,
+}: EducationDialogProps) => {
   const isEditing = education != null;
   const [draft, setDraft] = useState<EducationInput>(
     education
@@ -163,14 +167,13 @@ export const EducationDialog = ({ profileId, education, onClose }: EducationDial
               <Button
                 type='button'
                 variant='outline'
-                className='cursor-pointer'
                 onClick={onClose}
                 disabled={isSaving}
               >
                 Cancel
               </Button>
 
-              <Button type='submit' className='cursor-pointer' disabled={isSaving}>
+              <Button type='submit' disabled={isSaving}>
                 {isSaving ? 'Saving…' : isEditing ? 'Save' : 'Add'}
               </Button>
             </DialogFooter>

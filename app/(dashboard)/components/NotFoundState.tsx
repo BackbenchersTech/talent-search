@@ -26,7 +26,7 @@ export const NotFoundState = ({
       <div className='mt-6'>
         <Link
           href={backHref}
-          className='inline-flex items-center gap-1 text-sm font-medium underline-offset-2 transition-opacity hover:opacity-50 hover:underline'
+          className='inline-flex items-center gap-1 text-sm font-medium underline-offset-2 transition-opacity hover:underline hover:opacity-50'
         >
           <ArrowLeftIcon className='size-4 stroke-2' />
           {backLabel}

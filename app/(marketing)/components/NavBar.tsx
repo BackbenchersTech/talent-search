@@ -52,7 +52,7 @@ export const NavBar = () => {
         <div className='flex flex-row items-center justify-end'>
           <Button
             variant='ghost'
-            className='h-fit cursor-pointer p-0! text-gray-400 duration-200 hover:text-black md:hidden'
+            className='h-fit p-0! text-gray-400 duration-200 hover:text-black md:hidden'
             onClick={() => setIsSlidingMenuOpen(!isSlidingMenuOpen)}
           >
             {/* sidebar icon */}

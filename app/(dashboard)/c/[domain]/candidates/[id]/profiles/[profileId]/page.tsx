@@ -52,7 +52,7 @@ const ProfileDetailPage = async (props: {
           candidate={candidate}
           editable
           actions={
-            <Button className='cursor-pointer'>
+            <Button>
               <EyeIcon className='size-4' /> Preview Resume
             </Button>
           }

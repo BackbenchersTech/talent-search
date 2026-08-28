@@ -135,12 +135,10 @@ const EditNameAndLocationForm = ({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant='outline' className='cursor-pointer'>
-              Cancel
-            </Button>
+            <Button variant='outline'>Cancel</Button>
           </DialogClose>
 
-          <Button type='submit' className='cursor-pointer' disabled={isPending}>
+          <Button type='submit' disabled={isPending}>
             Save
           </Button>
         </DialogFooter>
@@ -160,7 +158,7 @@ export const EditNameAndLocationDialog = ({
         <Button
           variant='ghost'
           size='icon-sm'
-          className='cursor-pointer text-gray-400 hover:text-gray-600'
+          className='text-gray-400 hover:text-gray-600'
           aria-label={EDIT_LABEL}
           title={EDIT_LABEL}
         >
@@ -176,10 +174,7 @@ export const EditNameAndLocationDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <EditNameAndLocationForm
-          candidate={candidate}
-          onSuccess={() => setOpen(false)}
-        />
+        <EditNameAndLocationForm candidate={candidate} onSuccess={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

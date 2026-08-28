@@ -182,7 +182,12 @@ export const ExperienceDialog = ({
           }}
         >
           <div className='grid gap-4'>
-            <FormField name='experience-title' label='Title' required error={errors?.title}>
+            <FormField
+              name='experience-title'
+              label='Title'
+              required
+              error={errors?.title}
+            >
               <Input
                 id={fieldId('experience-title')}
                 autoFocus={true}
@@ -340,14 +345,13 @@ export const ExperienceDialog = ({
               <Button
                 type='button'
                 variant='outline'
-                className='cursor-pointer'
                 onClick={onClose}
                 disabled={isSaving}
               >
                 Cancel
               </Button>
 
-              <Button type='submit' className='cursor-pointer' disabled={isSaving}>
+              <Button type='submit' disabled={isSaving}>
                 {isSaving ? 'Saving…' : isEditing ? 'Save' : 'Add'}
               </Button>
             </DialogFooter>
