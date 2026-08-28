@@ -11,10 +11,16 @@ import {
 } from '@/components/ui/dialog';
 import { removeProfileEducation } from '@/lib/data/profiles/actions';
 import { DEGREE_LABELS, Education } from '@/lib/data/education/educationTypes';
-import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+  ChevronUpDownIcon,
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { EducationDialog } from './EducationDialog';
+import { ReorderEducationDialog } from './ReorderEducationDialog';
 
 interface EducationSectionProps {
   profileId: string;
@@ -25,6 +31,7 @@ interface EducationSectionProps {
 const ADD_EDUCATION_LABEL = 'Add education';
 const EDIT_EDUCATION_LABEL = 'Edit education';
 const REMOVE_EDUCATION_LABEL = 'Remove education';
+const REORDER_EDUCATION_LABEL = 'Reorder education';
 
 interface RemoveEducationDialogProps {
   profileId: string;
@@ -94,6 +101,7 @@ export const EducationSection = ({
 }: EducationSectionProps) => {
   const [dialogEducation, setDialogEducation] = useState<Education | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isReorderDialogOpen, setIsReorderDialogOpen] = useState(false);
   const [removalCandidate, setRemovalCandidate] = useState<Education | null>(null);
 
   if (!education.length && !editable) {
@@ -106,16 +114,31 @@ export const EducationSection = ({
         <h3 className='font-semibold text-black'>Education</h3>
 
         {editable && (
-          <Button
-            variant='ghost'
-            size='icon-sm'
-            className='text-gray-400 hover:text-gray-600'
-            onClick={() => setIsAddDialogOpen(true)}
-            aria-label={ADD_EDUCATION_LABEL}
-            title={ADD_EDUCATION_LABEL}
-          >
-            <PlusIcon className='size-4' />
-          </Button>
+          <div className='flex shrink-0 gap-1'>
+            {education.length > 1 && (
+              <Button
+                variant='ghost'
+                size='icon-sm'
+                className='text-gray-400 hover:text-gray-600'
+                onClick={() => setIsReorderDialogOpen(true)}
+                aria-label={REORDER_EDUCATION_LABEL}
+                title={REORDER_EDUCATION_LABEL}
+              >
+                <ChevronUpDownIcon className='size-4' />
+              </Button>
+            )}
+
+            <Button
+              variant='ghost'
+              size='icon-sm'
+              className='text-gray-400 hover:text-gray-600'
+              onClick={() => setIsAddDialogOpen(true)}
+              aria-label={ADD_EDUCATION_LABEL}
+              title={ADD_EDUCATION_LABEL}
+            >
+              <PlusIcon className='size-4' />
+            </Button>
+          </div>
         )}
       </div>
 
@@ -190,6 +213,14 @@ export const EducationSection = ({
           profileId={profileId}
           education={dialogEducation}
           onClose={() => setDialogEducation(null)}
+        />
+      )}
+
+      {isReorderDialogOpen && (
+        <ReorderEducationDialog
+          profileId={profileId}
+          education={education}
+          onClose={() => setIsReorderDialogOpen(false)}
         />
       )}
 

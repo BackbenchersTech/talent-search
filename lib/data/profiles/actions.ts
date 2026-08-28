@@ -327,9 +327,7 @@ export async function setProfileStatus(
   return {};
 }
 
-export async function deleteProfile(
-  profileUrlId: string,
-): Promise<{ error?: string }> {
+export async function deleteProfile(profileUrlId: string): Promise<{ error?: string }> {
   let candidateUrlId: string | undefined;
 
   try {
@@ -340,9 +338,7 @@ export async function deleteProfile(
 
     candidateUrlId = createCandidateId(existing.profile.candidateId);
 
-    await withProfilesRepo(existing.orgId, (repo) =>
-      repo.delete(existing.profileId),
-    );
+    await withProfilesRepo(existing.orgId, (repo) => repo.delete(existing.profileId));
   } catch {
     return { error: 'Database error: Failed to delete profile.' };
   }
@@ -486,6 +482,44 @@ export async function removeProfileEducation(
     }
   } catch {
     return { error: 'Database error: Failed to remove education.' };
+  }
+
+  revalidateProfileRoutes(profileUrlId);
+
+  return {};
+}
+
+// Array position becomes the new orderIndex, so the payload stays minimal
+// (IDs only) and can't express duplicate or missing indices.
+export async function reorderProfileEducation(
+  profileUrlId: string,
+  educationIds: string[],
+): Promise<EducationMutationResult> {
+  const existing = await getProfileForUpdate(profileUrlId);
+  if ('error' in existing) {
+    return existing;
+  }
+
+  const currentIds = await withEducationRepo(existing.profile.candidateId, (repo) =>
+    repo.getAll().then((rows) => rows.map((education) => education.id)),
+  );
+  const isSameSet =
+    educationIds.length === currentIds.length &&
+    currentIds.every((id) => educationIds.includes(id));
+
+  if (!isSameSet) {
+    return {
+      error:
+        'This education list has changed since it was loaded. Refresh the page and try again.',
+    };
+  }
+
+  try {
+    await withEducationRepo(existing.profile.candidateId, (repo) =>
+      repo.reorder(educationIds),
+    );
+  } catch {
+    return { error: 'Database error: Failed to reorder education.' };
   }
 
   revalidateProfileRoutes(profileUrlId);

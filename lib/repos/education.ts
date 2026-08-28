@@ -60,6 +60,16 @@ const createEducationRepo = (candidateId: string) => {
 
       return education;
     },
+    reorder: async (ids: string[]) => {
+      await db.transaction(async (tx) => {
+        for (const [index, id] of ids.entries()) {
+          await tx
+            .update(EducationRow)
+            .set({ orderIndex: index })
+            .where(and(baseFilter, eq(EducationRow.id, id)));
+        }
+      });
+    },
   };
 };
 
