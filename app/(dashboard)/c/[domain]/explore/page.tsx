@@ -1,12 +1,11 @@
-import { ProfileCard } from '@/app/(dashboard)/components/profiles/ProfileCard';
-import { ProfileGrid } from '@/app/(dashboard)/components/profiles/ProfileGrid';
-import { Search } from '@/app/components/Search';
-import { getProfiles } from '@/lib/data/profiles/profileData';
-import { cn } from '@/lib/utils/cn';
-
+import { ExploreProfiles } from '@/app/(dashboard)/components/profiles/ExploreProfiles';
 import { ProfileDetailWrapper } from '@/app/(dashboard)/components/profiles/ProfileDetailWrapper';
 import styles from '@/app/(dashboard)/dashboard.module.css';
+import { Search } from '@/app/components/Search';
 import { getOrgIdFromSlug } from '@/lib/auth/getOrgIdFromSlug';
+import { getProfilesPage } from '@/lib/data/profiles/profileData';
+import { EXPLORE_PAGE_SIZE } from '@/lib/data/profiles/profileTypes';
+import { cn } from '@/lib/utils/cn';
 
 const ExplorePage = async ({
   params,
@@ -19,7 +18,9 @@ const ExplorePage = async ({
   const queryParams = await searchParams;
   const profileId = queryParams?.profileId;
   const orgId = await getOrgIdFromSlug(domain);
-  const profilesWithCandidate = await getProfiles(orgId);
+  const { rows, nextCursor, total } = await getProfilesPage(orgId, {
+    limit: EXPLORE_PAGE_SIZE,
+  });
 
   return (
     <>
@@ -40,15 +41,11 @@ const ExplorePage = async ({
           </div>
 
           <div className='mt-6 w-full'>
-            <ProfileGrid>
-              {profilesWithCandidate.map((p) => (
-                <ProfileCard
-                  key={p.id}
-                  profileWithCandidate={p}
-                  href={`?profileId=${p.id}`}
-                />
-              ))}
-            </ProfileGrid>
+            <ExploreProfiles
+              initialRows={rows}
+              initialCursor={nextCursor}
+              total={total}
+            />
           </div>
         </div>
       </div>

@@ -2,6 +2,8 @@ import { ExploreCandidate } from '../candidates/candidateTypes';
 
 export const MAX_BIO_LENGTH = 1000;
 
+export const EXPLORE_PAGE_SIZE = 24;
+
 export const ProfileStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED',

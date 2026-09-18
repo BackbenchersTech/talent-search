@@ -13,11 +13,32 @@ import {
   mapProfileRowToProfile,
   mapProfileRowToProfileWithCandidate,
 } from './profileTransforms';
+import type { ProfileWithCandidate } from './profileTypes';
 
-export async function getProfiles(orgId: string) {
-  return (await withProfilesRepo(orgId, (repo) => repo.getAllWithCandidate())).map(
-    mapProfileRowToProfileWithCandidate,
-  );
+export type ProfilesPage = {
+  rows: ProfileWithCandidate[];
+  nextCursor: string | null;
+  total: number;
+};
+
+export async function getProfilesPage(
+  orgId: string,
+  { cursor, limit = 24 }: { cursor?: string | null; limit?: number } = {},
+): Promise<ProfilesPage> {
+  const { rows, nextCursor, total } = await withProfilesRepo(orgId, async (repo) => {
+    const [page, total] = await Promise.all([
+      repo.getAllWithCandidate({ limit, cursor }),
+      repo.countAll(),
+    ]);
+
+    return { ...page, total };
+  });
+
+  return {
+    rows: rows.map(mapProfileRowToProfileWithCandidate),
+    nextCursor,
+    total,
+  };
 }
 
 export async function getCandidateProfiles(orgId: string, candidateUrlId: string) {

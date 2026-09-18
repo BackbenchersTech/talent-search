@@ -1,14 +1,29 @@
 import { db } from '@/lib/db/client';
+import {
+  decodeProfileCursor,
+  encodeProfileCursor,
+} from '@/lib/data/profiles/profileTransforms';
 import { ProfileAvailability, ProfileStatus } from '@/lib/data/profiles/profileTypes';
 import { Candidates, Profiles } from '@/lib/db/schema';
-import { and, asc, eq, getTableColumns, inArray } from 'drizzle-orm';
+import { and, asc, count, desc, eq, getTableColumns, inArray, lt, or } from 'drizzle-orm';
 
 type GetAllOptions = {
   limit?: number;
+  cursor?: string | null;
 };
 
 export const createProfilesRepo = (orgId: string) => {
   const baseFilter = eq(Profiles.organizationId, orgId);
+
+  const withCandidateColumns = {
+    ...getTableColumns(Profiles),
+    candidate: {
+      id: Profiles.candidateId,
+      city: Candidates.city,
+      state: Candidates.state,
+      country: Candidates.country,
+    },
+  };
 
   return {
     getByCandidateIds: async (candidateIds: string[]) =>
@@ -23,21 +38,43 @@ export const createProfilesRepo = (orgId: string) => {
             .where(and(baseFilter, inArray(Profiles.candidateId, candidateIds)))
             .orderBy(asc(Profiles.createdAt))
         : [],
-    getAllWithCandidate: async ({ limit = 20 }: GetAllOptions = {}) =>
-      await db
-        .select({
-          ...getTableColumns(Profiles),
-          candidate: {
-            id: Profiles.candidateId,
-            city: Candidates.city,
-            state: Candidates.state,
-            country: Candidates.country,
-          },
-        })
+    getAllWithCandidate: async ({ limit = 20, cursor }: GetAllOptions = {}) => {
+      // Newest-first with an id tie-breaker keeps the keyset stable when
+      // profiles share a createdAt timestamp.
+      const after = cursor ? decodeProfileCursor(cursor) : null;
+      const cursorFilter = after
+        ? or(
+            lt(Profiles.createdAt, after.createdAt),
+            and(eq(Profiles.createdAt, after.createdAt), lt(Profiles.id, after.id)),
+          )
+        : undefined;
+
+      const rows = await db
+        .select(withCandidateColumns)
         .from(Profiles)
         .leftJoin(Candidates, eq(Profiles.candidateId, Candidates.id))
-        .where(baseFilter)
-        .limit(limit),
+        .where(and(baseFilter, cursorFilter))
+        .orderBy(desc(Profiles.createdAt), desc(Profiles.id))
+        .limit(limit);
+
+      const lastRow = rows.at(-1);
+
+      return {
+        rows,
+        nextCursor:
+          rows.length === limit && lastRow
+            ? encodeProfileCursor(lastRow.createdAt, lastRow.id)
+            : null,
+      };
+    },
+    countAll: async () => {
+      const [{ total }] = await db
+        .select({ total: count() })
+        .from(Profiles)
+        .where(baseFilter);
+
+      return total;
+    },
     getByCandidateId: async (candidateId: string) =>
       await db.query.Profiles.findMany({
         where: (fields) => and(baseFilter, eq(fields.candidateId, candidateId)),

@@ -11,6 +11,8 @@ import {
   ProfileStatus,
 } from '@/lib/data/profiles/profileTypes';
 import { createCandidateId } from '@/lib/data/candidates/candidateTransforms';
+import { getProfilesPage, ProfilesPage } from './profileData';
+import { EXPLORE_PAGE_SIZE } from './profileTypes';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -31,6 +33,18 @@ export type State = {
   };
   success?: boolean;
 };
+
+// The explore grid's "load more": returns the rows immediately after `cursor`,
+// with profile/candidate ids already in their public URL form (prof_/cand_) —
+// the same identifiers shareable links already carry.
+export async function loadMoreProfiles(
+  cursor: string | null,
+  limit = EXPLORE_PAGE_SIZE,
+): Promise<ProfilesPage> {
+  const { orgId } = await getAppContext();
+
+  return getProfilesPage(orgId, { cursor, limit });
+}
 
 export async function createProfile(
   candidateUrlId: string,
